@@ -506,6 +506,7 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Primal Rend Feature", "Replace Inner Beast and Steel Cyclone with Primal Rend when available", WAR.JobID)]
         WarriorPrimalRendFeature = 2107,
 
+        [SecretCustomCombo]
         [CustomComboInfo("Storm's Path to Storm's Eye (Questionable)", "Replace Storm's Path with Storm's Eye when no Surging Tempest is active or is below 30.", WAR.JobID)]
         WarriorStormPathStormEye = 2108,
 
