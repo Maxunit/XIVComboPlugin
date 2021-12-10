@@ -88,26 +88,26 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class MonkHowlingFistMeditationFeature : CustomCombo
-    {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MonkHowlingFistMeditationFeature;
+    // internal class MonkHowlingFistMeditationFeature : CustomCombo
+    // {
+    // protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MonkHowlingFistMeditationFeature;
 
-        protected internal override uint[] ActionIDs { get; } = new[] { MNK.HowlingFist };
+    // protected internal override uint[] ActionIDs { get; } = new[] { MNK.HowlingFist };
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            if (actionID == MNK.HowlingFist)
-            {
-                var gauge = GetJobGauge<MNKGauge>();
+    // protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+    // {
+    // if (actionID == MNK.HowlingFist)
+    // {
+    // var gauge = GetJobGauge<MNKGauge>();
+    //
+    // if (level >= MNK.Levels.Meditation && gauge.Chakra < 5)
+    // return MNK.Meditation;
 
-                if (level >= MNK.Levels.Meditation && gauge.Chakra < 5)
-                    return MNK.Meditation;
-
-                // Enlightenment
-                return OriginalHook(MNK.HowlingFist);
-            }
-
-            return actionID;
-        }
-    }
+    // // Enlightenment
+    // return OriginalHook(MNK.HowlingFist);
+    // }
+    //
+    // return actionID;
+    // }
+    // }
 }

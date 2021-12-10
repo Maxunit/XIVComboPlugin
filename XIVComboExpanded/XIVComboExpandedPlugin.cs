@@ -55,7 +55,7 @@ namespace XIVComboExpandedPlugin
         }
 
         /// <inheritdoc/>
-        public string Name => "XIV Combo Expanded";
+        public string Name => "XIV Combo Expanded Customized";
 
         /// <inheritdoc/>
         public void Dispose()

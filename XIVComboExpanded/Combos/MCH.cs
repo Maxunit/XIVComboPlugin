@@ -28,9 +28,12 @@ namespace XIVComboExpandedPlugin.Combos
             AutomatonQueen = 16501,
             QueenOverdrive = 16502,
             // Other
+            Reassemble = 2876,
             Hypercharge = 17209,
             HeatBlast = 7410,
             HotShot = 2872,
+            Wildfire = 2878,
+            BarrelStabilizer = 7414,
             Drill = 16498,
             AirAnchor = 16500,
             Chainsaw = 25788;
@@ -38,7 +41,7 @@ namespace XIVComboExpandedPlugin.Combos
         public static class Buffs
         {
             public const ushort
-                Placeholder = 0;
+                Reassembled = 851;
         }
 
         public static class Debuffs
@@ -51,20 +54,25 @@ namespace XIVComboExpandedPlugin.Combos
         {
             public const byte
                 SlugShot = 2,
+                Reassemble = 10,
                 GaussRound = 15,
                 CleanShot = 26,
                 Hypercharge = 30,
                 HeatBlast = 35,
+                RookAutoturret = 40,
                 RookOverdrive = 40,
+                Wildfire = 45,
                 Ricochet = 50,
                 AutoCrossbow = 52,
                 HeatedSplitShot = 54,
                 Drill = 58,
                 HeatedSlugshot = 60,
                 HeatedCleanShot = 64,
+                BarrelStabilizer = 66,
                 ChargedActionMastery = 74,
                 AirAnchor = 76,
                 QueenOverdrive = 80,
+                EnchancedReassemble = 84,
                 Chainsaw = 90;
         }
     }
@@ -81,9 +89,40 @@ namespace XIVComboExpandedPlugin.Combos
             {
                 if (comboTime > 0)
                 {
+                    if (IsEnabled(CustomComboPreset.MachinistAutoweaveFeature))
+                    {
+                        IconReplacer.CooldownData gaussCd = GetCooldown(MCH.GaussRound);
+                        var maxCharges = level >= MCH.Levels.ChargedActionMastery ? 3 : 2;
+                        float gaussCharges = gaussCd.IsCooldown ? gaussCd.CooldownElapsed / (gaussCd.CooldownTotal / maxCharges) : maxCharges;
+                        float ricochetCharges = 0;
+                        var weaveAction = MCH.GaussRound;
+                        if (level >= MCH.Levels.Ricochet)
+                        {
+                            IconReplacer.CooldownData ricochetCd = GetCooldown(MCH.Ricochet);
+                            ricochetCharges = ricochetCd.IsCooldown ? ricochetCd.CooldownElapsed / (ricochetCd.CooldownTotal / maxCharges) : maxCharges;
+                            if (gaussCharges >= 1 || ricochetCharges >= 1)
+                                weaveAction = CalcBestAction(actionID, MCH.GaussRound, MCH.Ricochet);
+                        }
+
+                        IconReplacer.CooldownData globalCd = GetCooldown(MCH.SplitShot);
+                        bool canWeave = (globalCd.CooldownElapsed / globalCd.CooldownTotal) < 0.7;
+                        if (canWeave && (gaussCharges >= 1 || ricochetCharges >= 1))
+                            return weaveAction;
+                    }
+
                     if (lastComboMove == MCH.SlugShot && level >= MCH.Levels.CleanShot)
+                    {
+                        if (IsEnabled(CustomComboPreset.MachinistRookFeature) && level >= MCH.Levels.RookAutoturret)
+                        {
+                            var gauge = GetJobGauge<MCHGauge>();
+
+                            if (gauge.Battery == 100)
+                                return OriginalHook(MCH.AutomatonQueen);
+                        }
+
                         // Heated
                         return OriginalHook(MCH.CleanShot);
+                    }
 
                     if (lastComboMove == MCH.SplitShot && level >= MCH.Levels.SlugShot)
                         // Heated
@@ -130,8 +169,43 @@ namespace XIVComboExpandedPlugin.Combos
             {
                 var gauge = GetJobGauge<MCHGauge>();
 
+                if (IsEnabled(CustomComboPreset.MachinistBarrelStabilizerFeature))
+                {
+                    IconReplacer.CooldownData barrelStabilizerCd = GetCooldown(MCH.BarrelStabilizer);
+                    if (level >= MCH.Levels.BarrelStabilizer && !barrelStabilizerCd.IsCooldown && !gauge.IsOverheated && gauge.Heat < 50)
+                        return MCH.BarrelStabilizer;
+                }
+
+                if (IsEnabled(CustomComboPreset.MachinistWildfireFeature))
+                {
+                    IconReplacer.CooldownData wildfireCd = GetCooldown(MCH.Wildfire);
+                    if (level >= MCH.Levels.Wildfire && !wildfireCd.IsCooldown && !gauge.IsOverheated && gauge.Heat >= 50)
+                        return MCH.Wildfire;
+                }
+
                 if (level >= MCH.Levels.Hypercharge && !gauge.IsOverheated)
                     return MCH.Hypercharge;
+
+                if (IsEnabled(CustomComboPreset.MachinistAutoweaveFeature) && actionID == MCH.HeatBlast)
+                {
+                    IconReplacer.CooldownData gaussCd = GetCooldown(MCH.GaussRound);
+                    var maxCharges = level >= MCH.Levels.ChargedActionMastery ? 3 : 2;
+                    float gaussCharges = gaussCd.IsCooldown ? gaussCd.CooldownElapsed / (gaussCd.CooldownTotal / maxCharges) : maxCharges;
+                    float ricochetCharges = 0;
+                    var weaveAction = MCH.GaussRound;
+                    if (level >= MCH.Levels.Ricochet)
+                    {
+                        IconReplacer.CooldownData ricochetCd = GetCooldown(MCH.Ricochet);
+                        ricochetCharges = ricochetCd.IsCooldown ? ricochetCd.CooldownElapsed / (ricochetCd.CooldownTotal / maxCharges) : maxCharges;
+                        if (gaussCharges >= 1 || ricochetCharges >= 1)
+                            weaveAction = CalcBestAction(actionID, MCH.GaussRound, MCH.Ricochet);
+                    }
+
+                    IconReplacer.CooldownData heatBlastCd = GetCooldown(MCH.HeatBlast);
+                    bool canWeave = (heatBlastCd.CooldownElapsed / heatBlastCd.CooldownTotal) < 0.5;
+                    if (canWeave && (gaussCharges >= 1 || ricochetCharges >= 1))
+                        return weaveAction;
+                }
 
                 if (level < MCH.Levels.AutoCrossbow)
                     return MCH.HeatBlast;
@@ -192,16 +266,37 @@ namespace XIVComboExpandedPlugin.Combos
         {
             if (actionID == MCH.HotShot || actionID == MCH.AirAnchor || actionID == MCH.Drill || actionID == MCH.Chainsaw)
             {
-                if (level >= MCH.Levels.Chainsaw)
-                    return CalcBestAction(actionID, MCH.Chainsaw, MCH.AirAnchor, MCH.Drill);
+                uint bestAction = MCH.HotShot;
+                if (level >= MCH.Levels.Drill)
+                    bestAction = CalcBestAction(actionID, MCH.Drill, MCH.HotShot);
 
                 if (level >= MCH.Levels.AirAnchor)
-                    return CalcBestAction(actionID, MCH.AirAnchor, MCH.Drill);
+                    bestAction = CalcBestAction(actionID, MCH.AirAnchor, MCH.Drill);
 
-                if (level >= MCH.Levels.Drill)
-                    return CalcBestAction(actionID, MCH.Drill, MCH.HotShot);
+                if (level >= MCH.Levels.Chainsaw)
+                    bestAction = CalcBestAction(actionID, MCH.Chainsaw, MCH.AirAnchor, MCH.Drill);
 
-                return MCH.HotShot;
+                IconReplacer.CooldownData bestActionCd = GetCooldown(bestAction);
+                if (IsEnabled(CustomComboPreset.MachinistReassembleFeature) && level >= MCH.Levels.Reassemble && !HasEffect(MCH.Buffs.Reassembled) && !bestActionCd.IsCooldown)
+                {
+                    IconReplacer.CooldownData reassembleCd = GetCooldown(MCH.Reassemble);
+
+                    var maxCharges = level >= MCH.Levels.EnchancedReassemble ? 2 : 1;
+                    float reassembleCharges = reassembleCd.IsCooldown ? reassembleCd.CooldownElapsed / (reassembleCd.CooldownTotal / maxCharges) : maxCharges;
+
+                    if (reassembleCharges >= 1)
+                        bestAction = MCH.Reassemble;
+                }
+
+                if (IsEnabled(CustomComboPreset.MachinistRookFeature) && level >= MCH.Levels.RookAutoturret && (bestAction == MCH.HotShot || bestAction == MCH.AirAnchor))
+                {
+                    var gauge = GetJobGauge<MCHGauge>();
+
+                    if (gauge.Battery == 100)
+                        bestAction = OriginalHook(MCH.AutomatonQueen);
+                }
+
+                return bestAction;
             }
 
             return actionID;

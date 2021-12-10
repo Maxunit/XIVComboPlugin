@@ -62,6 +62,13 @@ namespace XIVComboExpandedPlugin
                 ImGui.EndTooltip();
             }
 
+            var showEvil = Service.Configuration.EnableEvilCombos;
+            if (ImGui.Checkbox("Enable combos added by Evil Crab", ref showEvil))
+            {
+                Service.Configuration.EnableEvilCombos = showEvil;
+                Service.Configuration.Save();
+            }
+
             ImGui.BeginChild("scrolling", new Vector2(0, -1), true);
 
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(0, 5));
@@ -76,6 +83,7 @@ namespace XIVComboExpandedPlugin
                     {
                         var enabled = Service.Configuration.IsEnabled(preset);
                         var secret = Service.Configuration.IsSecret(preset);
+                        var evil = Service.Configuration.IsEvil(preset);
                         var conflicts = Service.Configuration.GetConflicts(preset);
                         var parent = Service.Configuration.GetParent(preset);
 
@@ -85,6 +93,9 @@ namespace XIVComboExpandedPlugin
 #endif
 
                         if (secret && !showSecrets)
+                            continue;
+
+                        if (evil && !showEvil)
                             continue;
 
                         ImGui.PushItemWidth(200);
@@ -123,6 +134,25 @@ namespace XIVComboExpandedPlugin
                             {
                                 ImGui.BeginTooltip();
                                 ImGui.TextUnformatted("Secret");
+                                ImGui.EndTooltip();
+                            }
+                        }
+
+                        if (evil)
+                        {
+                            ImGui.SameLine();
+                            ImGui.Text("  ");
+                            ImGui.SameLine();
+                            ImGui.PushFont(UiBuilder.IconFont);
+                            ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
+                            ImGui.Text(FontAwesomeIcon.FireAlt.ToIconString());
+                            ImGui.PopStyleColor();
+                            ImGui.PopFont();
+
+                            if (ImGui.IsItemHovered())
+                            {
+                                ImGui.BeginTooltip();
+                                ImGui.TextUnformatted("Evil");
                                 ImGui.EndTooltip();
                             }
                         }

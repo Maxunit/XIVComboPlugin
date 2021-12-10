@@ -39,6 +39,12 @@ namespace XIVComboExpandedPlugin
         public bool EnableSecretCombos { get; set; } = false;
 
         /// <summary>
+        /// Gets or sets a value indicating whether to allow and display combos added by Evil Crab.
+        /// </summary>
+        [JsonProperty("Evil")]
+        public bool EnableEvilCombos { get; set; } = false;
+
+        /// <summary>
         /// Gets or sets an array of 4 ability IDs to interact with the <see cref="CustomComboPreset.DancerDanceComboCompatibility"/> combo.
         /// </summary>
         public uint[] DancerDanceCompatActionIDs { get; set; } = new uint[]
@@ -70,6 +76,14 @@ namespace XIVComboExpandedPlugin
         /// <returns>The boolean representation.</returns>
         public bool IsSecret(CustomComboPreset preset)
             => preset.GetAttribute<SecretCustomComboAttribute>() != default;
+
+        /// <summary>
+        /// Gets a value indicating whether a preset is evil.
+        /// </summary>
+        /// <param name="preset">Preset to check.</param>
+        /// <returns>The boolean representation.</returns>
+        public bool IsEvil(CustomComboPreset preset)
+            => preset.GetAttribute<EvilComboAttribute>() != default;
 
         /// <summary>
         /// Gets an array of conflicting combo presets.

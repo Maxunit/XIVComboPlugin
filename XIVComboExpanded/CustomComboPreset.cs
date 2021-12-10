@@ -180,6 +180,10 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("No Mercy Feature", "Replace No Mercy with Bow Shock, and then Sonic Break, while No Mercy is active.", GNB.JobID)]
         GunbreakerNoMercyFeature = 3708,
 
+        [EvilCombo]
+        [CustomComboInfo("Burst Strike Feature", "In addition to the Solid Barrel combo, add Burst Strike when charges are full.", GNB.JobID)]
+        GunbreakerBurstStrikeFeature = 3751,
+
         #endregion
         // ====================================================================================
         #region MACHINIST
@@ -204,6 +208,26 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Hot Shot (Air Anchor) / Drill / Chainsaw Feature", "Replace Hot Shot (Air Anchor), Drill, and Chainsaw with whichever is available.", MCH.JobID)]
         MachinistHotShotDrillChainsawFeature = 3106,
 
+        [EvilCombo]
+        [CustomComboInfo("Gauss Round / Ricochet autoweave Feature", "Weave Gauss Round / Ricochet between attacks when appropriate. Requires (Heated) Shot Combo and Hypercharge Feature.", MCH.JobID)]
+        MachinistAutoweaveFeature = 3151,
+
+        [EvilCombo]
+        [CustomComboInfo("Wildfire feature", "Replace Hypercharge with Wildfire when appropriate. Requires Hypercharge Feature.", MCH.JobID)]
+        MachinistWildfireFeature = 3152,
+
+        [EvilCombo]
+        [CustomComboInfo("BarrelStabilizer feature", "Replace Hypercharge with Barrel Stabilizer when below 50 heat. Requires Hypercharge Feature.", MCH.JobID)]
+        MachinistBarrelStabilizerFeature = 3153,
+
+        [EvilCombo]
+        [CustomComboInfo("Rook / Queen feature", "Replace Clean Shot Hot Shot (Air Anchor) and Chainsaw with Rook / Queen at full battery. Requires (Heated) Shot Combo and Hot Shot (Air Anchor) / Drill / Chainsaw Feature.", MCH.JobID)]
+        MachinistRookFeature = 3154,
+
+        [EvilCombo]
+        [CustomComboInfo("Reassemble feature", "Replace nukes with Reassemble when they both are available. Requires (Heated) Shot Combo and Hot Shot (Air Anchor) / Drill / Chainsaw Feature.", MCH.JobID)]
+        MachinistReassembleFeature = 3155,
+
         #endregion
         // ====================================================================================
         #region MONK
@@ -214,8 +238,8 @@ namespace XIVComboExpandedPlugin
         // [CustomComboInfo("Monk Bootshine Feature", "Replaces Dragon Kick with Bootshine if both a form and Leaden Fist are up.", MNK.JobID)]
         // MnkBootshineFeature = 2002,
 
-        [CustomComboInfo("Howling Fist / Meditation Feature", "Howling Fist with Meditation when the Fifth Chakra is not open.", MNK.JobID)]
-        MonkHowlingFistMeditationFeature = 2003,
+        // [CustomComboInfo("Howling Fist / Meditation Feature", "Howling Fist with Meditation when the Fifth Chakra is not open.", MNK.JobID)]
+        // MonkHowlingFistMeditationFeature = 2003,
 
         #endregion
         // ====================================================================================
@@ -470,17 +494,20 @@ namespace XIVComboExpandedPlugin
         // [CustomComboInfo("Overpower Combo", "Replace Overpower with its combo chain (so that you can still use Mythril Tempest by itself in pulls)", WAR.JobID, WAR.Overpower)]
         // WarriorOverpowerCombo = 2104,
 
-        // [CustomComboInfo("Warrior Gauge Overcap Feature", "Replace Single-target or AoE combo with gauge spender if you are about to overcap and are before a step of a combo that would generate beast gauge.", WAR.JobID)]
-        // WarriorGaugeOvercapFeature = 2104,
+        [CustomComboInfo("Warrior Gauge Overcap Feature", "Replace Single-target or AoE combo with gauge spender if you are about to overcap and are before a step of a combo that would generate beast gauge.", WAR.JobID)]
+        WarriorGaugeOvercapFeature = 2104,
 
-        // [CustomComboInfo("Inner Release Feature", "Replace Single-target and AoE combo with Fell Cleave/Decimate during Inner Release.", WAR.JobID)]
-        // WarriorInnerReleaseFeature = 2105,
+        [CustomComboInfo("Inner Release Feature", "Replace Single-target and AoE combo with Fell Cleave/Decimate during Inner Release.", WAR.JobID)]
+        WarriorInnerReleaseFeature = 2105,
 
         [CustomComboInfo("Nascent Flash Feature", "Replace Nascent Flash with Raw intuition when level synced below 76.", WAR.JobID)]
         WarriorNascentFlashFeature = 2106,
 
         [CustomComboInfo("Primal Rend Feature", "Replace Inner Beast and Steel Cyclone with Primal Rend when available", WAR.JobID)]
         WarriorPrimalRendFeature = 2107,
+
+        [CustomComboInfo("Storm's Path to Storm's Eye (Questionable)", "Replace Storm's Path with Storm's Eye when no Surging Tempest is active or is below 30.", WAR.JobID)]
+        WarriorStormPathStormEye = 2108,
 
         #endregion
         // ====================================================================================
