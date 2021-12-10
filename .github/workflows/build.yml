@@ -12,7 +12,7 @@ env:
   PUBLIC_NAME: XIVComboExpandedCustomized
   SOLUTION_NAME: XIVComboExpandedCustomized
   INTERNAL_NAME: XIVComboExpandedCustomized
-  RELEASE_DIR: XIVComboExpanded\bin\Release\XIVComboExpanded
+  RELEASE_DIR: XIVComboExpanded\bin\Release\XIVComboExpandedCustomized
   PERSONAL_PLUGIN_REPO: Maxunit/MyDalamudPlugins
   PR_PLUGIN_REPO: Maxunit/DalamudPlugins
 
