@@ -9,12 +9,12 @@ on:
     - master
 
 env:
-  PUBLIC_NAME: XIVComboExpanded
-  SOLUTION_NAME: XIVComboExpanded
-  INTERNAL_NAME: XIVComboExpanded
+  PUBLIC_NAME: XIVComboExpandedCustomized
+  SOLUTION_NAME: XIVComboExpandedCustomized
+  INTERNAL_NAME: XIVComboExpandedCustomized
   RELEASE_DIR: XIVComboExpanded\bin\Release\XIVComboExpanded
-  PERSONAL_PLUGIN_REPO: daemitus/MyDalamudPlugins
-  PR_PLUGIN_REPO: daemitus/DalamudPlugins
+  PERSONAL_PLUGIN_REPO: Maxunit/MyDalamudPlugins
+  PR_PLUGIN_REPO: Maxunit/DalamudPlugins
 
 jobs:
   build:
