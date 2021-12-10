@@ -24,4 +24,4 @@ For some jobs, this frees a massive amount of hotbar space (looking at you, DRG)
 ## Full list of supported combos
 There used to be a list here, but it got annoying to update. You should install it and check out what's available!
 
-Place `https://github.com/daemitus/MyDalamudPlugins/raw/master/pluginmaster.json` in your /xlsettings 3rd party repo list to access this plugin.
+Place `https://github.com/maxunit/MyDalamudPlugins/raw/master/pluginmaster.json` in your /xlsettings 3rd party repo list to access this plugin.
