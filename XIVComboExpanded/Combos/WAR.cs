@@ -226,6 +226,12 @@ namespace XIVComboExpandedPlugin.Combos
                                 return OriginalHook(WAR.StormsPath);
                         }
 
+                        if (surgingtempesttime.RemainingTime <= 30)
+                        {
+                            if (IsEnabled(CustomComboPreset.WarriorStormPathStormEye) && HasEffect(WAR.Buffs.SurgingTempest))
+                                return OriginalHook(WAR.StormsEye);
+                        }
+
                         if (level <= WAR.StormsEye)
                         return WAR.StormsPath;
                     }
