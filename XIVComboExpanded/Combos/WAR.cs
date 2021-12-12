@@ -213,15 +213,15 @@ namespace XIVComboExpandedPlugin.Combos
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID == WAR.StormsPath || actionID == WAR.StormsEye)
+            if (actionID is WAR.StormsPath or WAR.StormsEye)
             {
                 if (level >= WAR.Levels.StormsEye)
                 {
                     if (IsEnabled(CustomComboPreset.WarriorStormPathStormEye))
                     {
                         Status? surgingtempesttime = FindEffectAny(WAR.Buffs.SurgingTempest);
-                        if (surgingtempesttime is not null)
-                        {
+                        if (HasEffect(WAR.Buffs.SurgingTempest) && surgingtempesttime is not null)
+                            {
                             if (surgingtempesttime.RemainingTime >= 30)
                             {
                                 if (IsEnabled(CustomComboPreset.WarriorStormPathStormEye) && HasEffect(WAR.Buffs.SurgingTempest))
@@ -235,10 +235,7 @@ namespace XIVComboExpandedPlugin.Combos
                             }
                         }
 
-                        if (surgingtempesttime != null)
-                        {
-                            return WAR.StormsEye;
-                        }
+                        return WAR.StormsEye;
                     }
                 }
 
