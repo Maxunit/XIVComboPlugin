@@ -188,34 +188,34 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class DragoonDiveFeature : CustomCombo
-    {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.Disabled; // DragoonDiveFeature;
-
-        protected internal override uint[] ActionIDs { get; } = new[] { DRG.SpineshatterDive, DRG.DragonfireDive, DRG.Stardiver };
-
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            if (actionID == DRG.SpineshatterDive || actionID == DRG.DragonfireDive || actionID == DRG.Stardiver)
-            {
-                if (level >= DRG.Levels.Stardiver)
-                {
-                    var gauge = GetJobGauge<DRGGauge>();
-
-                    if (gauge.BOTDState == BOTDState.LOTD)
-                        return CalcBestAction(actionID, DRG.SpineshatterDive, DRG.DragonfireDive, DRG.Stardiver);
-
-                    return CalcBestAction(actionID, DRG.SpineshatterDive, DRG.DragonfireDive);
-                }
-
-                if (level >= DRG.Levels.DragonfireDive)
-                    return CalcBestAction(actionID, DRG.SpineshatterDive, DRG.DragonfireDive);
-
-                if (level >= DRG.Levels.SpineshatterDive)
-                    return DRG.SpineshatterDive;
-            }
-
-            return actionID;
-        }
-    }
+    // internal class DragoonDiveFeature : CustomCombo
+    // {
+    // protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.Disabled; // DragoonDiveFeature;
+    //
+    // protected internal override uint[] ActionIDs { get; } = new[] { DRG.SpineshatterDive, DRG.DragonfireDive, DRG.Stardiver };
+    //
+    // protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+    // {
+    // if (actionID == DRG.SpineshatterDive || actionID == DRG.DragonfireDive || actionID == DRG.Stardiver)
+    // {
+    // if (level >= DRG.Levels.Stardiver)
+    // {
+    // var gauge = GetJobGauge<DRGGauge>();
+    //
+    // if (gauge.LOTDState == LOTDState.LOTD)
+    // return CalcBestAction(actionID, DRG.SpineshatterDive, DRG.DragonfireDive, DRG.Stardiver);
+    //
+    // return CalcBestAction(actionID, DRG.SpineshatterDive, DRG.DragonfireDive);
+    // }
+    //
+    // if (level >= DRG.Levels.DragonfireDive)
+    // return CalcBestAction(actionID, DRG.SpineshatterDive, DRG.DragonfireDive);
+    //
+    // if (level >= DRG.Levels.SpineshatterDive)
+    // return DRG.SpineshatterDive;
+    // }
+    //
+    // return actionID;
+    // }
+    // }
 }

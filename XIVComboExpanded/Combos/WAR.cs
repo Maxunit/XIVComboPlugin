@@ -25,7 +25,8 @@ namespace XIVComboExpandedPlugin.Combos
             ChaoticCyclone = 16463,
             NascentFlash = 16464,
             InnerChaos = 16465,
-            PrimalRend = 25753;
+            PrimalRend = 25753,
+            Upheaval = 7387;
 
         public static class Buffs
         {
@@ -52,6 +53,7 @@ namespace XIVComboExpandedPlugin.Combos
                 InnerBeastMastery = 54,
                 FellCleave = 54,
                 Decimate = 60,
+                Upheaval = 64,
                 MythrilTempestTrait = 74,
                 NascentFlash = 76,
                 InnerChaos = 80,
@@ -69,15 +71,17 @@ namespace XIVComboExpandedPlugin.Combos
         {
             if (actionID == WAR.StormsPath)
             {
-                if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease))
+                if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease) && level >= WAR.Levels.FellCleave)
                     return OriginalHook(WAR.FellCleave);
                 if (comboTime > 0)
                 {
                     if (lastComboMove == WAR.Maim && level >= WAR.Levels.StormsPath)
                     {
                         byte gauge = GetJobGauge<WARGauge>().BeastGauge;
-                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 80 && level >= WAR.Levels.InnerBeastMastery)
+                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.InnerBeastMastery)
                             return OriginalHook(WAR.FellCleave);
+                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.InnerBeastMastery)
+                            return OriginalHook(WAR.InnerBeast);
                         return WAR.StormsPath;
                     }
 
@@ -102,15 +106,17 @@ namespace XIVComboExpandedPlugin.Combos
         {
             if (actionID == WAR.StormsEye)
             {
-                if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease))
+                if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease) && level >= WAR.Levels.FellCleave)
                     return OriginalHook(WAR.FellCleave);
                 if (comboTime > 0)
                 {
                     if (lastComboMove == WAR.Maim && level >= WAR.Levels.StormsEye)
                     {
                         byte gauge = GetJobGauge<WARGauge>().BeastGauge;
-                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 80 && level >= WAR.Levels.InnerBeastMastery)
+                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.InnerBeastMastery)
                             return OriginalHook(WAR.FellCleave);
+                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.InnerBeastMastery)
+                            return OriginalHook(WAR.InnerBeast);
                         return WAR.StormsEye;
                     }
 
@@ -144,6 +150,8 @@ namespace XIVComboExpandedPlugin.Combos
                         byte gauge = GetJobGauge<WARGauge>().BeastGauge;
                         if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
                             return OriginalHook(WAR.Decimate);
+                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.MythrilTempestTrait)
+                            return OriginalHook(WAR.SteelCyclone);
                         return WAR.MythrilTempest;
                     }
                 }
@@ -201,21 +209,25 @@ namespace XIVComboExpandedPlugin.Combos
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.WarriorStormPathStormEye;
 
-        protected internal override uint[] ActionIDs { get; } = new[] { WAR.StormsEye };
+        protected internal override uint[] ActionIDs { get; } = new[] { WAR.StormsPath, WAR.StormsEye };
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID == WAR.StormsEye)
+            if (actionID == WAR.StormsPath || actionID == WAR.StormsEye)
             {
                 Status? surgingtempesttime = FindEffectAny(WAR.Buffs.SurgingTempest);
                 if (surgingtempesttime is not null)
                 {
-                    if (surgingtempesttime.RemainingTime >= 30)
+                    if (level >= WAR.StormsEye)
                     {
-                        if (IsEnabled(CustomComboPreset.WarriorStormPathStormEye) && HasEffect(WAR.Buffs.SurgingTempest))
-                            return OriginalHook(WAR.StormsPath);
+                        if (surgingtempesttime.RemainingTime >= 30)
+                        {
+                            if (IsEnabled(CustomComboPreset.WarriorStormPathStormEye) && HasEffect(WAR.Buffs.SurgingTempest))
+                                return OriginalHook(WAR.StormsPath);
+                        }
 
-                        return WAR.StormsEye;
+                        if (level <= WAR.StormsEye)
+                        return WAR.StormsPath;
                     }
                 }
             }
