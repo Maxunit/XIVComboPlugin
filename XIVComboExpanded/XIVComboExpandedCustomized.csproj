@@ -67,4 +67,9 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
+	
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="if $(ConfigurationName) == Release (&#xD;&#xA;  echo Running Release Post Build (Please have Dalamud closed)&#xD;&#xA;  echo Copying to DevPlugins&#xD;&#xA;  xcopy &quot;$(TargetPath)\..&quot; &quot;%25appdata%25\XIVLauncher\devPlugins\XIVComboExpanded\&quot; /Y /E&#xD;&#xA;  exit /b 0&#xD;&#xA;)" />
+	</Target>
+	
 </Project>
