@@ -8,14 +8,16 @@ namespace XIVComboExpandedPlugin
     /// </summary>
     public enum CustomComboPreset
     {
-        // A placeholder for when an attribute fails to be found.
-        [CustomComboInfo("None", "This should not be used.", ADV.JobID)]
-        None = 0,
+        [CustomComboInfo("Any", "This should not be displayed. This always returns true when used with IsEnabled.", ADV.JobID)]
+        Any = 0,
 
         // A placeholder for disabled combos due to various issues.
         [CustomComboInfo("Disabled", "This should not be used.", ADV.JobID)]
         Disabled = 99999,
 
+        // ====================================================================================
+        #region ADV
+        #endregion
         // ====================================================================================
         #region ASTROLOGIAN
 
@@ -49,6 +51,12 @@ namespace XIVComboExpandedPlugin
 
         [CustomComboInfo("Freeze/Flare Feature", "Freeze and Flare become whichever action you can currently use.", BLM.JobID)]
         BlackFreezeFlareFeature = 2506,
+
+        [CustomComboInfo("Fire 2 Feature", "(High) Fire 2 becomes Flare in Astral Fire with 1 or fewer Umbral Hearts.", BLM.JobID)]
+        BlackFire2Feature = 2508,
+
+        [CustomComboInfo("Ice 2 Feature", "(High) Blizzard 2 becomes Freeze in Umbral Ice.", BLM.JobID)]
+        BlackBlizzard2Feature = 2509,
 
         [CustomComboInfo("Scathe/Xenoglossy Feature", "Scathe becomes Xenoglossy when available.", BLM.JobID)]
         BlackScatheFeature = 2507,
@@ -146,9 +154,12 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Full Thrust Combo", "Replace Full Thrust with its combo chain.", DRG.JobID)]
         DragoonFullThrustCombo = 2204,
 
-        // [SecretCustomCombo]
-        // [CustomComboInfo("Dive Dive Dive!", "Replace Spineshatter Dive, Dragonfire Dive, and Stardiver with whichever is available.", DRG.JobID)]
-        // DragoonDiveFeature = 2205,
+        [CustomComboInfo("Wheeling Thrust / Fang and Claw Option", "When you have either Enhanced Fang and Claw or Wheeling Thrust, Chaos Thrust becomes Wheeling Thrust and Full Thrust becomes Fang and Claw.", DRG.JobID)]
+        DragoonFangThrustFeature = 2205,
+
+        [SecretCustomCombo]
+        [CustomComboInfo("Dive Dive Dive!", "Replace Spineshatter Dive, Dragonfire Dive, and Stardiver with whichever is available.", DRG.JobID)]
+        DragoonDiveFeature = 2205,
 
         #endregion
         // ====================================================================================
@@ -179,6 +190,10 @@ namespace XIVComboExpandedPlugin
         [SecretCustomCombo]
         [CustomComboInfo("No Mercy Feature", "Replace No Mercy with Bow Shock, and then Sonic Break, while No Mercy is active.", GNB.JobID)]
         GunbreakerNoMercyFeature = 3708,
+
+        [SecretCustomCombo]
+        [CustomComboInfo("Double Down Feature", "Replace Burst Strike and Fated Circle with Double Down when available.", GNB.JobID)]
+        GunbreakerDoubleDownFeature = 3709,
 
         [EvilCombo]
         [CustomComboInfo("Burst Strike Feature", "In addition to the Solid Barrel combo, add Burst Strike when charges are full.", GNB.JobID)]
@@ -232,8 +247,7 @@ namespace XIVComboExpandedPlugin
         // ====================================================================================
         #region MONK
 
-        // [CustomComboInfo("Monk AoE Combo", "Replaces Rockbreaker and Four Point Fury with the AoE combo chain, when Perfect Balance is active, Rockbreaker does not change.", MNK.JobID)]
-        [CustomComboInfo("Monk AoE Combo", "Replaces Rockbreaker with the AoE combo chain, when Perfect Balance is active, Rockbreaker does not change.", MNK.JobID)]
+        [CustomComboInfo("Monk AoE Combo", "Replaces Rockbreaker and Four Point Fury with the AoE combo chain, when Perfect Balance is active, Rockbreaker does not change.", MNK.JobID)]
         MonkAoECombo = 2001,
 
         // [CustomComboInfo("Monk Bootshine Feature", "Replaces Dragon Kick with Bootshine if both a form and Leaden Fist are up.", MNK.JobID)]
@@ -294,11 +308,14 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Goring Blade Combo", "Replace Goring Blade with its combo chain.", PLD.JobID)]
         PaladinGoringBladeCombo = 1901,
 
-        [CustomComboInfo("Royal Authority Combo", "Replace Rage of Halone with its combo chain.", PLD.JobID)]
-        PaladinRageOfHaloneCombo = 1902,
+        [CustomComboInfo("Goring Blade Atonement Feature", "Replace Goring Blade with Atonement when under the effect of Sword Oath.", PLD.JobID)]
+        PaladinGoringBladeAtonementFeature = 1909,
 
-        [CustomComboInfo("Atonement Feature", "Replace Royal Authority with Atonement when under the effect of Sword Oath.", PLD.JobID)]
-        PaladinAtonementFeature = 1903,
+        [CustomComboInfo("Royal Authority Combo", "Replace Royal Authority with its combo chain.", PLD.JobID)]
+        PaladinRoyalAuthorityCombo = 1902,
+
+        [CustomComboInfo("Royal Authority Atonement Feature", "Replace Royal Authority with Atonement when under the effect of Sword Oath.", PLD.JobID)]
+        PaladinRoyalAuthorityAtonementFeature = 1903,
 
         [CustomComboInfo("Prominence Combo", "Replace Prominence with its combo chain.", PLD.JobID)]
         PaladinProminenceCombo = 1904,

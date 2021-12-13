@@ -115,7 +115,6 @@ namespace XIVComboExpandedPlugin
                                 Service.Configuration.EnabledActions.Remove(preset);
                             }
 
-                            Service.IconReplacer.UpdateEnabledActionIDs();
                             Service.Configuration.Save();
                         }
 
@@ -194,7 +193,6 @@ namespace XIVComboExpandedPlugin
                             if (inputChanged)
                             {
                                 Service.Configuration.DancerDanceCompatActionIDs = actions.Cast<uint>().ToArray();
-                                Service.IconReplacer.UpdateEnabledActionIDs();
                                 Service.Configuration.Save();
                             }
 

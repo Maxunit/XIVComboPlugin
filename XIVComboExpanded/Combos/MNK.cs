@@ -1,3 +1,6 @@
+using System.Linq;
+
+using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboExpandedPlugin.Combos
@@ -81,25 +84,27 @@ namespace XIVComboExpandedPlugin.Combos
                 if (level >= MNK.Levels.Rockbreaker && HasEffect(MNK.Buffs.CoerlForm))
                     return MNK.Rockbreaker;
 
-                return MNK.ArmOfTheDestroyer;
+                // Shadow of the Destroyer
+                return OriginalHook(MNK.ArmOfTheDestroyer);
             }
 
-            // if (actionID == MNK.FourPointFury)
-            // {
-            //     var gauge = GetJobGauge<MNKGauge>();
-            //
-            //     if (level >= MNK.Levels.ArmOfTheDestroyer && !gauge.BeastChakra.Contains(BeastChakra.OPOOPO))
-            //         // Shadow of the Destroyer
-            //         return OriginalHook(MNK.ArmOfTheDestroyer);
-            //
-            //     if (level >= MNK.Levels.FourPointFury && !gauge.BeastChakra.Contains(BeastChakra.RAPTOR))
-            //         return MNK.FourPointFury;
-            //
-            //     if (level >= MNK.Levels.Rockbreaker && !gauge.BeastChakra.Contains(BeastChakra.COEURL))
-            //         return MNK.Rockbreaker;
-            //
-            //     return MNK.ArmOfTheDestroyer;
-            // }
+            if (actionID == MNK.FourPointFury)
+            {
+                var gauge = GetJobGauge<MNKGauge>();
+
+                if (level >= MNK.Levels.ArmOfTheDestroyer && !gauge.BeastChakra.Contains(BeastChakra.OPOOPO))
+                    // Shadow of the Destroyer
+                    return OriginalHook(MNK.ArmOfTheDestroyer);
+
+                if (level >= MNK.Levels.FourPointFury && !gauge.BeastChakra.Contains(BeastChakra.RAPTOR))
+                    return MNK.FourPointFury;
+
+                if (level >= MNK.Levels.Rockbreaker && !gauge.BeastChakra.Contains(BeastChakra.COEURL))
+                    return MNK.Rockbreaker;
+
+                // Shadow of the Destroyer
+                return OriginalHook(MNK.ArmOfTheDestroyer);
+            }
 
             return actionID;
         }
@@ -116,13 +121,9 @@ namespace XIVComboExpandedPlugin.Combos
             if (actionID == MNK.HowlingFist)
             {
                 var gauge = GetJobGauge<MNKGauge>();
-                unsafe
-                {
-                    var chakra = *(byte*)(gauge.Address + 0x8);
 
-                    if (level >= MNK.Levels.Meditation && chakra < 5)
-                        return MNK.Meditation;
-                }
+                if (level >= MNK.Levels.Meditation && gauge.Chakra < 5)
+                    return MNK.Meditation;
 
                 // Enlightenment
                 return OriginalHook(MNK.HowlingFist);
