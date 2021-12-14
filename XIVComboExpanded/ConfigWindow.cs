@@ -30,6 +30,7 @@ namespace XIVComboExpandedPlugin
 
             this.groupedPresets = Enum
                 .GetValues<CustomComboPreset>()
+                .Where(preset => (int)preset > 100 && preset != CustomComboPreset.Disabled)
                 .Select(preset => (Preset: preset, Info: preset.GetAttribute<CustomComboInfoAttribute>()))
                 .Where(tpl => tpl.Info != null)
                 .OrderBy(tpl => tpl.Info.JobName)
@@ -86,11 +87,6 @@ namespace XIVComboExpandedPlugin
                         var evil = Service.Configuration.IsEvil(preset);
                         var conflicts = Service.Configuration.GetConflicts(preset);
                         var parent = Service.Configuration.GetParent(preset);
-
-#if !DEBUG
-                        if (preset == CustomComboPreset.Disabled)
-                            continue;
-#endif
 
                         if (secret && !showSecrets)
                             continue;
