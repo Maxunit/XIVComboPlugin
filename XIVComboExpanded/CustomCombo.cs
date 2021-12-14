@@ -8,6 +8,7 @@ using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
 using Dalamud.Utility;
+
 using XIVComboExpandedPlugin.Attributes;
 
 namespace XIVComboExpandedPlugin.Combos
@@ -267,6 +268,30 @@ namespace XIVComboExpandedPlugin.Combos
             }
 
             return null;
+        }
+
+        protected static uint PickByCooldown(uint original, params uint[] actions)
+        {
+            static (uint ActionID, IconReplacer.CooldownData Data) Compare(uint original, (uint ActionID, IconReplacer.CooldownData Data) a1, (uint ActionID, IconReplacer.CooldownData Data) a2)
+            {
+                // Neither on cooldown, return the original (or the last one provided)
+                if (!a1.Data.IsCooldown && !a2.Data.IsCooldown)
+                    return original == a1.ActionID ? a1 : a2;
+
+                // Both on cooldown, return soonest available
+                if (a1.Data.IsCooldown && a2.Data.IsCooldown)
+                    return a1.Data.CooldownRemaining < a2.Data.CooldownRemaining ? a1 : a2;
+
+                // Return whatever's not on cooldown
+                return a1.Data.IsCooldown ? a2 : a1;
+            }
+
+            static (uint ActionID, IconReplacer.CooldownData Data) Selector(uint actionID) => (actionID, GetCooldown(actionID));
+
+            return actions
+                .Select(Selector)
+                .Aggregate((a1, a2) => Compare(original, a1, a2))
+                .ActionID;
         }
 
         /// <summary>

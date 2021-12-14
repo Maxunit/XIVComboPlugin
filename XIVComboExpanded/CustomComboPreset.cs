@@ -22,7 +22,10 @@ namespace XIVComboExpandedPlugin
         #region ASTROLOGIAN
 
         [CustomComboInfo("Draw on Play", "Play turns into Draw when no card is drawn, as well as the usual Play behavior.", AST.JobID)]
-        AstrologianCardsOnDrawFeature = 3301,
+        AstrologianDrawPlayFeature = 3301,
+
+        [CustomComboInfo("Astrodyne on Play", "Play turns into Astrodyne when seals are full.", AST.JobID)]
+        AstrologianAstrodynePlayFeature = 3304,
 
         [CustomComboInfo("Minor Arcana Play Feature", "Changes Minor Arcana to Crown Play when a card drawn.", AST.JobID)]
         AstrologianMinorArcanaPlayFeature = 3302,
@@ -250,11 +253,15 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Monk AoE Combo", "Replaces Rockbreaker and Four Point Fury with the AoE combo chain, when Perfect Balance is active, Rockbreaker does not change.", MNK.JobID)]
         MonkAoECombo = 2001,
 
-        // [CustomComboInfo("Monk Bootshine Feature", "Replaces Dragon Kick with Bootshine if both a form and Leaden Fist are up.", MNK.JobID)]
-        // MnkBootshineFeature = 2002,
+        [ParentCombo(MonkAoECombo)]
+        [CustomComboInfo("Monk AoE Balance Feature", "Replaces Monk's AoE Combo with Masterful Blitz if you have 3 Beast Chakra.", MNK.JobID)]
+        MonkAoEBalanceFeature = 2002,
 
-        [CustomComboInfo("Howling Fist / Meditation Feature", "Howling Fist with Meditation when the Fifth Chakra is not open.", MNK.JobID)]
+        [CustomComboInfo("Howling Fist / Meditation Feature", "Replace Howling Fist with Meditation when the Fifth Chakra is not open.", MNK.JobID)]
         MonkHowlingFistMeditationFeature = 2003,
+
+        [CustomComboInfo("Perfect Balance Feature", "Replace Perfect Balance with Masterful Blitz when you have 3 Beast Chakra.", MNK.JobID)]
+        MonkPerfectBalanceFeature = 2004,
 
         #endregion
         // ====================================================================================
@@ -443,8 +450,17 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Iaijutsu to Shoha", "Replace Iaijutsu with Shoha when meditation is 3.", SAM.JobID)]
         SamuraiIaijutsuShohaFeature = 3410,
 
+        [CustomComboInfo("Shinten to Senei", "Replace Hissatsu: Shinten with Senei when available.", SAM.JobID)]
+        SamuraiShintenSeneiFeature = 3414,
+
+        [CustomComboInfo("Shinten to Shoha", "Replace Hissatsu: Shinten with Shoha when Meditation is full.", SAM.JobID)]
+        SamuraiShintenShohaFeature = 3413,
+
+        [CustomComboInfo("Kyuten to Guren", "Replace Hissatsu: Kyuten with Guren when available.", SAM.JobID)]
+        SamuraiKyutenGurenFeature = 3415,
+
         [CustomComboInfo("Kyuten to Shoha II", "Replace Hissatsu: Kyuten with Shoha II when Meditation is full.", SAM.JobID)]
-        SamuraiShoha2Feature = 3412,
+        SamuraiKyutenShoha2Feature = 3412,
 
         [CustomComboInfo("Ikishoten Namikiri Feature", "Replace Ikishoten with Ogi Namikiri, Shoha, and then Kaeshi Namikiri when available.", SAM.JobID)]
         SamuraiIkishotenNamikiriFeature = 3411,
@@ -525,8 +541,12 @@ namespace XIVComboExpandedPlugin
         WarriorPrimalRendFeature = 2107,
 
         [SecretCustomCombo]
-        [CustomComboInfo("Storm's Path to Storm's Eye (Questionable)", "Replace Storm's Path with Storm's Eye when no Surging Tempest is active or is below 30.", WAR.JobID)]
+        [CustomComboInfo("Storm's Path to Storm's Eye", "Replace Storm's Path with Storm's Eye when no Surging Tempest is active or is below 30.", WAR.JobID)]
         WarriorStormPathStormEye = 2108,
+
+        [SecretCustomCombo]
+        [CustomComboInfo("Upheaval and Orogeny Spender", "Replaces Decimate and Fell Cleave with Upheaval and Orogeny if ready.", WAR.JobID)]
+        UpheavalOrogenySpenderFeature = 2109,
 
         #endregion
         // ====================================================================================

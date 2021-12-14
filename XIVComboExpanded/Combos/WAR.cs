@@ -26,7 +26,8 @@ namespace XIVComboExpandedPlugin.Combos
             NascentFlash = 16464,
             InnerChaos = 16465,
             PrimalRend = 25753,
-            Upheaval = 7387;
+            Upheaval = 7387,
+            Orogeny = 25752;
 
         public static class Buffs
         {
@@ -57,6 +58,7 @@ namespace XIVComboExpandedPlugin.Combos
                 MythrilTempestTrait = 74,
                 NascentFlash = 76,
                 InnerChaos = 80,
+                Orogeny = 86,
                 PrimalRend = 90;
         }
     }
@@ -71,22 +73,24 @@ namespace XIVComboExpandedPlugin.Combos
         {
             if (actionID == WAR.StormsPath)
             {
+                byte gauge = GetJobGauge<WARGauge>().BeastGauge;
+                if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.InnerBeastMastery)
+                    return OriginalHook(WAR.FellCleave);
+                if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.InnerBeastMastery)
+                    return OriginalHook(WAR.InnerBeast);
                 if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease) && level >= WAR.Levels.FellCleave)
                     return OriginalHook(WAR.FellCleave);
                 if (comboTime > 0)
                 {
                     if (lastComboMove == WAR.Maim && level >= WAR.Levels.StormsPath)
                     {
-                        byte gauge = GetJobGauge<WARGauge>().BeastGauge;
-                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 80 && level >= WAR.Levels.InnerBeastMastery)
-                            return OriginalHook(WAR.FellCleave);
-                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 80 && level <= WAR.Levels.InnerBeastMastery)
-                            return OriginalHook(WAR.InnerBeast);
                         return WAR.StormsPath;
                     }
 
                     if (lastComboMove == WAR.HeavySwing && level >= WAR.Levels.Maim)
+                    {
                         return WAR.Maim;
+                    }
                 }
 
                 return WAR.HeavySwing;
@@ -106,17 +110,17 @@ namespace XIVComboExpandedPlugin.Combos
         {
             if (actionID == WAR.StormsEye)
             {
+                byte gauge = GetJobGauge<WARGauge>().BeastGauge;
+                if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.InnerBeastMastery)
+                    return OriginalHook(WAR.FellCleave);
+                if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.InnerBeastMastery)
+                    return OriginalHook(WAR.InnerBeast);
                 if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease) && level >= WAR.Levels.FellCleave)
                     return OriginalHook(WAR.FellCleave);
                 if (comboTime > 0)
                 {
                     if (lastComboMove == WAR.Maim && level >= WAR.Levels.StormsEye)
                     {
-                        byte gauge = GetJobGauge<WARGauge>().BeastGauge;
-                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 80 && level >= WAR.Levels.InnerBeastMastery)
-                            return OriginalHook(WAR.FellCleave);
-                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 80 && level <= WAR.Levels.InnerBeastMastery)
-                            return OriginalHook(WAR.InnerBeast);
                         return WAR.StormsEye;
                     }
 
@@ -148,9 +152,9 @@ namespace XIVComboExpandedPlugin.Combos
                     if (lastComboMove == WAR.Overpower && level >= WAR.Levels.MythrilTempest)
                     {
                         byte gauge = GetJobGauge<WARGauge>().BeastGauge;
-                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 80 && level >= WAR.Levels.MythrilTempestTrait)
+                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
                             return OriginalHook(WAR.Decimate);
-                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 80 && level <= WAR.Levels.MythrilTempestTrait)
+                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.MythrilTempestTrait)
                             return OriginalHook(WAR.SteelCyclone);
                         return WAR.MythrilTempest;
                     }
@@ -199,6 +203,38 @@ namespace XIVComboExpandedPlugin.Combos
 
                 // Fell Cleave or Decimate
                 return OriginalHook(actionID);
+            }
+
+            return actionID;
+        }
+    }
+
+    internal class UpheavalOrogenySpenderFeature : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.UpheavalOrogenySpenderFeature;
+
+        protected internal override uint[] ActionIDs { get; } = new[] { WAR.StormsPath, WAR.StormsEye, WAR.MythrilTempest };
+
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            byte gauge = GetJobGauge<WARGauge>().BeastGauge;
+            if (IsEnabled(CustomComboPreset.UpheavalOrogenySpenderFeature) && HasEffect(WAR.Buffs.SurgingTempest))
+            {
+                if (actionID is WAR.StormsPath or WAR.StormsEye)
+                {
+                    if (level >= WAR.Levels.Upheaval)
+                        return PickByCooldown(actionID, actionID, WAR.Upheaval);
+
+                    return WAR.StormsPath;
+                }
+
+                if (actionID is WAR.MythrilTempest)
+                {
+                    if (level >= WAR.Levels.Orogeny)
+                        return PickByCooldown(actionID, actionID, WAR.Orogeny);
+
+                    return WAR.MythrilTempest;
+                }
             }
 
             return actionID;
