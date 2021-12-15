@@ -23,7 +23,8 @@ namespace XIVComboExpandedPlugin.Combos
             FourPointFury = 16473,
             Enlightenment = 16474,
             HowlingFist = 25763,
-            MasterfulBlitz = 25764;
+            MasterfulBlitz = 25764,
+            ShadowOfTheDestroyer = 25767;
 
         public static class Buffs
         {
@@ -71,8 +72,7 @@ namespace XIVComboExpandedPlugin.Combos
         {
             if (actionID == MNK.Rockbreaker)
             {
-                var gauge1 = GetJobGauge<MNKGauge>();
-                var gauge = new MyMNKGauge(gauge1);
+                var gauge = new MyMNKGauge(GetJobGauge<MNKGauge>());
 
                 if (IsEnabled(CustomComboPreset.MonkAoEBalanceFeature))
                 {
@@ -82,13 +82,12 @@ namespace XIVComboExpandedPlugin.Combos
 
                 if (IsEnabled(CustomComboPreset.MonkAoECombo))
                 {
-                    if ((level >= MNK.Levels.PerfectBalance && HasEffect(MNK.Buffs.PerfectBalance)) || (level >= MNK.Levels.FormShift && HasEffect(MNK.Buffs.FormlessFist)))
+                    if ((level >= MNK.Levels.PerfectBalance && HasEffect(MNK.Buffs.PerfectBalance)) ||
+                        (level >= MNK.Levels.FormShift && HasEffect(MNK.Buffs.FormlessFist)))
                     {
-                        if (level >= MNK.Levels.ShadowOfTheDestroyer)
-                            // Shadow of the Destroyer
-                            return OriginalHook(MNK.ArmOfTheDestroyer);
-
-                        return MNK.Rockbreaker;
+                        return level >= MNK.Levels.ShadowOfTheDestroyer
+                            ? MNK.ShadowOfTheDestroyer
+                            : MNK.Rockbreaker;
                     }
 
                     if (level >= MNK.Levels.ArmOfTheDestroyer && HasEffect(MNK.Buffs.OpoOpoForm))
@@ -108,12 +107,12 @@ namespace XIVComboExpandedPlugin.Combos
 
             if (actionID == MNK.FourPointFury)
             {
-                var gauge1 = GetJobGauge<MNKGauge>();
-                var gauge = new MyMNKGauge(gauge1);
+                var gauge = new MyMNKGauge(GetJobGauge<MNKGauge>());
 
                 if (level >= MNK.Levels.PerfectBalance && HasEffect(MNK.Buffs.PerfectBalance))
                 {
                     if (level >= MNK.Levels.ArmOfTheDestroyer && !gauge.BeastChakra.Contains(BeastChakra.OPOOPO))
+                        // Shadow of the Destroyer
                         return OriginalHook(MNK.ArmOfTheDestroyer);
 
                     if (level >= MNK.Levels.FourPointFury && !gauge.BeastChakra.Contains(BeastChakra.RAPTOR))
@@ -141,8 +140,7 @@ namespace XIVComboExpandedPlugin.Combos
         {
             if (actionID == MNK.HowlingFist || actionID == MNK.Enlightenment)
             {
-                var gauge1 = GetJobGauge<MNKGauge>();
-                var gauge = new MyMNKGauge(gauge1);
+                var gauge = new MyMNKGauge(GetJobGauge<MNKGauge>());
 
                 if (level >= MNK.Levels.Meditation && gauge.Chakra < 5)
                     return MNK.Meditation;
@@ -165,8 +163,7 @@ namespace XIVComboExpandedPlugin.Combos
         {
             if (actionID == MNK.PerfectBalance)
             {
-                var gauge1 = GetJobGauge<MNKGauge>();
-                var gauge = new MyMNKGauge(gauge1);
+                var gauge = new MyMNKGauge(GetJobGauge<MNKGauge>());
 
                 if (!gauge.BeastChakra.Contains(BeastChakra.NONE))
                     return OriginalHook(MNK.MasterfulBlitz);
@@ -205,8 +202,8 @@ namespace XIVComboExpandedPlugin.Combos
     {
         NONE = 0,
         COEURL = 1,
-        RAPTOR = 2,
-        OPOOPO = 3,
+        OPOOPO = 2,
+        RAPTOR = 3,
     }
 
     [Flags]
