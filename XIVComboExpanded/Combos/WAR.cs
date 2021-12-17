@@ -234,7 +234,6 @@ namespace XIVComboExpandedPlugin.Combos
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            byte gauge = GetJobGauge<WARGauge>().BeastGauge;
             if (IsEnabled(CustomComboPreset.UpheavalOrogenySpenderFeature) && HasEffect(WAR.Buffs.SurgingTempest))
             {
                 if (actionID is WAR.StormsPath or WAR.StormsEye)
@@ -242,7 +241,8 @@ namespace XIVComboExpandedPlugin.Combos
                     if (level >= WAR.Levels.Upheaval)
                         return PickByCooldown(actionID, actionID, WAR.Upheaval);
 
-                    return WAR.StormsPath;
+                    // return WAR.StormsPath;
+                    return OriginalHook(actionID);
                 }
 
                 if (actionID is WAR.MythrilTempest)
@@ -250,7 +250,8 @@ namespace XIVComboExpandedPlugin.Combos
                     if (level >= WAR.Levels.Orogeny)
                         return PickByCooldown(actionID, actionID, WAR.Orogeny);
 
-                    return WAR.MythrilTempest;
+                    // return WAR.MythrilTempest;
+                    return OriginalHook(actionID);
                 }
             }
 

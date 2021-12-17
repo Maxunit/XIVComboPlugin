@@ -224,7 +224,7 @@ namespace XIVComboExpandedPlugin
 
         [SecretCustomCombo]
         [CustomComboInfo("Dive Dive Dive!", "Replace Spineshatter Dive, Dragonfire Dive, and Stardiver with whichever is available.", DRG.JobID)]
-        DragoonDiveFeature = 2205,
+        DragoonDiveFeature = 2206,
 
         #endregion
         // ====================================================================================
@@ -312,7 +312,7 @@ namespace XIVComboExpandedPlugin
         // ====================================================================================
         #region MONK
 
-        [CustomComboInfo("Monk AoE Combo", "Replaces Rockbreaker and Four Point Fury with the AoE combo chain, when Perfect Balance is active, Rockbreaker does not change.", MNK.JobID)]
+        [CustomComboInfo("Monk AoE Combo", "Replaces Rockbreaker with the AoE combo chain.", MNK.JobID)]
         MonkAoECombo = 2001,
 
         [CustomComboInfo("Monk AoE Balance Feature", "Replaces Rockbreaker with Masterful Blitz if you have 3 Beast Chakra.", MNK.JobID)]
@@ -323,6 +323,18 @@ namespace XIVComboExpandedPlugin
 
         [CustomComboInfo("Perfect Balance Feature", "Replace Perfect Balance with Masterful Blitz when you have 3 Beast Chakra.", MNK.JobID)]
         MonkPerfectBalanceFeature = 2004,
+
+        [CustomComboInfo("Monk Solar AoE Feature", "Replace Rockbreaker with whatever is necessary to acquire missing Beast Chakra when Perfect Balance is active and the Solar Nadi is missing.", MNK.JobID)]
+        MonkAoESolarFeature = 2005,
+
+        [CustomComboInfo("Monk Lunar AoE Feature", "Replace Rockbreaker with Shadow of the Destroyer (or Rockbreaker depending on level) when Perfect Balance is active and the Lunar Nadi is missing.", MNK.JobID)]
+        MonkAoELunarFeature = 2006,
+
+        [CustomComboInfo("Monk Disciplined AoE Feature", "Replace Rockbreaker with Four Point Fury while Formless Fist is active.", MNK.JobID)]
+        MonkAoEDisciplinedFeature = 2007,
+
+        [CustomComboInfo("Monk Four Point Fury AoE Feature", "Replace Four Point Fury with Shadow of the Destroyer (or Rockbreaker depending on level) when Perfect Balance is active.", MNK.JobID)]
+        MonkAoEFpfFeature = 2008,
 
         #endregion
         // ====================================================================================
@@ -435,6 +447,13 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Regress Feature", "Both Hell's Ingress and Egress turn into Regress when Threshold is active, instead of just the opposite of the one used.", RPR.JobID)]
         ReaperRegressFeature = 3910,
 
+        [CustomComboInfo("Lemure's Soul Reaver Feature", "Replace Gibbet, Gallows, and Guillotine (and in other combos) with Lemure's Slice or Scythe when two or more stacks of Void Shroud are active.", RPR.JobID)]
+        ReaperLemuresSoulReaverFeature = 3911,
+
+        [SecretCustomCombo]
+        [CustomComboInfo("Communio Soul Reaver Feature", "Replace Gibbet, Gallows, and Guillotine (and in other combos) with Communio when one stack is left of Shroud.", RPR.JobID)]
+        ReaperCommunioSoulReaverFeature = 3912,
+
         #endregion
         // ====================================================================================
         #region RED MAGE
@@ -511,20 +530,28 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Iaijutsu to Shoha", "Replace Iaijutsu with Shoha when meditation is 3.", SAM.JobID)]
         SamuraiIaijutsuShohaFeature = 3410,
 
-        [CustomComboInfo("Shinten to Senei", "Replace Hissatsu: Shinten with Senei when available.", SAM.JobID)]
-        SamuraiShintenSeneiFeature = 3414,
-
-        [CustomComboInfo("Shinten to Shoha", "Replace Hissatsu: Shinten with Shoha when Meditation is full.", SAM.JobID)]
-        SamuraiShintenShohaFeature = 3413,
-
-        [CustomComboInfo("Kyuten to Guren", "Replace Hissatsu: Kyuten with Guren when available.", SAM.JobID)]
-        SamuraiKyutenGurenFeature = 3415,
+        [CustomComboInfo("Ikishoten Namikiri Feature", "Replace Ikishoten with Ogi Namikiri, Shoha, and then Kaeshi Namikiri when available.", SAM.JobID)]
+        SamuraiIkishotenNamikiriFeature = 3411,
 
         [CustomComboInfo("Kyuten to Shoha II", "Replace Hissatsu: Kyuten with Shoha II when Meditation is full.", SAM.JobID)]
         SamuraiKyutenShoha2Feature = 3412,
 
-        [CustomComboInfo("Ikishoten Namikiri Feature", "Replace Ikishoten with Ogi Namikiri, Shoha, and then Kaeshi Namikiri when available.", SAM.JobID)]
-        SamuraiIkishotenNamikiriFeature = 3411,
+        [CustomComboInfo("Shinten to Shoha", "Replace Hissatsu: Shinten with Shoha when Meditation is full.", SAM.JobID)]
+        SamuraiShintenShohaFeature = 3413,
+
+        [CustomComboInfo("Shinten to Senei", "Replace Hissatsu: Shinten with Senei when available.", SAM.JobID)]
+        SamuraiShintenSeneiFeature = 3414,
+
+        [CustomComboInfo("Kyuten to Guren", "Replace Hissatsu: Kyuten with Guren when available.", SAM.JobID)]
+        SamuraiKyutenGurenFeature = 3415,
+
+        [ParentCombo(SamuraiGekkoCombo)]
+        [CustomComboInfo("Gekko Combo Option", "Start the Gekko combo chain with Jinpu instead of Hakaze.", SAM.JobID)]
+        SamuraiGekkoOption = 3416,
+
+        [ParentCombo(SamuraiKashaCombo)]
+        [CustomComboInfo("Kasha Combo Option", "Start the Kasha combo chain with Shifu instead of Hakaze.", SAM.JobID)]
+        SamuraiKashaOption = 3417,
 
         #endregion
         // ====================================================================================
@@ -575,6 +602,12 @@ namespace XIVComboExpandedPlugin
 
         [CustomComboInfo("Searing Carbuncle Feature", "Change Searing Light into Summon Carbuncle when no pet has been summoned.", SMN.JobID)]
         SummonerSearingCarbuncleFeature = 2712,
+
+        [CustomComboInfo("Titan's Favor Ruin Feature", "Change Ruin into Mountain Buster (oGCD) when available.", SMN.JobID)]
+        SummonerRuinTitansFavorFeature = 2713,
+
+        [CustomComboInfo("Titan's Favor Outburst Feature", "Change Outburst into Mountain Buster (oGCD) when available.", SMN.JobID)]
+        SummonerOutburstTitansFavorFeature = 2714,
 
         #endregion
         // ====================================================================================
