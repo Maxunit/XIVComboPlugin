@@ -84,7 +84,7 @@ namespace XIVComboExpandedPlugin.Combos
             { DOH.CulBasicTouch, DOH.CulAdvancedTouch },
         };
 
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.Disabled; // DohTouchCombo;
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DohTouchCombo;
 
         protected internal override uint[] ActionIDs { get; } = new[]
         {

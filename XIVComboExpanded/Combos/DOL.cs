@@ -9,12 +9,15 @@
             AgelessWords = 215,
             SolidReason = 232,
             MinWiseToTheWorld = 26521,
-            BtnWiseToTheWorld = 26522;
+            BtnWiseToTheWorld = 26522,
+            PioneersGift1 = 21178,
+            PioneersGift2 = 25590;
 
         public static class Buffs
         {
             public const ushort
-                EurekaMoment = 2765;
+                EurekaMoment = 2765,
+                GiftoftheLand = 2666;
         }
 
         public static class Debuffs
@@ -26,7 +29,9 @@
         public static class Levels
         {
             public const byte
-                WiseToTheWorld = 90;
+                WiseToTheWorld = 90,
+                PioneersGift1 = 15,
+                PioneersGift2 = 50;
         }
     }
 
@@ -48,6 +53,27 @@
             {
                 if (level >= DOL.Levels.WiseToTheWorld && HasEffect(DOL.Buffs.EurekaMoment))
                     return DOL.BtnWiseToTheWorld;
+            }
+
+            return actionID;
+        }
+    }
+
+    internal class DolGiftoftheLand : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DolGiftoftheLand;
+
+        protected internal override uint[] ActionIDs { get; } = new[] { DOL.PioneersGift1, DOL.PioneersGift2 };
+
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == DOL.PioneersGift1)
+            {
+                if (level >= DOL.Levels.PioneersGift2 && HasEffect(DOL.Buffs.GiftoftheLand))
+                    // Bloodwhetting
+                    return OriginalHook(DOL.PioneersGift2);
+
+                return DOL.PioneersGift1;
             }
 
             return actionID;

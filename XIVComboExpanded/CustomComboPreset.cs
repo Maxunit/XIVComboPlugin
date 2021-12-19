@@ -668,15 +668,18 @@ namespace XIVComboExpandedPlugin
         // ====================================================================================
         #region DOH
 
-        // [CustomComboInfo("Touch Combo", "Replaces Basic Touch with its combo chain.", DOH.JobID)]
-        // DohTouchCombo = 50001,
+        [CustomComboInfo("Touch Combo", "Replaces Basic Touch with its combo chain.", DOH.JobID)]
+        DohTouchCombo = 50001,
 
         #endregion
         // ====================================================================================
         #region DOL
 
-        // [CustomComboInfo("Eureka Feature", "Replaces Ageless Words and Solid Reason with Wise to the World when available.", DOL.JobID)]
-        // DolEurekaFeature = 51001,
+        [CustomComboInfo("Eureka Feature", "Replaces Ageless Words and Solid Reason with Wise to the World when available.", DOL.JobID)]
+        DolEurekaFeature = 51001,
+
+        [CustomComboInfo("Pioneer's Gift Combo", "Replaces Pioneer's Gift I with Pioneer's Gift II when Gift of the Land is active.", DOL.JobID)]
+        DolGiftoftheLand = 51002,
 
         #endregion
         // ====================================================================================
