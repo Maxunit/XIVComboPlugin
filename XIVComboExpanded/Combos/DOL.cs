@@ -70,7 +70,6 @@
             if (actionID == DOL.PioneersGift1)
             {
                 if (level >= DOL.Levels.PioneersGift2 && HasEffect(DOL.Buffs.GiftoftheLand))
-                    // Bloodwhetting
                     return OriginalHook(DOL.PioneersGift2);
 
                 return DOL.PioneersGift1;

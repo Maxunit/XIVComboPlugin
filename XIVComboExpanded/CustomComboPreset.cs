@@ -668,8 +668,8 @@ namespace XIVComboExpandedPlugin
         // ====================================================================================
         #region DOH
 
-        [CustomComboInfo("Touch Combo", "Replaces Basic Touch with its combo chain.", DOH.JobID)]
-        DohTouchCombo = 50001,
+        // [CustomComboInfo("Touch Combo", "Replaces Basic Touch with its combo chain.", DOH.JobID)]
+        // DohTouchCombo = 50001,
 
         #endregion
         // ====================================================================================

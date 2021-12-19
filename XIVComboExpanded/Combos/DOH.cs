@@ -27,13 +27,13 @@ namespace XIVComboExpandedPlugin.Combos
             GsmStandardTouch = 100078,
             AlcStandardTouch = 100093,
             CulStandardTouch = 100109,
-            CrpAdvancedTouch = 100411,
             // Advanced Touch
+            CrpAdvancedTouch = 100411,
             BsmAdvancedTouch = 100412,
             ArmAdvancedTouch = 100413,
-            LtwAdvancedTouch = 100415,
-            WvrAdvancedTouch = 100416,
-            GsmAdvancedTouch = 100414,
+            LtwAdvancedTouch = 100414,
+            WvrAdvancedTouch = 100415,
+            GsmAdvancedTouch = 100416,
             AlcAdvancedTouch = 100417,
             CulAdvancedTouch = 100418,
             Placeholder = 0;
@@ -58,7 +58,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class DolTouchCombo : CustomCombo
+    internal class DohTouchCombo : CustomCombo
     {
         private static readonly Dictionary<uint, uint> StandardTouchMap = new()
         {
@@ -84,7 +84,7 @@ namespace XIVComboExpandedPlugin.Combos
             { DOH.CulBasicTouch, DOH.CulAdvancedTouch },
         };
 
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DohTouchCombo;
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.Disabled; // DohTouchCombo;
 
         protected internal override uint[] ActionIDs { get; } = new[]
         {
@@ -104,11 +104,14 @@ namespace XIVComboExpandedPlugin.Combos
             var standard = StandardTouchMap[basic];
             var advanced = AdvancedTouchMap[basic];
 
-            if (level >= DOH.Levels.StandardTouch && lastComboMove == basic)
-                return standard;
+            if (actionID == basic)
+            {
+                if (level >= DOH.Levels.StandardTouch && lastComboMove == basic)
+                    return standard;
 
-            if (level >= DOH.Levels.AdvancedTouch && lastComboMove == standard)
-                return advanced;
+                if (level >= DOH.Levels.AdvancedTouch && lastComboMove == standard)
+                    return advanced;
+            }
 
             return actionID;
         }

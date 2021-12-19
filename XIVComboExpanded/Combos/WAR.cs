@@ -1,4 +1,3 @@
-using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
 
@@ -147,17 +146,17 @@ namespace XIVComboExpandedPlugin.Combos
         {
             if (actionID == WAR.MythrilTempest)
             {
+                byte gauge = GetJobGauge<WARGauge>().BeastGauge;
+                if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
+                    return OriginalHook(WAR.Decimate);
+                if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.MythrilTempestTrait)
+                    return OriginalHook(WAR.SteelCyclone);
                 if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease))
                     return OriginalHook(WAR.Decimate);
                 if (comboTime > 0)
                 {
                     if (lastComboMove == WAR.Overpower && level >= WAR.Levels.MythrilTempest)
                     {
-                        byte gauge = GetJobGauge<WARGauge>().BeastGauge;
-                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
-                            return OriginalHook(WAR.Decimate);
-                        if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.MythrilTempestTrait)
-                            return OriginalHook(WAR.SteelCyclone);
                         return WAR.MythrilTempest;
                     }
                 }
@@ -190,7 +189,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class WArriorPrimalBeastFeature : CustomCombo
+    internal class WarriorPrimalBeastFeature : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.WarriorPrimalBeastFeature;
 
@@ -239,18 +238,14 @@ namespace XIVComboExpandedPlugin.Combos
                 if (actionID is WAR.StormsPath or WAR.StormsEye)
                 {
                     if (level >= WAR.Levels.Upheaval)
-                        return PickByCooldown(actionID, actionID, WAR.Upheaval);
-
-                    // return WAR.StormsPath;
+                        return PickByCooldown(actionID, actionID, OriginalHook(actionID), WAR.Upheaval);
                     return OriginalHook(actionID);
                 }
 
                 if (actionID is WAR.MythrilTempest)
                 {
                     if (level >= WAR.Levels.Orogeny)
-                        return PickByCooldown(actionID, actionID, WAR.Orogeny);
-
-                    // return WAR.MythrilTempest;
+                        return PickByCooldown(actionID, actionID, OriginalHook(actionID), WAR.Orogeny);
                     return OriginalHook(actionID);
                 }
             }
@@ -275,7 +270,7 @@ namespace XIVComboExpandedPlugin.Combos
                     {
                         Status? surgingtempesttime = FindEffectAny(WAR.Buffs.SurgingTempest);
                         if (HasEffect(WAR.Buffs.SurgingTempest) && surgingtempesttime is not null)
-                            {
+                        {
                             if (surgingtempesttime.RemainingTime >= 30)
                             {
                                 if (IsEnabled(CustomComboPreset.WarriorStormPathStormEye) && HasEffect(WAR.Buffs.SurgingTempest))
