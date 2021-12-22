@@ -530,8 +530,16 @@ namespace XIVComboExpandedPlugin
         // ====================================================================================
         #region SAGE
 
-        // [CustomComboInfo("Kardia Into Soteria", "Kardia turns into Soteria when active and Soteria is off-cooldown.", SGE.JobID)]
-        // SageKardiaFeature = 4001,
+        [CustomComboInfo("Kardia Into Soteria", "Kardia turns into Soteria when active and Soteria is off-cooldown.", SGE.JobID)]
+        SageKardiaFeature = 4001,
+
+        [SecretCustomCombo]
+        [CustomComboInfo("Dosis into Eukrasia & Eukrasia Opener", "Dosis turns into Eukrasia when Eukrasian Dosis is not on Target.", SGE.JobID)]
+        SageSmartEukrasiaDosis = 4002,
+
+        // [SecretCustomCombo]
+        // [CustomComboInfo("Smart Eukrasia", "This is a work in progress, use at own risk.", SGE.JobID)]
+        // SageSmartEukrasia = 4999,
 
         #endregion
         // ====================================================================================
