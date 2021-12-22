@@ -296,11 +296,11 @@ namespace XIVComboExpandedPlugin.Combos
                 var gauge = GetJobGauge<WARGauge>().BeastGauge;
                 Status? surgingtempesttime = FindEffect(WAR.Buffs.SurgingTempest);
                 if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.InnerBeastMastery)
-                    return WAR.FellCleave;
+                    return OriginalHook(WAR.FellCleave);
                 if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.InnerBeastMastery)
-                    return WAR.InnerBeast;
+                    return OriginalHook(WAR.InnerBeast);
                 if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease) && level >= WAR.Levels.FellCleave)
-                    return WAR.FellCleave;
+                    return OriginalHook(WAR.FellCleave);
                 if (IsEnabled(CustomComboPreset.WarriorStormPathStormEye) && level >= WAR.Levels.StormsEye && HasEffect(WAR.Buffs.SurgingTempest) && surgingtempesttime is not null)
                 {
                     if (comboTime > 0 && surgingtempesttime.RemainingTime >= 30 && lastComboMove == WAR.Maim)
