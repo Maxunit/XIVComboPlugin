@@ -61,7 +61,12 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class GunbreakerSolidBarrelCombo : CustomCombo
+    internal abstract class GunbreakerCustomCombo : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GnbAny;
+    }
+
+    internal class GunbreakerSolidBarrelCombo : GunbreakerCustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GunbreakerSolidBarrelCombo;
 
@@ -101,11 +106,9 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class GunbreakerGnashingFangContinuation : CustomCombo
+    internal class GunbreakerGnashingFangContinuation : GunbreakerCustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GunbreakerGnashingFangCont;
-
-        protected internal override uint[] ActionIDs { get; } = new[] { GNB.GnashingFang };
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
@@ -131,12 +134,8 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class GunbreakerBurstStrikeFatedCircle : CustomCombo
+    internal class GunbreakerBurstStrikeFatedCircle : GunbreakerCustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GnbAny;
-
-        protected internal override uint[] ActionIDs { get; } = new[] { GNB.BurstStrike, GNB.FatedCircle };
-
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             if (actionID == GNB.BurstStrike)
@@ -156,8 +155,9 @@ namespace XIVComboExpandedPlugin.Combos
                 {
                     if (level >= GNB.Levels.DoubleDown && gauge.Ammo >= 2)
                     {
-                        var doubleDown = GetCooldown(GNB.DoubleDown);
-                        if (!doubleDown.IsCooldown)
+                        // var doubleDown = GetCooldown(GNB.DoubleDown);
+                        // if (!doubleDown.IsCooldown)
+                        if (!IsOnCooldown(GNB.DoubleDown))
                             return GNB.DoubleDown;
                     }
                 }
@@ -173,11 +173,9 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class GunbreakerBowShockSonicBreakFeature : CustomCombo
+    internal class GunbreakerBowShockSonicBreakFeature : GunbreakerCustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GunbreakerBowShockSonicBreakFeature;
-
-        protected internal override uint[] ActionIDs { get; } = new[] { GNB.BowShock, GNB.SonicBreak };
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
@@ -191,11 +189,9 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class GunbreakerDemonSlaughterCombo : CustomCombo
+    internal class GunbreakerDemonSlaughterCombo : GunbreakerCustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GunbreakerDemonSlaughterCombo;
-
-        protected internal override uint[] ActionIDs { get; } = new[] { GNB.DemonSlaughter };
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
@@ -245,11 +241,9 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class GunbreakerNoMercyFeature : CustomCombo
+    internal class GunbreakerNoMercyFeature : GunbreakerCustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GunbreakerNoMercyFeature;
-
-        protected internal override uint[] ActionIDs { get; } = new[] { GNB.NoMercy };
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
