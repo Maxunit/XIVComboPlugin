@@ -678,12 +678,14 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Primal Release Feature", "Replace Inner Release with Primal Rend when available", WAR.JobID)]
         WarriorPrimalReleaseFeature = 2109,
 
+        [ConflictingCombos(WarriorStormsPathCombo, WarriorStormsEyeCombo)]
         [SecretCustomCombo]
-        [CustomComboInfo("Storm's Path & Storm's Eye", "Replace Storm's Path with Storm's Eye when no Surging Tempest is active or is below 30.", WAR.JobID)]
+        [CustomComboInfo("Storm's Path & Storm's Eye", "Replace Storm's Path with Storm's Eye when no Surging Tempest is active or is below 30. (Uses Heavy Swing!)", WAR.JobID)]
         WarriorStormPathStormEye = 2110,
 
+        [ParentCombo(WarriorStormPathStormEye)]
         [SecretCustomCombo]
-        [CustomComboInfo("Upheaval and Orogeny Spender", "Replaces Decimate and Fell Cleave with Upheaval and Orogeny if ready.", WAR.JobID)]
+        [CustomComboInfo("Upheaval and Orogeny Spender", "Adds Upheaval and Orogeny to the Parent Combo if Surging Tempest is active.", WAR.JobID)]
         UpheavalOrogenySpenderFeature = 2111,
 
         // [SecretCustomCombo]
