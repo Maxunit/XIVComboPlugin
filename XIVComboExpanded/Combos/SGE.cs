@@ -76,48 +76,55 @@ namespace XIVComboExpandedPlugin.Combos
             {
                 if (actionID == SGE.Dosis)
                 {
-                    // Anything below this line is work-in-progress, still leveling Sage! No idea if Eukrasian Dosis is treated separately or not.
-                    Status? eukresiandosis1 = FindTargetEffectAny(SGE.Debuffs.EukrasianDosis1);
-                    Status? eukresiandosis2 = FindTargetEffectAny(SGE.Debuffs.EukrasianDosis2);
-                    Status? eukresiandosis3 = FindTargetEffectAny(SGE.Debuffs.EukrasianDosis3);
-
-                    if (eukresiandosis1 is not null && level >= SGE.Levels.Dosis)
+                    if (level >= SGE.Levels.Dosis)
                     {
-                        if (TargetHasEffectAny(SGE.Debuffs.EukrasianDosis1) && eukresiandosis1.RemainingTime >= 10)
-                            return OriginalHook(SGE.Dosis);
-
-                        if (TargetHasEffectAny(SGE.Debuffs.EukrasianDosis1) && eukresiandosis1.RemainingTime <= 10)
+                        Status? eukresiandosis1 = FindTargetEffectAny(SGE.Debuffs.EukrasianDosis1);
+                        if (eukresiandosis1 is not null)
                         {
-                            if (HasEffectAny(SGE.Buffs.Eukrasia) && eukresiandosis1.RemainingTime <= 10)
+                            if (TargetHasEffectAny(SGE.Debuffs.EukrasianDosis1) && eukresiandosis1.RemainingTime >= 10)
                                 return OriginalHook(SGE.Dosis);
+
+                            if (TargetHasEffectAny(SGE.Debuffs.EukrasianDosis1) && eukresiandosis1.RemainingTime <= 10)
+                            {
+                                if (HasEffectAny(SGE.Buffs.Eukrasia) && eukresiandosis1.RemainingTime <= 10)
+                                    return OriginalHook(SGE.Dosis);
+                            }
 
                             return OriginalHook(SGE.Eukrasia);
                         }
                     }
 
-                    if (eukresiandosis2 is not null && level >= SGE.Levels.Dosis2)
+                    if (level >= SGE.Levels.Dosis2)
                     {
-                        if (TargetHasEffectAny(SGE.Debuffs.EukrasianDosis2) && eukresiandosis2.RemainingTime >= 10)
-                            return OriginalHook(SGE.Dosis);
-
-                        if (TargetHasEffectAny(SGE.Debuffs.EukrasianDosis2) && eukresiandosis2.RemainingTime <= 10)
+                        Status? eukresiandosis2 = FindTargetEffectAny(SGE.Debuffs.EukrasianDosis2);
+                        if (eukresiandosis2 is not null)
                         {
-                            if (HasEffectAny(SGE.Buffs.Eukrasia) && eukresiandosis2.RemainingTime <= 10)
+                            if (TargetHasEffectAny(SGE.Debuffs.EukrasianDosis2) && eukresiandosis2.RemainingTime >= 10)
                                 return OriginalHook(SGE.Dosis);
+
+                            if (TargetHasEffectAny(SGE.Debuffs.EukrasianDosis2) && eukresiandosis2.RemainingTime <= 10)
+                            {
+                                if (HasEffectAny(SGE.Buffs.Eukrasia) && eukresiandosis2.RemainingTime <= 10)
+                                    return OriginalHook(SGE.Dosis);
+                            }
 
                             return OriginalHook(SGE.Eukrasia);
                         }
                     }
 
-                    if (eukresiandosis3 is not null && level >= SGE.Levels.Dosis3)
+                    if (level >= SGE.Levels.Dosis3)
                     {
-                        if (TargetHasEffectAny(SGE.Debuffs.EukrasianDosis3) && eukresiandosis3.RemainingTime >= 10)
-                            return OriginalHook(SGE.Dosis);
-
-                        if (TargetHasEffectAny(SGE.Debuffs.EukrasianDosis3) && eukresiandosis3.RemainingTime <= 10)
+                        Status? eukresiandosis3 = FindTargetEffectAny(SGE.Debuffs.EukrasianDosis3);
+                        if (eukresiandosis3 is not null)
                         {
-                            if (HasEffectAny(SGE.Buffs.Eukrasia) && eukresiandosis3.RemainingTime <= 10)
+                            if (TargetHasEffectAny(SGE.Debuffs.EukrasianDosis3) && eukresiandosis3.RemainingTime >= 10)
                                 return OriginalHook(SGE.Dosis);
+
+                            if (TargetHasEffectAny(SGE.Debuffs.EukrasianDosis3) && eukresiandosis3.RemainingTime <= 10)
+                            {
+                                if (HasEffectAny(SGE.Buffs.Eukrasia) && eukresiandosis3.RemainingTime <= 10)
+                                    return OriginalHook(SGE.Dosis);
+                            }
 
                             return OriginalHook(SGE.Eukrasia);
                         }
