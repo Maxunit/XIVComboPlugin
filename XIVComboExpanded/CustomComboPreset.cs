@@ -117,14 +117,18 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Freeze/Flare Feature", "Freeze and Flare become whichever action you can currently use.", BLM.JobID)]
         BlackFreezeFlareFeature = 2506,
 
+        [CustomComboInfo("Scathe/Xenoglossy Feature", "Scathe becomes Xenoglossy when available.", BLM.JobID)]
+        BlackScatheFeature = 2507,
+
         [CustomComboInfo("Fire 2 Feature", "(High) Fire 2 becomes Flare in Astral Fire with 1 or fewer Umbral Hearts.", BLM.JobID)]
         BlackFire2Feature = 2508,
 
         [CustomComboInfo("Ice 2 Feature", "(High) Blizzard 2 becomes Freeze in Umbral Ice.", BLM.JobID)]
         BlackBlizzard2Feature = 2509,
 
-        [CustomComboInfo("Scathe/Xenoglossy Feature", "Scathe becomes Xenoglossy when available.", BLM.JobID)]
-        BlackScatheFeature = 2507,
+        [SecretCustomCombo]
+        [CustomComboInfo("Enochian Despair Feature", "Change Fire 4 or Blizzard 4 to Despair when in Astral Fire with less than 2400 mana.", BLM.JobID)]
+        BlackEnochianDespairFeature = 2510,
 
         #endregion
         // ====================================================================================
@@ -537,6 +541,21 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Dosis into Eukrasia & Eukrasia Opener", "Dosis turns into Eukrasia when Eukrasian Dosis is not on Target.", SGE.JobID)]
         SageSmartEukrasiaDosis = 4002,
 
+        [CustomComboInfo("Taurochole Into Druochole Feature", "Replace Taurochole with Druochole when on cooldown", SGE.JobID)]
+        SageTaurocholeDruocholeFeature = 4003,
+
+        [CustomComboInfo("Taurochole Into Rhizomata Feature", "Replace Taurochole with Rhizomata when Addersgall is empty.", SGE.JobID)]
+        SageTaurocholeRhizomataFeature = 4004,
+
+        [CustomComboInfo("Druochole Into Rhizomata Feature", "Replace Druochole with Rhizomata when Addersgall is empty.", SGE.JobID)]
+        SageDruocholeRhizomataFeature = 4005,
+
+        [CustomComboInfo("Ixochole Into Rhizomata Feature", "Replace Ixochole with Rhizomata when Addersgall is empty.", SGE.JobID)]
+        SageIxocholeRhizomataFeature = 4006,
+
+        [CustomComboInfo("Kerachole Into Rhizomata Feature", "Replace Kerachole with Rhizomata when Addersgall is empty.", SGE.JobID)]
+        SageKeracholaRhizomataFeature = 4007,
+
         // [SecretCustomCombo]
         // [CustomComboInfo("Smart Eukrasia", "This is a work in progress, use at own risk.", SGE.JobID)]
         // SageSmartEukrasia = 4999,
@@ -607,7 +626,13 @@ namespace XIVComboExpandedPlugin
         ScholarSeraphConsolationFeature = 2801,
 
         [CustomComboInfo("ED Aetherflow", "Change Energy Drain into Aetherflow when you have no more Aetherflow stacks.", SCH.JobID)]
-        ScholarEnergyDrainFeature = 2802,
+        ScholarEnergyDrainAetherflowFeature = 2802,
+
+        [CustomComboInfo("Lustrous Aetherflow", "Change Lustrate into Aetherflow when you have no more Aetherflow stacks.", SCH.JobID)]
+        ScholarLustrateAetherflowFeature = 2803,
+
+        [CustomComboInfo("Indomitable Aetherflow", "Change Indomitability into Aetherflow when you have no more Aetherflow stacks.", SCH.JobID)]
+        ScholarIndomAetherflowFeature = 2804,
 
         #endregion
         // ====================================================================================

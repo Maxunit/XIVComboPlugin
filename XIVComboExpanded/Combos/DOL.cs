@@ -17,7 +17,8 @@
         {
             public const ushort
                 EurekaMoment = 2765,
-                GiftoftheLand = 2666;
+                GiftoftheLand = 2666,
+                GiftoftheLand2 = 759;
         }
 
         public static class Debuffs
@@ -70,7 +71,7 @@
             if (actionID == DOL.PioneersGift1)
             {
                 if (level >= DOL.Levels.PioneersGift2 && HasEffect(DOL.Buffs.GiftoftheLand))
-                    return OriginalHook(DOL.PioneersGift2);
+                    return DOL.PioneersGift2;
 
                 return DOL.PioneersGift1;
             }
