@@ -466,11 +466,11 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Slice Enhanced Enshrouded Feature", "Replace Infernal Slice with whichever of Gibbet or Gallows is currently enhanced while Enshrouded.", RPR.JobID)]
         ReaperSliceEnhancedEnshroudedFeature = 3914,
 
-        [CustomComboInfo("Enshroud Enhanced Feature", "Replace Enshroud with whichever of Gibbet or Gallows is currently enhanced when Enshrouded.", RPR.JobID)]
-        ReaperEnshroudEnhancedFeature = 3915,
+        // [CustomComboInfo("Enshroud Enhanced Feature", "Replace Enshroud with whichever of Gibbet or Gallows is currently enhanced when Enshrouded.", RPR.JobID)]
+        // ReaperEnshroudEnhancedFeature = 3915,
 
-        [CustomComboInfo("Enshroud Lemure's Feature", "Replace Enshroud with Lemure's Slice when two or more stacks of Void Shroud are active.", RPR.JobID)]
-        ReaperEnshroudLemuresFeature = 3916,
+        // [CustomComboInfo("Enshroud Lemure's Feature", "Replace Enshroud with Lemure's Slice when two or more stacks of Void Shroud are active.", RPR.JobID)]
+        // ReaperEnshroudLemuresFeature = 3916,
 
         [CustomComboInfo("Enhanced Soul Reaver Feature", "Replace Gibbet and Gallows with whichever is currently enhanced while Reaving.", RPR.JobID)]
         ReaperEnhancedSoulReaverFeature = 3917,
@@ -481,7 +481,7 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Slice Lemure's Feature", "Replace Infernal Slice with Lemure's Slice when two or more stacks of Void Shroud are active.", RPR.JobID)]
         ReaperSliceLemuresFeature = 3919,
 
-        [CustomComboInfo("Slice Communio Feature", "Replace Infernal Slice with Communio when one stack is left of Shroud.", RPR.JobID)]
+        [CustomComboInfo("Slice Communio Feature", "Replace Infernal Slice with Communio when one stack of Shroud is left.", RPR.JobID)]
         ReaperSliceCommunioFeature = 3920,
 
         [CustomComboInfo("Scythe Lemure's Feature", "Replace Infernal Slice with Lemure's Slice when two or more stacks of Void Shroud are active.", RPR.JobID)]
@@ -493,7 +493,7 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Shadow Lemure's Feature", "Replace Shadow of Death with Lemure's Slice when two or more stacks of Void Shroud are active.", RPR.JobID)]
         ReaperShadowLemuresFeature = 3923,
 
-        [CustomComboInfo("Shadow Communio Feature", "Replace Shadow of Death with Communio when one stack is left of Shroud.", RPR.JobID)]
+        [CustomComboInfo("Shadow Communio Feature", "Replace Shadow of Death with Communio when one stack of Shroud is left.", RPR.JobID)]
         ReaperShadowCommunioFeature = 3924,
 
         #endregion
@@ -758,6 +758,9 @@ namespace XIVComboExpandedPlugin
 
         [CustomComboInfo("Pioneer's Gift Combo", "Replaces Pioneer's Gift I with Pioneer's Gift II when Gift of the Land is active.", DOL.JobID)]
         DolGiftoftheLand = 51002,
+
+        // [CustomComboInfo("Fisher Price Catcher", "Combo Chains Cast, Thaliak's Favor and Price Catch. Procs Thaliak's Favor is below 200 GP and if above 3 Angler's Art.", DOL.JobID)]
+        // FisherPriceCatcher = 51003,
 
         #endregion
         // ====================================================================================

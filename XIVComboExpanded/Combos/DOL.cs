@@ -6,19 +6,24 @@
         public const byte JobID = 51;
 
         public const uint
+            Cast = 289,
+            ThaliaksFavor = 26804,
             AgelessWords = 215,
             SolidReason = 232,
             MinWiseToTheWorld = 26521,
             BtnWiseToTheWorld = 26522,
             PioneersGift1 = 21178,
-            PioneersGift2 = 25590;
+            PioneersGift2 = 25590,
+            PriceCatch = 26806;
 
         public static class Buffs
         {
             public const ushort
                 EurekaMoment = 2765,
                 GiftoftheLand = 2666,
-                GiftoftheLand2 = 759;
+                GiftoftheLand2 = 759,
+                AnglersArt = 2778,
+                PriceCatch = 2780;
         }
 
         public static class Debuffs
@@ -39,8 +44,6 @@
     internal class MinerEurekaFeature : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.Disabled; // DolEurekaFeature;
-
-        protected internal override uint[] ActionIDs { get; } = new[] { DOL.SolidReason, DOL.AgelessWords };
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
@@ -64,8 +67,6 @@
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DolGiftoftheLand;
 
-        protected internal override uint[] ActionIDs { get; } = new[] { DOL.PioneersGift1, DOL.PioneersGift2 };
-
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             if (actionID == DOL.PioneersGift1)
@@ -74,6 +75,21 @@
                     return DOL.PioneersGift2;
 
                 return DOL.PioneersGift1;
+            }
+
+            return actionID;
+        }
+    }
+
+    internal class FisherPriceCatcher : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.Disabled;
+
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        {
+            if (actionID == DOL.Cast)
+            {
+                // Need to work something out
             }
 
             return actionID;
