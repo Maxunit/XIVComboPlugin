@@ -8,19 +8,22 @@ namespace XIVComboExpandedPlugin.Combos
         public const byte JobID = 40;
 
         public const uint
+            Dosis = 24283,
             Diagnosis = 24284,
             Kardia = 24285,
+            Prognosis = 24286,
+            Egeiro = 24287,
+            Phlegma = 24289,
+            Eukrasia = 24290,
             Soteria = 24294,
             Druochole = 24296,
+            Dyskrasia = 24297,
             Kerachole = 24298,
             Ixochole = 24299,
             Taurochole = 24303,
-            Prognosis = 24286,
-            Holos = 24310,
-            Egeiro = 24287,
-            Dosis = 24283,
+            Toxikon = 24304,
             Rhizomata = 24309,
-            Eukrasia = 24290;
+            Holos = 24310;
 
         public static class Buffs
         {
@@ -35,8 +38,8 @@ namespace XIVComboExpandedPlugin.Combos
         public static class Debuffs
         {
             public const ushort
-                Taurochole = 62,
                 Ixochole = 52,
+                Taurochole = 62,
                 Dosis2 = 72,
                 Rhizomata = 74,
                 Holos = 76,
@@ -52,16 +55,19 @@ namespace XIVComboExpandedPlugin.Combos
             public const ushort
                 Dosis = 1,
                 Prognosis = 10,
+                Phlegma = 26,
+                Eukrasia = 30,
                 Soteria = 35,
                 Druochole = 45,
+                Dyskrasia = 46,
                 Kerachole = 50,
-                Taurochole = 62,
                 Ixochole = 52,
+                Taurochole = 62,
+                Toxikon = 66,
                 Dosis2 = 72,
-                Holos = 76,
                 Rhizomata = 74,
-                Dosis3 = 82,
-                Eukrasia = 30;
+                Holos = 76,
+                Dosis3 = 82;
         }
 
         internal abstract class SageCustomCombo : CustomCombo
@@ -79,6 +85,8 @@ namespace XIVComboExpandedPlugin.Combos
                 {
                     if (HasEffect(SGE.Buffs.Kardia) && IsOffCooldown(SGE.Soteria))
                         return SGE.Soteria;
+
+                    return SGE.Kardia;
                 }
 
                 return actionID;
@@ -162,6 +170,25 @@ namespace XIVComboExpandedPlugin.Combos
                     {
                         if (level >= SGE.Levels.Rhizomata && gauge.Addersgall == 0)
                             return SGE.Rhizomata;
+                    }
+                }
+
+                return actionID;
+            }
+        }
+
+        internal class DsykrasiaToxikon : SageCustomCombo
+        {
+            protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+            {
+                if (actionID == SGE.Dyskrasia)
+                {
+                    var gauge = GetJobGauge<SGEGauge>();
+
+                    if (IsEnabled(CustomComboPreset.DsykrasiaToxikon))
+                    {
+                        if (level >= SGE.Levels.Toxikon && gauge.Addersting >= 1)
+                            return OriginalHook(SGE.Toxikon);
                     }
                 }
 

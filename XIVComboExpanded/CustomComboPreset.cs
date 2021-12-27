@@ -496,6 +496,20 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Shadow Communio Feature", "Replace Shadow of Death with Communio when one stack of Shroud is left.", RPR.JobID)]
         ReaperShadowCommunioFeature = 3924,
 
+        [ConflictingCombos(ReaperSoulGibbetFeature)]
+        [CustomComboInfo("Soul Gallows Feature", "Replace Soul Slice with Gallows while Reaving or Enshrouded.", RPR.JobID)]
+        ReaperSoulGallowsFeature = 3925,
+
+        [ConflictingCombos(ReaperSoulGallowsFeature)]
+        [CustomComboInfo("Soul Gibbet Feature", "Replace Soul Slice with Gibbet while Reaving or Enshrouded.", RPR.JobID)]
+        ReaperSoulGibbetFeature = 3926,
+
+        [CustomComboInfo("Soul Lemure's Feature", "Replace Soul Slice with Lemure's Slice when two or more stacks of Void Shroud are active.", RPR.JobID)]
+        ReaperSoulLemuresFeature = 3927,
+
+        [CustomComboInfo("Soul Communio Feature", "Replace Soul Slice with Communio when one stack of Shroud is left.", RPR.JobID)]
+        ReaperSoulCommunioFeature = 3928,
+
         #endregion
         // ====================================================================================
         #region RED MAGE
@@ -555,6 +569,9 @@ namespace XIVComboExpandedPlugin
 
         [CustomComboInfo("Kerachole Into Rhizomata Feature", "Replace Kerachole with Rhizomata when Addersgall is empty.", SGE.JobID)]
         SageKeracholaRhizomataFeature = 4007,
+
+        [CustomComboInfo("Dsykrasia Into Toxikon Feature", "Replace Dyskrasia with Toxikon when Addersting is 1 or higher.", SGE.JobID)]
+        DsykrasiaToxikon = 4008,
 
         // [SecretCustomCombo]
         // [CustomComboInfo("Smart Eukrasia", "This is a work in progress, use at own risk.", SGE.JobID)]
@@ -756,7 +773,7 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Eureka Feature", "Replaces Ageless Words and Solid Reason with Wise to the World when available.", DOL.JobID)]
         DolEurekaFeature = 51001,
 
-        [CustomComboInfo("Pioneer's Gift Combo", "Replaces Pioneer's Gift I with Pioneer's Gift II when Gift of the Land is active.", DOL.JobID)]
+        [CustomComboInfo("Pioneer's/Mountaineer's Gift Combo", "Replaces Pioneer's/Mountaineer's Gift I with Pioneer's/Mountaineer's Gift II when Gift of the Land is active.", DOL.JobID)]
         DolGiftoftheLand = 51002,
 
         // [CustomComboInfo("Fisher Price Catcher", "Combo Chains Cast, Thaliak's Favor and Price Catch. Procs Thaliak's Favor is below 200 GP and if above 3 Angler's Art.", DOL.JobID)]
