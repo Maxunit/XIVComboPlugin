@@ -26,7 +26,7 @@ namespace XIVComboExpandedPlugin
         public IconReplacer()
         {
             this.customCombos = Assembly.GetAssembly(typeof(CustomCombo))!.GetTypes()
-                .Where(t => !t.IsAbstract && (t.BaseType == typeof(CustomCombo) || t.BaseType?.BaseType == typeof(CustomCombo)))
+                .Where(t => !t.IsAbstract && t.BaseType == typeof(CustomCombo))
                 .Select(t => Activator.CreateInstance(t))
                 .Cast<CustomCombo>()
                 .ToList();
@@ -60,7 +60,6 @@ namespace XIVComboExpandedPlugin
         private unsafe uint GetIconDetour(IntPtr actionManager, uint actionID)
         {
             this.actionManager = actionManager;
-            Service.ComboCache.UpdateActionManager(actionManager);
 
             try
             {

@@ -70,11 +70,6 @@ namespace XIVComboExpandedPlugin.Combos
                 Dosis3 = 82;
         }
 
-        internal abstract class SageCustomCombo : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
-        }
-
         internal class SageKardiaFeature : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SageKardiaFeature;
@@ -93,8 +88,10 @@ namespace XIVComboExpandedPlugin.Combos
             }
         }
 
-        internal class SageTaurochole : SageCustomCombo
+        internal class SageTaurochole : CustomCombo
         {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
+
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
                 if (actionID == SGE.Taurochole)
@@ -120,8 +117,10 @@ namespace XIVComboExpandedPlugin.Combos
             }
         }
 
-        internal class SageDruochole : SageCustomCombo
+        internal class SageDruochole : CustomCombo
         {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
+
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
                 if (actionID == SGE.Druochole)
@@ -139,8 +138,10 @@ namespace XIVComboExpandedPlugin.Combos
             }
         }
 
-        internal class SageIxochole : SageCustomCombo
+        internal class SageIxochole : CustomCombo
         {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
+
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
                 if (actionID == SGE.Ixochole)
@@ -158,8 +159,10 @@ namespace XIVComboExpandedPlugin.Combos
             }
         }
 
-        internal class SageKerachole : SageCustomCombo
+        internal class SageKerachole : CustomCombo
         {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
+
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
                 if (actionID == SGE.Kerachole)
@@ -177,8 +180,10 @@ namespace XIVComboExpandedPlugin.Combos
             }
         }
 
-        internal class DsykrasiaToxikon : SageCustomCombo
+        internal class DsykrasiaToxikon : CustomCombo
         {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
+
             protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
             {
                 if (actionID == SGE.Dyskrasia)

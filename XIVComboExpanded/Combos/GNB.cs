@@ -61,16 +61,9 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal abstract class GunbreakerCustomCombo : CustomCombo
-    {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GnbAny;
-    }
-
-    internal class GunbreakerSolidBarrelCombo : GunbreakerCustomCombo
+    internal class GunbreakerSolidBarrelCombo : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GunbreakerSolidBarrelCombo;
-
-        protected internal override uint[] ActionIDs { get; } = new[] { GNB.SolidBarrel };
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
@@ -106,7 +99,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class GunbreakerGnashingFangContinuation : GunbreakerCustomCombo
+    internal class GunbreakerGnashingFangContinuation : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GunbreakerGnashingFangCont;
 
@@ -134,8 +127,10 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class GunbreakerBurstStrikeFatedCircle : GunbreakerCustomCombo
+    internal class GunbreakerBurstStrikeFatedCircle : CustomCombo
     {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GnbAny;
+
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             if (actionID == GNB.BurstStrike)
@@ -173,7 +168,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class GunbreakerBowShockSonicBreakFeature : GunbreakerCustomCombo
+    internal class GunbreakerBowShockSonicBreakFeature : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GunbreakerBowShockSonicBreakFeature;
 
@@ -189,7 +184,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class GunbreakerDemonSlaughterCombo : GunbreakerCustomCombo
+    internal class GunbreakerDemonSlaughterCombo : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GunbreakerDemonSlaughterCombo;
 
@@ -222,8 +217,6 @@ namespace XIVComboExpandedPlugin.Combos
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GunbreakerEmptyBloodfestFeature;
 
-        protected internal override uint[] ActionIDs { get; } = new[] { GNB.BurstStrike, GNB.FatedCircle };
-
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             if (actionID == GNB.BurstStrike || actionID == GNB.FatedCircle)
@@ -241,7 +234,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class GunbreakerNoMercyFeature : GunbreakerCustomCombo
+    internal class GunbreakerNoMercyFeature : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GunbreakerNoMercyFeature;
 

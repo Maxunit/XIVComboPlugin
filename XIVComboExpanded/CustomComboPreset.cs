@@ -8,6 +8,9 @@ namespace XIVComboExpandedPlugin
     /// </summary>
     public enum CustomComboPreset
     {
+        // ====================================================================================
+        #region Misc
+
         [CustomComboInfo("Any", "This should not be displayed. This always returns true when used with IsEnabled.", ADV.JobID)]
         AdvAny = 0,
 
@@ -77,6 +80,7 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Disabled", "This should not be used.", ADV.JobID)]
         Disabled = 99999,
 
+        #endregion
         // ====================================================================================
         #region ADV
         #endregion
@@ -149,11 +153,13 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Quick Nock into Shadowbite", "Replaces Quick Nock with Shadowbite when available.", BRD.JobID)]
         BardShadowbiteFeature = 2305,
 
-        // [CustomComboInfo("Bloodletter Feature", "Replaces Bloodletter with Empyreal Arrow and Sidewinder depending on which is available.", BRD.JobID)]
-        // BardBloodletterFeature = 2306,
+        [SecretCustomCombo]
+        [CustomComboInfo("Bloodletter Feature", "Replaces Bloodletter with Empyreal Arrow and Sidewinder depending on which is available.", BRD.JobID)]
+        BardBloodletterFeature = 2306,
 
-        // [CustomComboInfo("Rain of Death Feature", "Replaces Rain of Death with Empyreal Arrow and Sidewinder depending on which is available.", BRD.JobID)]
-        // BardRainOfDeathFeature = 2307,
+        [SecretCustomCombo]
+        [CustomComboInfo("Rain of Death Feature", "Replaces Rain of Death with Empyreal Arrow and Sidewinder depending on which is available.", BRD.JobID)]
+        BardRainOfDeathFeature = 2307,
 
         #endregion
         // ====================================================================================
@@ -374,17 +380,19 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("GCDs to Ninjutsu Feature", "Every GCD combo becomes Ninjutsu while Mudras are being used.", NIN.JobID)]
         NinjaGCDNinjutsuFeature = 3009,
 
-        [CustomComboInfo("Bunshin / Kamaitachi Feature", "Replaces Bunshin with Phantom Kamaitachi after usage.", NIN.JobID)]
-        NinjaBunshinKamaitachiFeature = 3010,
+        [ConflictingCombos(NinjaHuraijinFleetingRaijuFeature)]
+        [CustomComboInfo("Huraijin / Forked Raiju Feature", "Replaces Huraijin with Forked Raiju when available.", NIN.JobID)]
+        NinjaHuraijinForkedRaijuFeature = 3011,
 
-        [CustomComboInfo("Armor Crush / Raiju Feature", "Replaces the Armor Crush combo with Forked and Fleeting Raiju when available.", NIN.JobID)]
+        [CustomComboInfo("Armor Crush / Raiju Feature", "Replaces the Armor Crush combo with Forked Raiju when available.", NIN.JobID)]
         NinjaArmorCrushRaijuFeature = 3012,
 
-        [CustomComboInfo("Aeolian Edge / Raiju Feature", "Replaces the Aeolian Edge combo with Forked and Fleeting Raiju when available.", NIN.JobID)]
+        [CustomComboInfo("Aeolian Edge / Raiju Feature", "Replaces the Aeolian Edge combo with Fleeting Raiju when available.", NIN.JobID)]
         NinjaAeolianEdgeRaijuFeature = 3013,
 
-        [CustomComboInfo("Huraijin / Raiju Feature", "Replaces Huraijin with Forked and Fleeting Raiju when available.", NIN.JobID)]
-        NinjaHuraijinRaijuFeature = 3011,
+        [ConflictingCombos(NinjaHuraijinForkedRaijuFeature)]
+        [CustomComboInfo("Huraijin / Fleeting Raiju Option", "Replaces Huraijin with Fleeting Raiju when available.", NIN.JobID)]
+        NinjaHuraijinFleetingRaijuFeature = 3014,
 
         #endregion
         // ====================================================================================
@@ -533,16 +541,19 @@ namespace XIVComboExpandedPlugin
         RedMageVerprocComboPlus = 3505,
 
         [ParentCombo(RedMageVerprocComboPlus)]
-        [CustomComboInfo("Verproc into Jolt Plus Opener Feature (Stone)", "Turns Verstone into Veraero when out of combat.", RDM.JobID)]
+        [CustomComboInfo("Verproc into Jolt Plus Opener Feature (Stone)", "Replaces Verstone with Veraero when out of combat.", RDM.JobID)]
         RedMageVerprocOpenerFeatureStone = 3506,
 
         [ParentCombo(RedMageVerprocComboPlus)]
-        [CustomComboInfo("Verproc into Jolt Plus Opener Feature (Fire)", "Turns Verfire into Verthunder when out of combat.", RDM.JobID)]
+        [CustomComboInfo("Verproc into Jolt Plus Opener Feature (Fire)", "Replaces Verfire with Verthunder when out of combat.", RDM.JobID)]
         RedMageVerprocOpenerFeatureFire = 3507,
 
-        // [SecretCustomCombo]
-        // [CustomComboInfo("Contre Sixte / Fleche Feature", "Turns Contre Sixte and Fleche into whichever is available.", RDM.JobID)]
-        // RedMageContreFlecheFeature = 3508,
+        [SecretCustomCombo]
+        [CustomComboInfo("Contre Sixte / Fleche Feature", "Replaces Contre Sixte and Fleche with whichever is available.", RDM.JobID)]
+        RedMageContreFlecheFeature = 3508,
+
+        [CustomComboInfo("Acceleration into Swiftcast", "Replaces Acceleration with Swiftcast when on cooldown or synced.", RDM.JobID)]
+        RedMageAccelerationFeature = 3509,
 
         #endregion
         // ====================================================================================
@@ -763,8 +774,8 @@ namespace XIVComboExpandedPlugin
         // ====================================================================================
         #region DOH
 
-        // [CustomComboInfo("Touch Combo", "Replaces Basic Touch with its combo chain.", DOH.JobID)]
-        // DohTouchCombo = 50001,
+        // [CustomComboInfo("Placeholder", "Placeholder.", DOH.JobID)]
+        // DohPlaceholder = 50001,
 
         #endregion
         // ====================================================================================

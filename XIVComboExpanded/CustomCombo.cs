@@ -47,11 +47,6 @@ namespace XIVComboExpandedPlugin.Combos
         protected internal abstract CustomComboPreset Preset { get; }
 
         /// <summary>
-        /// Gets the action IDs associated with this combo.
-        /// </summary>
-        protected internal virtual uint[] ActionIDs { get; } = Array.Empty<uint>();
-
-        /// <summary>
         /// Gets the class ID associated with this combo.
         /// </summary>
         protected byte ClassID { get; }
@@ -89,9 +84,6 @@ namespace XIVComboExpandedPlugin.Combos
                 this.JobID != classJobID && this.ClassID != classJobID)
                 return false;
 
-            if (this.ActionIDs.Length > 0 && !this.ActionIDs.Contains(actionID))
-                return false;
-
             var resultingActionID = this.Invoke(actionID, lastComboMove, comboTime, level);
 
             if (resultingActionID == 0 || actionID == resultingActionID)
@@ -121,7 +113,40 @@ namespace XIVComboExpandedPlugin.Combos
 
                 // Both, return soonest available
                 if (a1.Data.IsCooldown && a2.Data.IsCooldown)
-                    return a1.Data.CooldownRemaining < a2.Data.CooldownRemaining ? a1 : a2;
+                {
+                    if (a1.Data.HasCharges && a2.Data.HasCharges)
+                    {
+                        if (a1.Data.RemainingCharges == a2.Data.RemainingCharges)
+                        {
+                            return a1.Data.ChargeCooldownRemaining < a2.Data.ChargeCooldownRemaining
+                                ? a1 : a2;
+                        }
+
+                        return a1.Data.RemainingCharges > a2.Data.RemainingCharges
+                            ? a1 : a2;
+                    }
+                    else if (a1.Data.HasCharges)
+                    {
+                        if (a1.Data.RemainingCharges > 0)
+                            return a1;
+
+                        return a1.Data.ChargeCooldownRemaining < a2.Data.CooldownRemaining
+                            ? a1 : a2;
+                    }
+                    else if (a2.Data.HasCharges)
+                    {
+                        if (a2.Data.RemainingCharges > 0)
+                            return a2;
+
+                        return a2.Data.ChargeCooldownRemaining < a1.Data.CooldownRemaining
+                            ? a2 : a1;
+                    }
+                    else
+                    {
+                        return a1.Data.CooldownRemaining < a2.Data.CooldownRemaining
+                            ? a1 : a2;
+                    }
+                }
 
                 // One or the other
                 return a1.Data.IsCooldown ? a2 : a1;
@@ -326,11 +351,54 @@ namespace XIVComboExpandedPlugin.Combos
             => !GetCooldown(actionID).IsCooldown;
 
         /// <summary>
+        /// Get the maximum number of charges for an action at a given level.
+        /// </summary>
+        /// <param name="actionID">Action ID to check.</param>
+        /// <returns>Number of charges.</returns>
+        protected static ushort GetMaxCharges(uint actionID)
+            => GetCooldown(actionID).MaxCharges;
+
+        /// <summary>
         /// Get a job gauge.
         /// </summary>
         /// <typeparam name="T">Type of job gauge.</typeparam>
         /// <returns>The job gauge.</returns>
         protected static T GetJobGauge<T>() where T : JobGaugeBase
             => Service.ComboCache.GetJobGauge<T>();
+
+        /// <summary>
+        /// Gets the distance from the target.
+        /// </summary>
+        /// <returns>Double representing the distance from the target.</returns>
+        protected static double GetTargetDistance()
+        {
+            if (CurrentTarget is null)
+                return 0;
+
+            if (CurrentTarget is not BattleChara chara)
+                return 0;
+
+            double distanceX = chara.YalmDistanceX;
+            double distanceY = chara.YalmDistanceZ;
+
+            return Math.Sqrt(Math.Pow(distanceX, 2) + Math.Pow(distanceY, 2));
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether you are in melee range from the current target.
+        /// </summary>
+        /// <returns>Bool indicating whether you are in melee range.</returns>
+        protected static bool InMeleeRange()
+        {
+            var distance = GetTargetDistance();
+
+            if (distance == 0)
+                return true;
+
+            if (distance > 3)
+                return false;
+
+            return true;
+        }
     }
 }
