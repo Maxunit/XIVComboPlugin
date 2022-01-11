@@ -209,6 +209,12 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Delirium Feature", "Replace Souleater and Stalwart Soul with Bloodspiller and Quietus when Delirium is active.", DRK.JobID)]
         DarkDeliriumFeature = 3203,
 
+        [CustomComboInfo("Blood Weapon Feature", "Replace Carve and Spit, and Abyssal Drain with Blood Weapon when available.", DRK.JobID)]
+        DarkBloodWeaponFeature = 3204,
+
+        [CustomComboInfo("Living Shadow Feature", "Replace Quietus and Bloodspiller with Living Shadow when available.", DRK.JobID)]
+        DarkLivingShadowFeature = 3205,
+
         // [SecretCustomCombo]
         // [CustomComboInfo("Salted Shadowbringer Stuff", "Replace Cave and Spit and Abyssal Drain with Salted Earth and Shadowbringer depending on cooldown.", DRK.JobID)]
         // DarkShadowbringerFeature = 3204,
@@ -296,8 +302,14 @@ namespace XIVComboExpandedPlugin
         MachinistGaussRoundRicochetFeature = 3105,
 
         [SecretCustomCombo]
+        [ConflictingCombos(MachinistHotShotChainsawFeature)]
         [CustomComboInfo("Hot Shot (Air Anchor) / Drill / Chainsaw Feature", "Replace Hot Shot (Air Anchor), Drill, and Chainsaw with whichever is available.", MCH.JobID)]
         MachinistHotShotDrillChainsawFeature = 3106,
+
+        [SecretCustomCombo]
+        [ConflictingCombos(MachinistHotShotDrillChainsawFeature)]
+        [CustomComboInfo("Hot Shot (Air Anchor) / Chainsaw Feature", "Replace Hot Shot (Air Anchor) and Chainsaw with whichever is available.", MCH.JobID)]
+        MachinistHotShotChainsawFeature = 3107,
 
         [EvilCombo]
         [CustomComboInfo("Gauss Round / Ricochet autoweave Feature", "Weave Gauss Round / Ricochet between attacks when appropriate. Requires (Heated) Shot Combo and Hypercharge Feature.", MCH.JobID)]
@@ -379,6 +391,9 @@ namespace XIVComboExpandedPlugin
         [ConflictingCombos(NinjaNinjutsuFeature)]
         [CustomComboInfo("GCDs to Ninjutsu Feature", "Every GCD combo becomes Ninjutsu while Mudras are being used.", NIN.JobID)]
         NinjaGCDNinjutsuFeature = 3009,
+
+        [CustomComboInfo("Huraijin Armor Crush Combo", "Replace Huraijin with Armor Crush after using Gust Slash.", NIN.JobID)]
+        NinjaHuraijinArmorCrushCombo = 3010,
 
         [ConflictingCombos(NinjaHuraijinFleetingRaijuFeature)]
         [CustomComboInfo("Huraijin / Forked Raiju Feature", "Replaces Huraijin with Forked Raiju when available.", NIN.JobID)]

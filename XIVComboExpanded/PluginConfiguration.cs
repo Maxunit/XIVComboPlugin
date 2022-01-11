@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Dalamud.Configuration;
 using Dalamud.Utility;
@@ -15,6 +16,32 @@ namespace XIVComboExpandedPlugin
     [Serializable]
     public class PluginConfiguration : IPluginConfiguration
     {
+        private static readonly HashSet<CustomComboPreset> SecretCombos;
+        private static readonly Dictionary<CustomComboPreset, CustomComboPreset[]> ConflictingCombos;
+        private static readonly Dictionary<CustomComboPreset, CustomComboPreset?> ParentCombos;  // child: parent
+        private static readonly HashSet<CustomComboPreset> EvilCombo; // Evil_Crab Combos
+
+        static PluginConfiguration()
+        {
+            SecretCombos = Enum.GetValues<CustomComboPreset>()
+                .Where(preset => preset.GetAttribute<SecretCustomComboAttribute>() != default)
+                .ToHashSet();
+
+            ConflictingCombos = Enum.GetValues<CustomComboPreset>()
+                .ToDictionary(
+                    preset => preset,
+                    preset => preset.GetAttribute<ConflictingCombosAttribute>()?.ConflictingPresets ?? Array.Empty<CustomComboPreset>());
+
+            ParentCombos = Enum.GetValues<CustomComboPreset>()
+                .ToDictionary(
+                    preset => preset,
+                    preset => preset.GetAttribute<ParentComboAttribute>()?.ParentPreset);
+
+            EvilCombo = Enum.GetValues<CustomComboPreset>()
+                .Where(preset => preset.GetAttribute<EvilComboAttribute>() != default)
+                .ToHashSet();
+        }
+
         /// <summary>
         /// Gets or sets the configuration version.
         /// </summary>
@@ -37,6 +64,11 @@ namespace XIVComboExpandedPlugin
         /// </summary>
         [JsonProperty("Debug")]
         public bool EnableSecretCombos { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to hide the children of a feature if it is disabled.
+        /// </summary>
+        public bool HideChildren { get; set; } = false;
 
         /// <summary>
         /// Gets or sets a value indicating whether to allow and display combos added by Evil Crab.
@@ -75,15 +107,7 @@ namespace XIVComboExpandedPlugin
         /// <param name="preset">Preset to check.</param>
         /// <returns>The boolean representation.</returns>
         public bool IsSecret(CustomComboPreset preset)
-            => preset.GetAttribute<SecretCustomComboAttribute>() != default;
-
-        /// <summary>
-        /// Gets a value indicating whether a preset is evil.
-        /// </summary>
-        /// <param name="preset">Preset to check.</param>
-        /// <returns>The boolean representation.</returns>
-        public bool IsEvil(CustomComboPreset preset)
-            => preset.GetAttribute<EvilComboAttribute>() != default;
+            => SecretCombos.Contains(preset);
 
         /// <summary>
         /// Gets an array of conflicting combo presets.
@@ -91,7 +115,7 @@ namespace XIVComboExpandedPlugin
         /// <param name="preset">Preset to check.</param>
         /// <returns>The conflicting presets.</returns>
         public CustomComboPreset[] GetConflicts(CustomComboPreset preset)
-            => preset.GetAttribute<ConflictingCombosAttribute>()?.ConflictingPresets ?? Array.Empty<CustomComboPreset>();
+            => ConflictingCombos[preset];
 
         /// <summary>
         /// Gets the parent combo preset if it exists, or null.
@@ -99,6 +123,14 @@ namespace XIVComboExpandedPlugin
         /// <param name="preset">Preset to check.</param>
         /// <returns>The parent preset.</returns>
         public CustomComboPreset? GetParent(CustomComboPreset preset)
-            => preset.GetAttribute<ParentComboAttribute>()?.ParentPreset;
+            => ParentCombos[preset];
+
+        /// <summary>
+        /// Gets a value indicating whether a preset is evil.
+        /// </summary>
+        /// <param name="preset">Preset to check.</param>
+        /// <returns>The boolean representation.</returns>
+        public bool IsEvil(CustomComboPreset preset)
+            => EvilCombo.Contains(preset);
     }
 }

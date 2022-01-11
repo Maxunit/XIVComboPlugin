@@ -33,6 +33,7 @@ namespace XIVComboExpandedPlugin.Combos
         public static class Buffs
         {
             public const ushort
+                Berserk = 86,
                 InnerRelease = 1177,
                 NascentChaos = 1897,
                 PrimalRendReady = 2624,
@@ -49,6 +50,7 @@ namespace XIVComboExpandedPlugin.Combos
         {
             public const byte
                 Maim = 4,
+                Berserk = 6,
                 StormsPath = 26,
                 MythrilTempest = 40,
                 StormsEye = 50,
@@ -57,6 +59,7 @@ namespace XIVComboExpandedPlugin.Combos
                 FellCleave = 54,
                 Decimate = 60,
                 Upheaval = 64,
+                InnerRelease = 70,
                 MythrilTempestTrait = 74,
                 NascentFlash = 76,
                 InnerChaos = 80,
@@ -203,7 +206,7 @@ namespace XIVComboExpandedPlugin.Combos
             {
                 if (level >= WAR.Levels.NascentFlash)
                     // Bloodwhetting
-                    return OriginalHook(WAR.NascentFlash);
+                    return WAR.NascentFlash;
 
                 return WAR.RawIntuition;
             }

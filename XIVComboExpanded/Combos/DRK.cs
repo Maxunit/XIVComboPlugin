@@ -9,6 +9,7 @@ namespace XIVComboExpandedPlugin.Combos
             Unleash = 3621,
             SyphonStrike = 3623,
             Souleater = 3632,
+            BloodWeapon = 3625,
             SaltedEarth = 3639,
             AbyssalDrain = 3641,
             CarveAndSpit = 3643,
@@ -19,6 +20,7 @@ namespace XIVComboExpandedPlugin.Combos
             StalwartSoul = 16468,
             FloodOfShadow = 16469,
             EdgeOfShadow = 16470,
+            LivingShadow = 16472,
             SaltAndDarkness = 25755,
             Shadowbringer = 25757;
 
@@ -42,21 +44,23 @@ namespace XIVComboExpandedPlugin.Combos
                 SyphonStrike = 2,
                 Souleater = 26,
                 FloodOfDarkness = 30,
+                BloodWeapon = 35,
                 EdgeOfDarkness = 40,
                 SaltedEarth = 52,
                 AbyssalDrain = 56,
                 CarveAndSpit = 60,
-                Bloodpiller = 62,
+                Bloodspiller = 62,
                 Quietus = 64,
                 Delirium = 68,
                 StalwartSoul = 72,
                 Shadow = 74,
+                LivingShadow = 80,
                 SaltAndDarkness = 86,
                 Shadowbringer = 90;
         }
     }
 
-    internal class DarkSouleaterCombo : CustomCombo
+    internal class DarkSouleater : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DrkAny;
 
@@ -66,7 +70,7 @@ namespace XIVComboExpandedPlugin.Combos
             {
                 if (IsEnabled(CustomComboPreset.DarkDeliriumFeature))
                 {
-                    if (level >= DRK.Levels.Bloodpiller && level >= DRK.Levels.Delirium && HasEffect(DRK.Buffs.Delirium))
+                    if (level >= DRK.Levels.Bloodspiller && level >= DRK.Levels.Delirium && HasEffect(DRK.Buffs.Delirium))
                         return DRK.Bloodspiller;
                 }
 
@@ -89,7 +93,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class DarkStalwartSoulCombo : CustomCombo
+    internal class DarkStalwartSoul : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DrkAny;
 
@@ -119,25 +123,41 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class DarkShadowbringerFeature : CustomCombo
+    internal class DarkCarveAndSpitAbyssalDrain : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.Disabled; // DarkShadowbringerFeature;
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DrkAny;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             if (actionID == DRK.CarveAndSpit || actionID == DRK.AbyssalDrain)
             {
-                if (level >= DRK.Levels.Shadowbringer)
-                    return CalcBestAction(actionID, actionID, DRK.Shadowbringer, DRK.SaltedEarth, DRK.SaltAndDarkness);
+                if (IsEnabled(CustomComboPreset.DarkBloodWeaponFeature))
+                {
+                    if (level >= DRK.Levels.BloodWeapon && IsOffCooldown(DRK.BloodWeapon))
+                        return DRK.BloodWeapon;
+                }
+            }
 
-                if (level >= DRK.Levels.SaltAndDarkness)
-                    return CalcBestAction(actionID, actionID, DRK.SaltedEarth, DRK.SaltAndDarkness);
+            return actionID;
+        }
+    }
 
-                if (level >= DRK.Levels.AbyssalDrain) // or CarveAndSpit
-                    return CalcBestAction(actionID, actionID, DRK.SaltedEarth);
+    internal class DarkQuietusBloodspiller : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DrkAny;
 
-                if (level >= DRK.Levels.SaltedEarth)
-                    return DRK.SaltedEarth;
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == DRK.Quietus || actionID == DRK.Bloodspiller)
+            {
+                if (IsEnabled(CustomComboPreset.DarkLivingShadowFeature))
+                {
+                    if (level >= DRK.Levels.Delirium && HasEffect(DRK.Buffs.Delirium))
+                        return actionID;
+
+                    if (level >= DRK.Levels.LivingShadow && IsOffCooldown(DRK.LivingShadow))
+                        return DRK.LivingShadow;
+                }
             }
 
             return actionID;
