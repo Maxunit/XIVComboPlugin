@@ -32,6 +32,7 @@ namespace XIVComboExpandedPlugin.Combos
             HeatBlast = 7410,
             HotShot = 2872,
             Wildfire = 2878,
+            Detonator = 16766,
             BarrelStabilizer = 7414,
             Drill = 16498,
             AirAnchor = 16500,
@@ -135,7 +136,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class MachinistGaussRoundRicochetFeature : CustomCombo
+    internal class MachinistGaussRoundRicochet : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MachinistGaussRoundRicochetFeature;
 
@@ -153,7 +154,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class MachinistOverheatFeature : CustomCombo
+    internal class MachinistWildfire : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MachinistOverheatFeature;
 
@@ -209,7 +210,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class MachinistSpreadShotFeature : CustomCombo
+    internal class MachinistSpreadShot : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MachinistSpreadShotFeature;
 
@@ -227,13 +228,13 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class MachinistOverdriveFeature : CustomCombo
+    internal class MachinistRookAutoturret : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MachinistOverdriveFeature;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID == MCH.RookAutoturret)
+            if (actionID == MCH.RookAutoturret || actionID == MCH.AutomatonQueen)
             {
                 var gauge = GetJobGauge<MCHGauge>();
 
@@ -246,7 +247,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class MachinistDrillAirAnchorChainsawFeature : CustomCombo
+    internal class MachinistDrillAirAnchorChainsaw : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MachinistHotShotDrillChainsawFeature;
 
@@ -291,7 +292,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class MachinistAirAnchorChainsawFeature : CustomCombo
+    internal class MachinistAirAnchorChainsaw : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MachinistHotShotChainsawFeature;
 

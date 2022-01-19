@@ -1,3 +1,4 @@
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
 
@@ -8,19 +9,31 @@ namespace XIVComboExpandedPlugin.Combos
         public const byte JobID = 33;
 
         public const uint
-            Benefic = 3594,
-            Benefic2 = 3610,
             Draw = 3590,
+            Benefic = 3594,
+            Malefic = 3596,
+            Lightspeed = 3606,
+            Benefic2 = 3610,
+            Synastry = 3612,
+            CollectiveUnconscious = 3613,
             Balance = 4401,
             Bole = 4404,
             Arrow = 4402,
             Spear = 4403,
             Ewer = 4405,
             Spire = 4406,
+            EarthlyStar = 7439,
             MinorArcana = 7443,
+            SleeveDraw = 7448,
+            Divination = 16552,
+            CelestialOpposition = 16553,
+            Horoscope = 16557,
+            NeutralSect = 16559,
             Play = 17055,
             CrownPlay = 25869,
-            Astrodyne = 25870;
+            Astrodyne = 25870,
+            Exaltation = 25873,
+            Macrocosmos = 25874;
 
         public static class Buffs
         {
@@ -46,7 +59,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class AstrologianCardsOnDrawFeature : CustomCombo
+    internal class AstrologianPlay : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstAny;
 
@@ -64,6 +77,14 @@ namespace XIVComboExpandedPlugin.Combos
 
                 if (IsEnabled(CustomComboPreset.AstrologianDrawPlayFeature))
                 {
+                    if (IsEnabled(CustomComboPreset.AstrologianAstrodyneDrawPlayFeature))
+                    {
+                        var draw = GetCooldown(AST.Draw);
+
+                        if (level >= AST.Levels.Astrodyne && !gauge.ContainsSeal(SealType.NONE) && draw.RemainingCharges == 0)
+                            return AST.Astrodyne;
+                    }
+
                     if (level >= AST.Levels.Draw && gauge.DrawnCard == CardType.NONE)
                         return AST.Draw;
                 }
@@ -73,7 +94,26 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class AstrologianMinorArcanaPlayFeature : CustomCombo
+    internal class AstrologianDraw : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstrologianDrawLockoutFeature;
+
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == AST.Draw)
+            {
+                var gauge = GetJobGauge<ASTGauge>();
+
+                if (gauge.DrawnCard != CardType.NONE)
+                    // Malefic4
+                    return OriginalHook(AST.Malefic);
+            }
+
+            return actionID;
+        }
+    }
+
+    internal class AstrologianMinorArcana : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstrologianMinorArcanaPlayFeature;
 
@@ -82,7 +122,9 @@ namespace XIVComboExpandedPlugin.Combos
             if (actionID == AST.MinorArcana)
             {
                 var gauge = GetJobGauge<ASTGauge>();
+
                 if (level >= AST.Levels.CrownPlay && gauge.DrawnCrownCard != CardType.NONE)
+                    // Card action
                     return OriginalHook(AST.CrownPlay);
             }
 
@@ -90,7 +132,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class AstrologianBeneficFeature : CustomCombo
+    internal class AstrologianBenefic2 : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstrologianBeneficFeature;
 

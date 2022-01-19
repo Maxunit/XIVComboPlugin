@@ -35,8 +35,9 @@ namespace XIVComboExpandedPlugin.Combos
         {
             public const ushort
                 Thundercloud = 164,
+                Firestarter = 165,
                 LeyLines = 737,
-                Firestarter = 165;
+                EnhancedFlare = 2960;
         }
 
         public static class Debuffs
@@ -66,28 +67,50 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class BlackEnochianFeature : CustomCombo
+    internal class BlackFireBlizzard4 : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BlackEnochianFeature;
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BlmAny;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
+            if (actionID == BLM.Blizzard4)
+            {
+                var gauge = GetJobGauge<BLMGauge>();
+
+                if (IsEnabled(CustomComboPreset.BlackUmbralSoulFeature))
+                {
+                    if (level >= BLM.Levels.UmbralSoul && gauge.InUmbralIce && !HasTarget())
+                        return BLM.UmbralSoul;
+                }
+            }
+
             if (actionID == BLM.Fire4 || actionID == BLM.Blizzard4)
             {
                 var gauge = GetJobGauge<BLMGauge>();
 
-                if (level >= BLM.Levels.Blizzard4 && gauge.InUmbralIce)
-                    return BLM.Blizzard4;
-
-                if (level >= BLM.Levels.Fire4 && gauge.InAstralFire)
+                if (IsEnabled(CustomComboPreset.BlackEnochianFeature))
                 {
-                    if (IsEnabled(CustomComboPreset.BlackEnochianDespairFeature))
+                    if (gauge.InAstralFire)
                     {
-                        if (level >= BLM.Levels.Despair && LocalPlayer?.CurrentMp < 2400)
-                            return BLM.Despair;
+                        if (IsEnabled(CustomComboPreset.BlackEnochianDespairFeature))
+                        {
+                            if (level >= BLM.Levels.Despair && LocalPlayer?.CurrentMp < 2400)
+                                return BLM.Despair;
+                        }
+
+                        if (IsEnabled(CustomComboPreset.BlackEnochianNoSyncFeature) || level >= BLM.Levels.Fire4)
+                            return BLM.Fire4;
+
+                        return BLM.Fire;
                     }
 
-                    return BLM.Fire4;
+                    if (gauge.InUmbralIce)
+                    {
+                        if (IsEnabled(CustomComboPreset.BlackEnochianNoSyncFeature) || level >= BLM.Levels.Blizzard4)
+                            return BLM.Blizzard4;
+
+                        return BLM.Blizzard;
+                    }
                 }
             }
 
@@ -95,7 +118,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class BlackManaFeature : CustomCombo
+    internal class BlackTranspose : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BlackManaFeature;
 
@@ -113,7 +136,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class BlackLeyLinesFeature : CustomCombo
+    internal class BlackLeyLines : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BlackLeyLinesFeature;
 
@@ -129,7 +152,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class BlackFireFeature : CustomCombo
+    internal class BlackFire : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BlackFireFeature;
 
@@ -139,60 +162,100 @@ namespace XIVComboExpandedPlugin.Combos
             {
                 var gauge = GetJobGauge<BLMGauge>();
 
-                if (level >= BLM.Levels.Fire3 && (!gauge.InAstralFire || HasEffect(BLM.Buffs.Firestarter)))
-                    return BLM.Fire3;
+                if (level >= BLM.Levels.Paradox && gauge.IsParadoxActive && gauge.InUmbralIce)
+                    return BLM.Paradox;
 
-                // Paradox
-                return OriginalHook(BLM.Fire);
+                if (level >= BLM.Levels.Fire3)
+                {
+                    if (IsEnabled(CustomComboPreset.BlackFireOption))
+                    {
+                        if (gauge.AstralFireStacks < 3)
+                            return BLM.Fire3;
+                    }
+
+                    if (IsNotEnabled(CustomComboPreset.BlackFireOption2))
+                    {
+                        if (!gauge.InAstralFire)
+                            return BLM.Fire3;
+                    }
+
+                    if (HasEffect(BLM.Buffs.Firestarter))
+                        return BLM.Fire3;
+                }
             }
 
             return actionID;
         }
     }
 
-    internal class BlackBlizzardFeature : CustomCombo
+    internal class BlackBlizzard : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BlackBlizzardFeature;
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BlmAny;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID == BLM.Blizzard)
+            if (actionID == BLM.Blizzard || actionID == BLM.Blizzard3)
             {
                 var gauge = GetJobGauge<BLMGauge>();
 
-                if (level >= BLM.Levels.Blizzard3 && !gauge.InUmbralIce)
-                    return BLM.Blizzard3;
+                if (IsEnabled(CustomComboPreset.BlackUmbralSoulFeature))
+                {
+                    if (level >= BLM.Levels.UmbralSoul && gauge.InUmbralIce && !HasTarget())
+                        return BLM.UmbralSoul;
+                }
 
-                // Paradox
-                return OriginalHook(BLM.Blizzard);
+                if (IsEnabled(CustomComboPreset.BlackBlizzardFeature))
+                {
+                    if (level >= BLM.Levels.Paradox && gauge.IsParadoxActive && (gauge.InUmbralIce || LocalPlayer?.CurrentMp >= 1600))
+                        return BLM.Paradox;
+
+                    if (level >= BLM.Levels.Blizzard3)
+                        return BLM.Blizzard3;
+
+                    return BLM.Blizzard;
+                }
             }
 
             return actionID;
         }
     }
 
-    internal class BlackFreezeFlareFeature : CustomCombo
+    internal class BlackFreezeFlare : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BlackFreezeFlareFeature;
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BlmAny;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
+            if (actionID == BLM.Freeze)
+            {
+                var gauge = GetJobGauge<BLMGauge>();
+
+                if (IsEnabled(CustomComboPreset.BlackUmbralSoulFeature))
+                {
+                    if (level >= BLM.Levels.UmbralSoul && gauge.InUmbralIce && !HasTarget())
+                        return BLM.UmbralSoul;
+                }
+            }
+
             if (actionID == BLM.Freeze || actionID == BLM.Flare)
             {
                 var gauge = GetJobGauge<BLMGauge>();
 
-                if (level >= BLM.Levels.Freeze && gauge.InUmbralIce)
-                    return BLM.Freeze;
+                if (IsEnabled(CustomComboPreset.BlackFreezeFlareFeature))
+                {
+                    if (level >= BLM.Levels.Freeze && gauge.InUmbralIce)
+                        return BLM.Freeze;
 
-                if (level >= BLM.Levels.Flare && gauge.InAstralFire)
-                    return BLM.Flare;
+                    if (level >= BLM.Levels.Flare && gauge.InAstralFire)
+                        return BLM.Flare;
+                }
             }
 
             return actionID;
         }
     }
 
-    internal class BlackFire2Feature : CustomCombo
+    internal class BlackFire2 : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BlackFire2Feature;
 
@@ -202,7 +265,13 @@ namespace XIVComboExpandedPlugin.Combos
             {
                 var gauge = GetJobGauge<BLMGauge>();
 
-                if (level >= BLM.Levels.Flare && gauge.InAstralFire && gauge.UmbralHearts <= 1)
+                if (IsEnabled(CustomComboPreset.BlackFireBlizzard2Option))
+                {
+                    if (gauge.AstralFireStacks < 3)
+                        return actionID;
+                }
+
+                if (level >= BLM.Levels.Flare && gauge.InAstralFire && (gauge.UmbralHearts == 1 || LocalPlayer?.CurrentMp < 3800 || HasEffect(BLM.Buffs.EnhancedFlare)))
                     return BLM.Flare;
             }
 
@@ -210,9 +279,9 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class BlackBlizzard2Feature : CustomCombo
+    internal class BlackBlizzard2 : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BlackBlizzard2Feature;
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BlmAny;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
@@ -220,15 +289,30 @@ namespace XIVComboExpandedPlugin.Combos
             {
                 var gauge = GetJobGauge<BLMGauge>();
 
-                if (level >= BLM.Levels.Freeze && gauge.InUmbralIce)
-                    return BLM.Freeze;
+                if (IsEnabled(CustomComboPreset.BlackUmbralSoulFeature))
+                {
+                    if (level >= BLM.Levels.UmbralSoul && gauge.InUmbralIce && !HasTarget())
+                        return BLM.UmbralSoul;
+                }
+
+                if (IsEnabled(CustomComboPreset.BlackBlizzard2Feature))
+                {
+                    if (IsEnabled(CustomComboPreset.BlackFireBlizzard2Option))
+                    {
+                        if (gauge.UmbralIceStacks < 3)
+                            return actionID;
+                    }
+
+                    if (level >= BLM.Levels.Freeze && gauge.InUmbralIce)
+                        return BLM.Freeze;
+                }
             }
 
             return actionID;
         }
     }
 
-    internal class BlackScatheFeature : CustomCombo
+    internal class BlackScathe : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BlackScatheFeature;
 

@@ -190,6 +190,13 @@ namespace XIVComboExpandedPlugin.Combos
             => Service.TargetManager.Target;
 
         /// <summary>
+        /// Find if the player has a target.
+        /// </summary>
+        /// <returns>A value indicating whether the player has a target.</returns>
+        protected static bool HasTarget()
+            => CurrentTarget is not null;
+
+        /// <summary>
         /// Calls the original hook.
         /// </summary>
         /// <param name="actionID">Action ID.</param>
@@ -198,12 +205,28 @@ namespace XIVComboExpandedPlugin.Combos
             => Service.IconReplacer.OriginalHook(actionID);
 
         /// <summary>
+        /// Compare the original hook to the given action ID.
+        /// </summary>
+        /// <param name="actionID">Action ID.</param>
+        /// <returns>A value indicating whether the action would be modified.</returns>
+        protected static bool IsOriginal(uint actionID)
+            => Service.IconReplacer.OriginalHook(actionID) == actionID;
+
+        /// <summary>
         /// Determine if the given preset is enabled.
         /// </summary>
         /// <param name="preset">Preset to check.</param>
         /// <returns>A value indicating whether the preset is enabled.</returns>
         protected static bool IsEnabled(CustomComboPreset preset)
             => (int)preset < 100 || Service.Configuration.IsEnabled(preset);
+
+        /// <summary>
+        /// Determine if the given preset is not enabled.
+        /// </summary>
+        /// <param name="preset">Preset to check.</param>
+        /// <returns>A value indicating whether the preset is not enabled.</returns>
+        protected static bool IsNotEnabled(CustomComboPreset preset)
+            => !IsEnabled(preset);
 
         /// <summary>
         /// Find if the player is in condition.
@@ -216,7 +239,7 @@ namespace XIVComboExpandedPlugin.Combos
         /// <summary>
         /// Find if the player has a pet present.
         /// </summary>
-        /// <returns>A value indicating whether the play has a pet present.</returns>
+        /// <returns>A value indicating whether the player has a pet present.</returns>
         protected static bool HasPetPresent()
             => Service.BuddyList.PetBuddyPresent;
 
