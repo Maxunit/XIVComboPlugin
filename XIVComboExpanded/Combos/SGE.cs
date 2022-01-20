@@ -340,11 +340,11 @@ namespace XIVComboExpandedPlugin.Combos
                 {
                     var gauge = GetJobGauge<SGEGauge>();
 
-                    if (IsEnabled(CustomComboPreset.SagePhlegmaDyskrasia))
-                    {
-                        if (!HasTarget())
-                            return OriginalHook(SGE.Dyskrasia);
-                    }
+                    // if (IsEnabled(CustomComboPreset.SagePhlegmaDyskrasia))
+                    // {
+                    //    if (!HasTarget())
+                    //        return OriginalHook(SGE.Dyskrasia);
+                    // }
 
                     if (IsEnabled(CustomComboPreset.SagePhlegmaToxicon))
                     {

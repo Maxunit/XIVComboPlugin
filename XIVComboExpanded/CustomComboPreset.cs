@@ -703,10 +703,10 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Dsykrasia Into Toxikon Feature", "Replace Dyskrasia with Toxikon when Addersting is 1 or higher.", SGE.JobID)]
         DsykrasiaToxikon = 4008,
 
-        [CustomComboInfo("Phlegma into Toxikon", "Replace Phlegma with Toxikon when no charges rmemain and have Addersting.\nThis takes priority over Phlegma into Dyskrasia.", SGE.JobID)]
+        [CustomComboInfo("Phlegma into Toxikon", "Replace Phlegma with Toxikon when no charges remain and have Addersting.\nThis takes priority over Phlegma into Dyskrasia.", SGE.JobID)]
         SagePhlegmaToxicon = 4009,
 
-        [CustomComboInfo("Phlegma into Dyskrasia", "Replace Phlegma with Dyskrasia when no charges remain or have no target.", SGE.JobID)]
+        [CustomComboInfo("Phlegma into Dyskrasia", "Replace Phlegma with Dyskrasia when no charges remain.", SGE.JobID)]
         SagePhlegmaDyskrasia = 4010,
 
         // [SecretCustomCombo]
