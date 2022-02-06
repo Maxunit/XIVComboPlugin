@@ -1,4 +1,5 @@
 using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboExpandedPlugin.Combos
 {
@@ -78,6 +79,8 @@ namespace XIVComboExpandedPlugin.Combos
         {
             if (actionID == NIN.AeolianEdge)
             {
+                var gauge = GetJobGauge<NINGauge>();
+
                 if (IsEnabled(CustomComboPreset.NinjaAeolianEdgeRaijuFeature))
                 {
                     if (level >= NIN.Levels.Raiju && HasEffect(NIN.Buffs.RaijuReady))
@@ -88,6 +91,18 @@ namespace XIVComboExpandedPlugin.Combos
                 {
                     if (level >= NIN.Levels.Ninjitsu && HasEffect(NIN.Buffs.Mudra))
                         return OriginalHook(NIN.Ninjutsu);
+                }
+
+                if (IsEnabled(CustomComboPreset.NinjaAeolianEdgeHutonFeature))
+                {
+                    if (level >= NIN.Levels.Huraijin && gauge.HutonTimer == 0)
+                        return NIN.Huraijin;
+
+                    if (comboTime > 0)
+                    {
+                        if (lastComboMove == NIN.GustSlash && level >= NIN.Levels.ArmorCrush && gauge.HutonTimer <= 30_000)
+                            return NIN.ArmorCrush;
+                    }
                 }
 
                 if (IsEnabled(CustomComboPreset.NinjaAeolianEdgeCombo))
@@ -240,7 +255,7 @@ namespace XIVComboExpandedPlugin.Combos
         {
             if (actionID == NIN.Hide)
             {
-                if (level >= NIN.Levels.Mug && HasCondition(ConditionFlag.InCombat))
+                if (level >= NIN.Levels.Mug && InCombat())
                     return NIN.Mug;
             }
 
@@ -274,6 +289,28 @@ namespace XIVComboExpandedPlugin.Combos
             {
                 if (level >= NIN.Levels.Meisui && HasEffect(NIN.Buffs.Suiton))
                     return NIN.Meisui;
+            }
+
+            return actionID;
+        }
+    }
+
+    internal class NinjaNinjitsu : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.NinAny;
+
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        {
+            if (actionID == NIN.Ninjutsu)
+            {
+                if (level >= NIN.Levels.Raiju && HasEffect(NIN.Buffs.RaijuReady) && !HasEffect(NIN.Buffs.Mudra))
+                {
+                    if (IsEnabled(CustomComboPreset.NinjaNinjitsuForkedRaijuFeature))
+                        return NIN.ForkedRaiju;
+
+                    if (IsEnabled(CustomComboPreset.NinjaNinjitsuFleetingRaijuFeature))
+                        return NIN.FleetingRaiju;
+                }
             }
 
             return actionID;

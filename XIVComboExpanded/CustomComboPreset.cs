@@ -87,24 +87,33 @@ namespace XIVComboExpandedPlugin
         // ====================================================================================
         #region ASTROLOGIAN
 
-        [CustomComboInfo("Draw on Play", "Replace Play with Draw when no card is drawn.", AST.JobID)]
-        AstrologianDrawPlayFeature = 3301,
+        [CustomComboInfo("Play to Draw", "Replace Play with Draw when no card is drawn and a card is available.", AST.JobID)]
+        AstrologianPlayDrawFeature = 3301,
 
-        [CustomComboInfo("Minor Arcana Play Feature", "Changes Minor Arcana to Crown Play when a card drawn.", AST.JobID)]
-        AstrologianMinorArcanaPlayFeature = 3302,
+        [CustomComboInfo("Minor Arcana to Crown Play Feature", "Replace Minor Arcana with Crown Play when a card drawn.", AST.JobID)]
+        AstrologianMinorArcanaCrownPlayFeature = 3302,
 
         [CustomComboInfo("Benefic 2 to Benefic Level Sync", "Changes Benefic 2 to Benefic when below level 26 in synced content.", AST.JobID)]
-        AstrologianBeneficFeature = 3303,
+        AstrologianBeneficSyncFeature = 3303,
 
-        [CustomComboInfo("Astrodyne on Play", "Play turns into Astrodyne when seals are full.", AST.JobID)]
-        AstrologianAstrodynePlayFeature = 3304,
+        [CustomComboInfo("Play to Astrodyne", "Replace Play with Astrodyne when seals are full.", AST.JobID)]
+        AstrologianPlayAstrodyneFeature = 3304,
 
-        [CustomComboInfo("Draw Lockout", "Replace Draw (not Draw on Play) with Malefic when a card is drawn.", AST.JobID)]
+        [CustomComboInfo("Draw Lockout", "Replace Draw (not Play to Draw) with Malefic when a card is drawn.", AST.JobID)]
         AstrologianDrawLockoutFeature = 3305,
 
-        [ParentCombo(AstrologianDrawPlayFeature)]
-        [CustomComboInfo("Astrodyne on Draw on Play", "Replace Play with Astrodyne when seals are full and Draw is on Cooldown.", AST.JobID)]
-        AstrologianAstrodyneDrawPlayFeature = 3306,
+        [ParentCombo(AstrologianPlayDrawFeature)]
+        [CustomComboInfo("Play to Draw to Astrodyne", "Replace Play with Astrodyne when seals are full and Draw is on Cooldown.", AST.JobID)]
+        AstrologianPlayDrawAstrodyneFeature = 3306,
+
+        [CustomComboInfo("Crown Play to Minor Arcana Feature", "Replace Crown Play with Minor Arcana when no card is drawn.", AST.JobID)]
+        AstrologianCrownPlayMinorArcanaFeature = 3307,
+
+        [CustomComboInfo("Malefic to Draw", "Replace Malefic with Draw when no card is drawn and a card is available.", AST.JobID)]
+        AstrologianMaleficDrawFeature = 3308,
+
+        [CustomComboInfo("Gravity to Draw", "Replace Gravity with Draw when no card is drawn and a card is available.", AST.JobID)]
+        AstrologianGravityDrawFeature = 3309,
 
         #endregion
         // ====================================================================================
@@ -214,27 +223,28 @@ namespace XIVComboExpandedPlugin
         // ====================================================================================
         #region DANCER
 
-        [CustomComboInfo("Fan Dance Combos", "Change Fan Dance and Fan Dance 2 into Fan Dance 3 while flourishing.", DNC.JobID)]
-        DancerFanDanceCombo = 3801,
+        [CustomComboInfo("Fan Dance 3 Feature", "Replace Fan Dance and Fan Dance 2 with Fan Dance 3 when available.", DNC.JobID)]
+        DancerFanDance3Feature = 3801,
 
         [SecretCustomCombo]
         [ConflictingCombos(DancerDanceComboCompatibility)]
-        [CustomComboInfo("Dance Step Combo", "Change Standard Step and Technical Step into each dance step while dancing.", DNC.JobID)]
+        [CustomComboInfo("Dance Step Combo", "Replace Standard Step and Technical Step with each dance step while dancing.", DNC.JobID)]
         DancerDanceStepCombo = 3802,
 
-        [CustomComboInfo("Flourish Proc Saver", "Change Flourish into any available procs before using.", DNC.JobID)]
+        [CustomComboInfo("Flourish Proc Saver", "Replace Flourish with any available procs while off cooldown.", DNC.JobID)]
         DancerFlourishFeature = 3803,
 
-        [CustomComboInfo("Single Target Multibutton", "Change Cascade into procs and combos as available.", DNC.JobID)]
+        [ConflictingCombos(DancerSingleTargetProcs)]
+        [CustomComboInfo("Single Target Multibutton", "Replace Cascade with its procs and combos as they activate.", DNC.JobID)]
         DancerSingleTargetMultibutton = 3804,
 
-        [CustomComboInfo("AoE Multibutton", "Change Windmill into procs and combos as available.", DNC.JobID)]
+        [CustomComboInfo("AoE Multibutton", "Replace Windmill with its procs and combos as they activate.", DNC.JobID)]
         DancerAoeMultibutton = 3805,
 
         [ConflictingCombos(DancerDanceStepCombo)]
         [CustomComboInfo(
             "Dance Step Feature",
-            "Change actions into dance steps while dancing." +
+            "Replace arbitrary actions with dance steps while dancing." +
             "\nThis helps ensure you can still dance with combos on, without using auto dance." +
             "\nYou can change the respective actions by inputting action IDs below for each dance step." +
             "\nThe defaults are Cascade, Flourish, Fan Dance and Fan Dance II. If set to 0, they will reset to these actions." +
@@ -242,8 +252,25 @@ namespace XIVComboExpandedPlugin
             DNC.JobID)]
         DancerDanceComboCompatibility = 3806,
 
-        [CustomComboInfo("Devilment Feature", "Change Devilment into Starfall Dance after use.", DNC.JobID)]
+        [CustomComboInfo("Devilment Feature", "Replace Devilment with Starfall Dance when active.", DNC.JobID)]
         DancerDevilmentFeature = 3807,
+
+        [CustomComboInfo("Flourishing Fan Dance 4", "Replace Flourish with Fan Dance 4 when available.", DNC.JobID)]
+        DancerFlourishFan4Feature = 3808,
+
+        [ParentCombo(DancerFanDance3Feature)]
+        [CustomComboInfo("Fan Dance 4 Feature", "Replace Fan Dance and Fan Dance 2 with Fan Dance 4 when available.", DNC.JobID)]
+        DancerFanDance4Feature = 3809,
+
+        [CustomComboInfo("Flourishing Fan Dance 3", "Replace Flourish with Fan Dance 3 when available.", DNC.JobID)]
+        DancerFlourishFan3Feature = 3810,
+
+        [ConflictingCombos(DancerSingleTargetMultibutton)]
+        [CustomComboInfo("Single Target to Procs", "Replace Cascade and Fountain with Reverse Cascade and Fountainfall respectively when available.", DNC.JobID)]
+        DancerSingleTargetProcs = 3811,
+
+        [CustomComboInfo("AoE to Procs", "Replace Windmill and Bladeshower with Rising Wiindmill and Bloodshower respectively when available.", DNC.JobID)]
+        DancerAoeProcs = 3812,
 
         #endregion
         // ====================================================================================
@@ -271,6 +298,12 @@ namespace XIVComboExpandedPlugin
         [ParentCombo(DarkStalwartSoulCombo)]
         [CustomComboInfo("Stalwart Soul Overcap Feature", "Replace Stalwart Soul with Quietus when the next combo action would cause the Blood Gauge to overcap.", WAR.JobID)]
         DarkStalwartSoulOvercapFeature = 3207,
+
+        [CustomComboInfo("Living Shadowbringer Feature", "Replace Living Shadow with Shadowbringer when charges are available and your Shadow is present.", DRK.JobID)]
+        DarkLivingShadowbringerFeature = 3208,
+
+        [CustomComboInfo("Missing Shadowbringer Feature", "Replace Living Shadow with Shadowbringer when charges are available and Living Shadow is on cooldown.", DRK.JobID)]
+        DarkLivingShadowbringerHpFeature = 3209,
 
         #endregion
         // ====================================================================================
@@ -343,7 +376,7 @@ namespace XIVComboExpandedPlugin
         GunbreakerEmptyBloodfestFeature = 3707,
 
         [SecretCustomCombo]
-        [CustomComboInfo("No Mercy Feature", "Replace No Mercy with Bow Shock, and then Sonic Break, while No Mercy is active\nBow Shock can only be used if the GCD has more than 0.5s left.", GNB.JobID)]
+        [CustomComboInfo("No Mercy Bow Shock/Sonic Break Feature", "Replace No Mercy with Bow Shock, and then Sonic Break, while No Mercy is active.", GNB.JobID)]
         GunbreakerNoMercyFeature = 3708,
 
         [SecretCustomCombo]
@@ -354,8 +387,12 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Burst Strike Feature", "Replace Solid Barrel with Burst Strike when charges are full.", GNB.JobID)]
         GunbreakerBurstStrikeFeature = 3710,
 
-        [CustomComboInfo("No Mercy Double Down Feature", "Replace No Mercy with Double Down while No Mercy is active and is off cooldown.\nThis takes priority over Bow Shock/Sonic Break if the No Mercy feature is enabled.", GNB.JobID)]
+        [CustomComboInfo("No Mercy Double Down Feature", "Replace No Mercy with Double Down while No Mercy is active, 2 cartridges are available, and Double Down is off cooldown.\nThis takes priority over the No Mercy Bow Shock/Sonic Break Feature.", GNB.JobID)]
         GunbreakerNoMercyDoubleDownFeature = 3711,
+
+        [ConflictingCombos(GunbreakerNoMercyFeature)]
+        [CustomComboInfo("No Mercy Always Double Down Feature", "Replace No Mercy with Double Down while No Mercy is active.", GNB.JobID)]
+        GunbreakerNoMercyAlwaysDoubleDownFeature = 3713,
 
         #endregion
         // ====================================================================================
@@ -429,11 +466,17 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Riddle of Fire and Wind", "Replace Riddle of Fire with Riddle of Wind if the former is on cooldown and the latter is not.", MNK.JobID)]
         MonkRiddleOfFireWind = 2006,
 
-        [CustomComboInfo("Dragon Bootshine Feature", "Replace Dragon Kick with Bootshine if Leaden Fist is up.", MNK.JobID)]
+        [CustomComboInfo("Dragon Kick / Bootshine Feature", "Replace Dragon Kick with Bootshine if Leaden Fist is up.", MNK.JobID)]
         MonkBootshineFeature = 2007,
 
         [CustomComboInfo("Dragon Meditation Feature", "Replace Dragon Kick with Meditation when out of combat and the Fifth Chakra is not open.", MNK.JobID)]
         MonkDragonKickMeditationFeature = 2008,
+
+        [CustomComboInfo("Twin Snakes / True Strike Feature", "Replace Twin Snakes with True Strike if Twin Snakes has more than 6s remaining.", MNK.JobID)]
+        MonkTwinSnakesFeature = 2009,
+
+        [CustomComboInfo("Demolish / Snap Punch Feature", "Replace Demolish with Snap Punch if Demolish has more than 6s remaining on your current target.", MNK.JobID)]
+        MonkDemolishFeature = 2010,
 
         #endregion
         // ====================================================================================
@@ -460,13 +503,13 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Hide to Mug", "Replace Hide with Mug while in combat.", NIN.JobID)]
         NinjaHideMugFeature = 3007,
 
-        [CustomComboInfo("Aeolian to Ninjutsu Feature", "Replace Aeolian Edge with Ninjutsu if any Mudra are used.", NIN.JobID)]
+        [CustomComboInfo("Aeolian Edge / Ninjutsu Feature", "Replace Aeolian Edge with Ninjutsu if any Mudra are used.", NIN.JobID)]
         NinjaAeolianNinjutsuFeature = 3008,
 
-        [CustomComboInfo("GCDs to Ninjutsu Feature", "Every GCD combo becomes Ninjutsu while Mudras are being used.", NIN.JobID)]
-        NinjaGCDNinjutsuFeature = 3009,
+        [CustomComboInfo("Huraijin / Ninjutsu Feature", "Replace Huraijin with Ninjutsu if any Mudra are used.", NIN.JobID)]
+        NinjaHuraijinNinjutsuFeature = 3009,
 
-        [CustomComboInfo("Huraijin Armor Crush Combo", "Replace Huraijin with Armor Crush after using Gust Slash.", NIN.JobID)]
+        [CustomComboInfo("Huraijin / Armor Crush Combo", "Replace Huraijin with Armor Crush after using Gust Slash.", NIN.JobID)]
         NinjaHuraijinArmorCrushCombo = 3010,
 
         [ConflictingCombos(NinjaHuraijinFleetingRaijuFeature)]
@@ -483,14 +526,23 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Huraijin / Fleeting Raiju Option", "Replace Huraijin with Fleeting Raiju when available.", NIN.JobID)]
         NinjaHuraijinFleetingRaijuFeature = 3014,
 
-        [CustomComboInfo("Armor Crush to Ninjutsu Feature", "Replace Armor Crush with Ninjutsu if any Mudra are used.", NIN.JobID)]
+        [CustomComboInfo("Armor Crush / Ninjutsu Feature", "Replace Armor Crush with Ninjutsu if any Mudra are used.", NIN.JobID)]
         NinjaArmorCrushNinjutsuFeature = 3015,
 
-        [CustomComboInfo("Hakke Mujinsatsu to Ninjutsu Feature", "Replace Hakke Mujinsatsu with Ninjutsu if any Mudra are used.", NIN.JobID)]
+        [CustomComboInfo("Hakke Mujinsatsu / Ninjutsu Feature", "Replace Hakke Mujinsatsu with Ninjutsu if any Mudra are used.", NIN.JobID)]
         NinjaHakkeMujinsatsuNinjutsuFeature = 3016,
 
-        [CustomComboInfo("Huraijin to Ninjutsu Feature", "Replace Huraijin with Ninjutsu if any Mudra are used.", NIN.JobID)]
-        NinjaHuraijinNinjutsuFeature = 3017,
+        [ConflictingCombos(NinjaNinjitsuFleetingRaijuFeature)]
+        [CustomComboInfo("Ninjitsu / Forked Raiju Feature", "Replace Ninjitsu with Forked Raiju when available and no Mudra are active.", NIN.JobID)]
+        NinjaNinjitsuForkedRaijuFeature = 3017,
+
+        [ConflictingCombos(NinjaNinjitsuForkedRaijuFeature)]
+        [CustomComboInfo("Ninjitsu / Fleeting Raiju Feature", "Replace Ninjitsu with Fleeting Raiju when available and no Mudra are active.", NIN.JobID)]
+        NinjaNinjitsuFleetingRaijuFeature = 3018,
+
+        [SecretCustomCombo]
+        [CustomComboInfo("Aeolian Edge / Huton Feature", "Replaces Aeolian Edge with Armor Crush when Huton has less than 30 seconds remaining and Huraijin when missing.", NIN.JobID)]
+        NinjaAeolianEdgeHutonFeature = 3019,
 
         #endregion
         // ====================================================================================
@@ -559,7 +611,7 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Enshroud Communio Feature", "Replace Enshroud with Communio when Enshrouded.", RPR.JobID)]
         ReaperEnshroudCommunioFeature = 3909,
 
-        [CustomComboInfo("Regress Feature", "Both Hell's Ingress and Egress turn into Regress when Threshold is active, instead of just the opposite of the one used.", RPR.JobID)]
+        [CustomComboInfo("Regress Feature", "Replace Hell's Ingress and Egress turn with Regress when Threshold is active, instead of just the opposite of the one used.", RPR.JobID)]
         ReaperRegressFeature = 3910,
 
         [CustomComboInfo("Lemure's Soul Reaver Feature", "Replace Gibbet, Gallows, and Guillotine with Lemure's Slice or Scythe when two or more stacks of Void Shroud are active.", RPR.JobID)]
@@ -568,17 +620,17 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Communio Soul Reaver Feature", "Replace Gibbet, Gallows, and Guillotine with Communio when one stack is left of Shroud.", RPR.JobID)]
         ReaperCommunioSoulReaverFeature = 3912,
 
-        [CustomComboInfo("Blood Stalk Gluttony Feature", "Replace Blood Stalk with Gluttony when available and greater-than-or-equal-to 50 Soul Gauge is present.", RPR.JobID)]
-        ReaperBloodStalkGluttonyFeature = 3913,
-
-        [CustomComboInfo("Grim Swathe Gluttony Feature", "Replace Grim Swathe with Gluttony when available and greater-than-or-equal-to 50 Soul Gauge is present.", RPR.JobID)]
-        ReaperGrimSwatheGluttonyFeature = 3914,
-
         [CustomComboInfo("Slice Enhanced Soul Reaver Feature", "Replace Infernal Slice with whichever of Gibbet or Gallows is currently enhanced while Reaving.", RPR.JobID)]
-        ReaperSliceEnhancedSoulReaverFeature = 3915,
+        ReaperSliceEnhancedSoulReaverFeature = 3913,
 
         [CustomComboInfo("Slice Enhanced Enshrouded Feature", "Replace Infernal Slice with whichever of Gibbet or Gallows is currently enhanced while Enshrouded.", RPR.JobID)]
-        ReaperSliceEnhancedEnshroudedFeature = 3916,
+        ReaperSliceEnhancedEnshroudedFeature = 3914,
+
+        [CustomComboInfo("Blood Stalk Gluttony Feature", "Replace Blood Stalk with Gluttony when available and greater-than-or-equal-to 50 Soul Gauge is present.", RPR.JobID)]
+        ReaperBloodStalkGluttonyFeature = 3915,
+
+        [CustomComboInfo("Grim Swathe Gluttony Feature", "Replace Grim Swathe with Gluttony when available and greater-than-or-equal-to 50 Soul Gauge is present.", RPR.JobID)]
+        ReaperGrimSwatheGluttonyFeature = 3916,
 
         [CustomComboInfo("Enhanced Soul Reaver Feature", "Replace Gibbet and Gallows with whichever is currently enhanced while Reaving.", RPR.JobID)]
         ReaperEnhancedSoulReaverFeature = 3917,
@@ -629,6 +681,30 @@ namespace XIVComboExpandedPlugin
 
         [CustomComboInfo("Scythe Harvest Moon Feature", "Replace Nightmare Scythe with Harvest Moon when Soulsow is active and you have a target.", RPR.JobID)]
         ReaperScytheHarvestMoonFeature = 3932,
+
+        [ParentCombo(ReaperRegressFeature)]
+        [CustomComboInfo("Delayed Regress Option", "Replace the action used with Regress only after 1.5 seconds have elapsed on Threshold.", RPR.JobID)]
+        ReaperRegressOption = 3933,
+
+        [CustomComboInfo("Soul Overcap Feature", "Replace Soul Slice with Blood Stalk not Enshrouded and greater-than 50 Soul Gauge is present.", RPR.JobID)]
+        ReaperSoulOvercapFeature = 3934,
+
+        [CustomComboInfo("Soul (Scythe) Overcap Feature", "Replace Soul Scythe with Grim Swathe when not Enshrouded and greater-than 50 Soul Gauge is present.", RPR.JobID)]
+        ReaperSoulScytheOvercapFeature = 3935,
+
+        [CustomComboInfo("Harpe Soulsow Feature", "Replace Harpe with Soulsow when not active and out of combat or you have no target.", RPR.JobID)]
+        ReaperHarpeHarvestSoulsowFeature = 3936,
+
+        [CustomComboInfo("Harpe Harvest Moon Feature", "Replace Harpe with Harvest Moon when Soulsow is active and you are in combat.", RPR.JobID)]
+        ReaperHarpeHarvestMoonFeature = 3937,
+
+        [ParentCombo(ReaperHarpeHarvestMoonFeature)]
+        [CustomComboInfo("Combat Option", "Prevent replacing Harpe with Harvest Moon when not in combat.", RPR.JobID)]
+        ReaperHarpeHarvestMoonCombatFeature = 3938,
+
+        [ParentCombo(ReaperHarpeHarvestMoonFeature)]
+        [CustomComboInfo("Enhanced Harpe Option", "Prevent replacing Harpe with Harvest Moon when Enhanced Harpe is active.", RPR.JobID)]
+        ReaperHarpeHarvestMoonEnhancedFeature = 3939,
 
         #endregion
         // ====================================================================================
@@ -734,45 +810,49 @@ namespace XIVComboExpandedPlugin
 
         [ConflictingCombos(SamuraiIaijutsuTsubameGaeshiFeature)]
         [CustomComboInfo("Tsubame-gaeshi to Iaijutsu", "Replace Tsubame-gaeshi with Iaijutsu when Sen is empty.", SAM.JobID)]
-        SamuraiTsubameGaeshiIaijutsuFeature = 3407,
+        SamuraiTsubameGaeshiIaijutsuFeature = 3406,
 
         [ConflictingCombos(SamuraiIaijutsuShohaFeature)]
         [CustomComboInfo("Tsubame-gaeshi to Shoha", "Replace Tsubame-gaeshi with Shoha when meditation is 3.", SAM.JobID)]
-        SamuraiTsubameGaeshiShohaFeature = 3408,
+        SamuraiTsubameGaeshiShohaFeature = 3407,
 
         [ConflictingCombos(SamuraiTsubameGaeshiIaijutsuFeature)]
         [CustomComboInfo("Iaijutsu to Tsubame-gaeshi", "Replace Iaijutsu with Tsubame-gaeshi when Sen is not empty.", SAM.JobID)]
-        SamuraiIaijutsuTsubameGaeshiFeature = 3409,
+        SamuraiIaijutsuTsubameGaeshiFeature = 3408,
 
         [ConflictingCombos(SamuraiTsubameGaeshiShohaFeature)]
         [CustomComboInfo("Iaijutsu to Shoha", "Replace Iaijutsu with Shoha when meditation is 3.", SAM.JobID)]
-        SamuraiIaijutsuShohaFeature = 3410,
+        SamuraiIaijutsuShohaFeature = 3409,
 
-        [CustomComboInfo("Ikishoten Namikiri Feature", "Replace Ikishoten with Ogi Namikiri, Shoha, and then Kaeshi Namikiri when available.", SAM.JobID)]
-        SamuraiIkishotenNamikiriFeature = 3411,
+        [CustomComboInfo("Ikishoten Namikiri Feature", "Replace Ikishoten with Ogi Namikiri and then Kaeshi Namikiri when available.", SAM.JobID)]
+        SamuraiIkishotenNamikiriFeature = 3410,
 
         [CustomComboInfo("Kyuten to Shoha II", "Replace Hissatsu: Kyuten with Shoha II when Meditation is full.", SAM.JobID)]
-        SamuraiKyutenShoha2Feature = 3412,
+        SamuraiKyutenShoha2Feature = 3411,
 
         [CustomComboInfo("Shinten to Shoha", "Replace Hissatsu: Shinten with Shoha when Meditation is full.", SAM.JobID)]
-        SamuraiShintenShohaFeature = 3413,
+        SamuraiShintenShohaFeature = 3412,
 
         [CustomComboInfo("Shinten to Senei", "Replace Hissatsu: Shinten with Senei when available.", SAM.JobID)]
-        SamuraiShintenSeneiFeature = 3414,
+        SamuraiShintenSeneiFeature = 3413,
 
         [CustomComboInfo("Kyuten to Guren", "Replace Hissatsu: Kyuten with Guren when available.", SAM.JobID)]
-        SamuraiKyutenGurenFeature = 3415,
+        SamuraiKyutenGurenFeature = 3414,
 
         [ParentCombo(SamuraiGekkoCombo)]
         [CustomComboInfo("Gekko Combo Option", "Start the Gekko combo chain with Jinpu instead of Hakaze.", SAM.JobID)]
-        SamuraiGekkoOption = 3416,
+        SamuraiGekkoOption = 3415,
 
         [ParentCombo(SamuraiKashaCombo)]
         [CustomComboInfo("Kasha Combo Option", "Start the Kasha combo chain with Shifu instead of Hakaze.", SAM.JobID)]
-        SamuraiKashaOption = 3417,
+        SamuraiKashaOption = 3416,
 
         [CustomComboInfo("Senei to Guren Level Sync", "Replace Hissatsu: Senei with Guren when level synced below 72.", SAM.JobID)]
-        SamuraiSeneiGurenFeature = 3418,
+        SamuraiSeneiGurenFeature = 3417,
+
+        [ParentCombo(SamuraiIkishotenNamikiriFeature)]
+        [CustomComboInfo("Ikishoten Shoha Feature", "Replace Ikishoten with Shoha when Meditation is full.", SAM.JobID)]
+        SamuraiIkishotenShohaFeature = 3418,
 
         #endregion
         // ====================================================================================
@@ -793,14 +873,17 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Summon Seraph Feature", "Replace Summon Eos and Selene with Summon Seraph when a summon is out.", SCH.JobID)]
         ScholarSeraphFeature = 2805,
 
-        [CustomComboInfo("Excogitation to Recitation", "Replace Excogitation with Recitation when the latter is off cooldown.", SCH.JobID)]
+        [CustomComboInfo("Excogitation to Recitation", "Replace Excogitation with Recitation when Recitation is off cooldown.", SCH.JobID)]
         ScholarExcogitationRecitationFeature = 2806,
 
-        [CustomComboInfo("Lustrate to Recitation", "Replace Lustrate with Recitation when the latter is off cooldown.", SCH.JobID)]
+        [CustomComboInfo("Lustrate to Recitation", "Replace Lustrate with Recitation when Recitation is off cooldown.", SCH.JobID)]
         ScholarLustrateRecitationFeature = 2807,
 
-        [CustomComboInfo("Lustrate to Excogitation", "Replace Lustrate with Excogitation when the latter is off cooldown.", SCH.JobID)]
+        [CustomComboInfo("Lustrate to Excogitation", "Replace Lustrate with Excogitation when Excogitation is off cooldown.", SCH.JobID)]
         ScholarLustrateExcogitationFeature = 2808,
+
+        [CustomComboInfo("Excogitation to Lustrate", "Replace Excogitation with Lustrate when Excogitation is on cooldown.", SCH.JobID)]
+        ScholarExcogitationLustrateFeature = 2809,
 
         #endregion
         // ====================================================================================
@@ -929,6 +1012,24 @@ namespace XIVComboExpandedPlugin
 
         [CustomComboInfo("Pioneer's/Mountaineer's Gift Combo", "Replace Pioneer's/Mountaineer's Gift I with Pioneer's/Mountaineer's Gift II when Gift of the Land is active.", DOL.JobID)]
         DolGiftoftheLand = 51002,
+
+        [CustomComboInfo("Cast / Hook Feature", "Replace Cast with Hook when fishing.", DOL.JobID)]
+        DolCastHookFeature = 51003,
+
+        [CustomComboInfo("Cast / Gig Feature", "Replace Cast with Gig when underwater.", DOL.JobID)]
+        DolCastGigFeature = 51004,
+
+        [CustomComboInfo("Surface Slap / Veteran Trade Feature", "Replace Surface Slap with Veteran Trade when underwater.", DOL.JobID)]
+        DolSurfaceTradeFeature = 51005,
+
+        [CustomComboInfo("Prize Catch / Nature's Bounty Feature", "Replace Prize Catch with Nature's Bounty when underwater.", DOL.JobID)]
+        DolPrizeBountyFeature = 5106,
+
+        [CustomComboInfo("Snagging / Salvage Feature", "Replace Snagging with Salvage when underwater.", DOL.JobID)]
+        DolSnaggingSalvageFeature = 51007,
+
+        [CustomComboInfo("Cast Light / Electric Current Feature", "Replace Cast Light with Electric Current when underwater.", DOL.JobID)]
+        DolCastLightElectricCurrentFeature = 51008,
 
         // [CustomComboInfo("Fisher Price Catcher", "Combo Chains Cast, Thaliak's Favor and Price Catch. Procs Thaliak's Favor is below 200 GP and if above 3 Angler's Art.", DOL.JobID)]
         // FisherPriceCatcher = 51003,

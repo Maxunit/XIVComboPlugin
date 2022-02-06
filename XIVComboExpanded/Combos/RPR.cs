@@ -39,6 +39,7 @@ namespace XIVComboExpandedPlugin.Combos
             LemuresScythe = 24400,
             // Misc
             ShadowOfDeath = 24378,
+            Harpe = 24386,
             Soulsow = 24387,
             HarvestMoon = 24388,
             HellsIngress = 24401,
@@ -48,6 +49,7 @@ namespace XIVComboExpandedPlugin.Combos
         public static class Buffs
         {
             public const ushort
+                EnhancedHarpe = 2845,
                 SoulReaver = 2587,
                 EnhancedGibbet = 2588,
                 EnhancedGallows = 2589,
@@ -74,11 +76,16 @@ namespace XIVComboExpandedPlugin.Combos
                 SpinningScythe = 25,
                 InfernalSlice = 30,
                 NightmareScythe = 45,
+                BloodStalk = 50,
+                GrimSwathe = 55,
+                SoulSlice = 60,
+                SoulScythe = 65,
                 SoulReaver = 70,
                 Regress = 74,
                 Gluttony = 76,
                 Enshroud = 80,
                 Soulsow = 82,
+                HarvestMoon = 82,
                 EnhancedShroud = 86,
                 LemuresScythe = 86,
                 PlentifulHarvest = 88,
@@ -98,7 +105,7 @@ namespace XIVComboExpandedPlugin.Combos
 
                 if (IsEnabled(CustomComboPreset.ReaperSliceSoulsowFeature))
                 {
-                    if (level >= RPR.Levels.Soulsow && !HasCondition(ConditionFlag.InCombat) && !HasEffect(RPR.Buffs.Soulsow))
+                    if (level >= RPR.Levels.Soulsow && !InCombat() && !HasEffect(RPR.Buffs.Soulsow))
                         return RPR.Soulsow;
                 }
 
@@ -178,18 +185,6 @@ namespace XIVComboExpandedPlugin.Combos
             {
                 var gauge = GetJobGauge<RPRGauge>();
 
-                if (IsEnabled(CustomComboPreset.ReaperScytheHarvestMoonFeature))
-                {
-                    if (level >= RPR.Levels.Soulsow && HasEffect(RPR.Buffs.Soulsow) && HasTarget())
-                        return RPR.HarvestMoon;
-                }
-
-                if (IsEnabled(CustomComboPreset.ReaperScytheSoulsowFeature))
-                {
-                    if (level >= RPR.Levels.Soulsow && !HasCondition(ConditionFlag.InCombat) && !HasEffect(RPR.Buffs.Soulsow))
-                        return RPR.Soulsow;
-                }
-
                 if (level >= RPR.Levels.Enshroud && gauge.EnshroudedTimeRemaining > 0)
                 {
                     if (IsEnabled(CustomComboPreset.ReaperScytheCommunioFeature))
@@ -211,6 +206,18 @@ namespace XIVComboExpandedPlugin.Combos
                         (level >= RPR.Levels.Enshroud && gauge.EnshroudedTimeRemaining > 0))
                         // Grim Reaping
                         return OriginalHook(RPR.Guillotine);
+                }
+
+                if (IsEnabled(CustomComboPreset.ReaperScytheHarvestMoonFeature))
+                {
+                    if (level >= RPR.Levels.HarvestMoon && HasEffect(RPR.Buffs.Soulsow) && HasTarget())
+                        return RPR.HarvestMoon;
+                }
+
+                if (IsEnabled(CustomComboPreset.ReaperScytheSoulsowFeature))
+                {
+                    if (level >= RPR.Levels.Soulsow && !InCombat() && !HasEffect(RPR.Buffs.Soulsow))
+                        return RPR.Soulsow;
                 }
 
                 if (IsEnabled(CustomComboPreset.ReaperScytheCombo))
@@ -241,7 +248,7 @@ namespace XIVComboExpandedPlugin.Combos
 
                 if (IsEnabled(CustomComboPreset.ReaperShadowSoulsowFeature))
                 {
-                    if (level >= RPR.Levels.Soulsow && !HasCondition(ConditionFlag.InCombat) && !HasTarget() && !HasEffect(RPR.Buffs.Soulsow))
+                    if (level >= RPR.Levels.Soulsow && !InCombat() && !HasTarget() && !HasEffect(RPR.Buffs.Soulsow))
                         return RPR.Soulsow;
                 }
 
@@ -313,6 +320,46 @@ namespace XIVComboExpandedPlugin.Combos
                         // Void Reaping
                         return OriginalHook(RPR.Gibbet);
                 }
+
+                if (IsEnabled(CustomComboPreset.ReaperSoulOvercapFeature))
+                {
+                    if (IsEnabled(CustomComboPreset.ReaperBloodStalkGluttonyFeature))
+                    {
+                        if (level >= RPR.Levels.Gluttony && gauge.Soul >= 50 && gauge.EnshroudedTimeRemaining == 0 && IsOffCooldown(RPR.Gluttony))
+                            return RPR.Gluttony;
+                    }
+
+                    if (level >= RPR.Levels.BloodStalk && gauge.Soul > 50 && gauge.EnshroudedTimeRemaining == 0)
+                        // Unveiled Gibbet and Gallows
+                        return OriginalHook(RPR.BloodStalk);
+                }
+            }
+
+            return actionID;
+        }
+    }
+
+    internal class ReaperSoulScythe : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.RprAny;
+
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == RPR.SoulScythe)
+            {
+                var gauge = GetJobGauge<RPRGauge>();
+
+                if (IsEnabled(CustomComboPreset.ReaperSoulScytheOvercapFeature))
+                {
+                    if (IsEnabled(CustomComboPreset.ReaperGrimSwatheGluttonyFeature))
+                    {
+                        if (level >= RPR.Levels.Gluttony && gauge.Soul >= 50 && gauge.EnshroudedTimeRemaining == 0 && IsOffCooldown(RPR.Gluttony))
+                            return RPR.Gluttony;
+                    }
+
+                    if (level >= RPR.Levels.GrimSwathe && gauge.Soul > 50 && gauge.EnshroudedTimeRemaining == 0)
+                        return RPR.GrimSwathe;
+                }
             }
 
             return actionID;
@@ -325,7 +372,7 @@ namespace XIVComboExpandedPlugin.Combos
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID == RPR.BloodStalk || actionID == RPR.GrimSwathe)
+            if (actionID == RPR.BloodStalk)
             {
                 var gauge = GetJobGauge<RPRGauge>();
 
@@ -340,7 +387,7 @@ namespace XIVComboExpandedPlugin.Combos
         }
     }
 
-    internal class ReaperBloodStalkGrimSwathe : CustomCombo
+    internal class ReaperGrimSwathe : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.RprAny;
 
@@ -482,8 +529,60 @@ namespace XIVComboExpandedPlugin.Combos
             {
                 if (IsEnabled(CustomComboPreset.ReaperRegressFeature))
                 {
-                    if (level >= RPR.Levels.Regress && HasEffect(RPR.Buffs.Threshold))
-                        return RPR.Regress;
+                    if (level >= RPR.Levels.Regress)
+                    {
+                        if (IsEnabled(CustomComboPreset.ReaperRegressOption))
+                        {
+                            var threshold = FindEffect(RPR.Buffs.Threshold);
+
+                            if (threshold != null && threshold.RemainingTime <= 8.5)
+                                return RPR.Regress;
+                        }
+                        else
+                        {
+                            if (HasEffect(RPR.Buffs.Threshold))
+                                return RPR.Regress;
+                        }
+                    }
+                }
+            }
+
+            return actionID;
+        }
+    }
+
+    internal class ReaperHarpe : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.RprAny;
+
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == RPR.Harpe)
+            {
+                if (IsEnabled(CustomComboPreset.ReaperHarpeHarvestSoulsowFeature))
+                {
+                    if (level >= RPR.Levels.Soulsow && !HasEffect(RPR.Buffs.Soulsow) && (!InCombat() || !HasTarget()))
+                        return RPR.Soulsow;
+                }
+
+                if (IsEnabled(CustomComboPreset.ReaperHarpeHarvestMoonFeature))
+                {
+                    if (level >= RPR.Levels.HarvestMoon && HasEffect(RPR.Buffs.Soulsow))
+                    {
+                        if (IsEnabled(CustomComboPreset.ReaperHarpeHarvestMoonEnhancedFeature))
+                        {
+                            if (HasEffect(RPR.Buffs.EnhancedHarpe))
+                                return RPR.Harpe;
+                        }
+
+                        if (IsEnabled(CustomComboPreset.ReaperHarpeHarvestMoonCombatFeature))
+                        {
+                            if (OutOfCombat())
+                                return RPR.Harpe;
+                        }
+
+                        return RPR.HarvestMoon;
+                    }
                 }
             }
 

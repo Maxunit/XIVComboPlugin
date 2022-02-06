@@ -190,13 +190,6 @@ namespace XIVComboExpandedPlugin.Combos
             => Service.TargetManager.Target;
 
         /// <summary>
-        /// Find if the player has a target.
-        /// </summary>
-        /// <returns>A value indicating whether the player has a target.</returns>
-        protected static bool HasTarget()
-            => CurrentTarget is not null;
-
-        /// <summary>
         /// Calls the original hook.
         /// </summary>
         /// <param name="actionID">Action ID.</param>
@@ -229,12 +222,33 @@ namespace XIVComboExpandedPlugin.Combos
             => !IsEnabled(preset);
 
         /// <summary>
-        /// Find if the player is in condition.
+        /// Find if the player has a certain condition.
         /// </summary>
         /// <param name="flag">Condition flag.</param>
         /// <returns>A value indicating whether the player is in the condition.</returns>
         protected static bool HasCondition(ConditionFlag flag)
             => Service.Condition[flag];
+
+        /// <summary>
+        /// Find if the player is in combat.
+        /// </summary>
+        /// <returns>A value indicating whether the player is in combat.</returns>
+        protected static bool InCombat()
+            => Service.Condition[ConditionFlag.InCombat];
+
+        /// <summary>
+        /// Find if the player is not in combat.
+        /// </summary>
+        /// <returns>A value indicating whether the player is not in combat.</returns>
+        protected static bool OutOfCombat()
+            => !InCombat();
+
+        /// <summary>
+        /// Find if the player has a target.
+        /// </summary>
+        /// <returns>A value indicating whether the player has a target.</returns>
+        protected static bool HasTarget()
+            => CurrentTarget is not null;
 
         /// <summary>
         /// Find if the player has a pet present.
@@ -372,6 +386,22 @@ namespace XIVComboExpandedPlugin.Combos
         /// <returns>True or false.</returns>
         protected static bool IsOffCooldown(uint actionID)
             => !GetCooldown(actionID).IsCooldown;
+
+        /// <summary>
+        /// Gets a value indicating whether an action has any available charges.
+        /// </summary>
+        /// <param name="actionID">Action ID to check.</param>
+        /// <returns>True or false.</returns>
+        protected static bool HasCharges(uint actionID)
+            => GetCooldown(actionID).RemainingCharges > 0;
+
+        /// <summary>
+        /// Get the current number of charges remaining for an action.
+        /// </summary>
+        /// <param name="actionID">Action ID to check.</param>
+        /// <returns>Number of charges.</returns>
+        protected static ushort GetRemainingCharges(uint actionID)
+            => GetCooldown(actionID).RemainingCharges;
 
         /// <summary>
         /// Get the maximum number of charges for an action at a given level.

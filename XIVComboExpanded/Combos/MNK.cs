@@ -14,13 +14,14 @@ namespace XIVComboExpandedPlugin.Combos
 
         public const uint
             Bootshine = 53,
-            DragonKick = 74,
+            TrueStrike = 54,
             SnapPunch = 56,
             TwinSnakes = 61,
             ArmOfTheDestroyer = 62,
             Demolish = 66,
             PerfectBalance = 69,
             Rockbreaker = 70,
+            DragonKick = 74,
             Meditation = 3546,
             RiddleOfFire = 7395,
             Brotherhood = 7396,
@@ -34,7 +35,6 @@ namespace XIVComboExpandedPlugin.Combos
         public static class Buffs
         {
             public const ushort
-                TwinSnakes = 101,
                 OpoOpoForm = 107,
                 RaptorForm = 108,
                 CoerlForm = 109,
@@ -53,7 +53,11 @@ namespace XIVComboExpandedPlugin.Combos
         public static class Levels
         {
             public const byte
+                Bootshine = 1,
+                TrueStrike = 4,
+                SnapPunch = 6,
                 Meditation = 15,
+                TwinSnakes = 18,
                 ArmOfTheDestroyer = 26,
                 Rockbreaker = 30,
                 Demolish = 30,
@@ -62,6 +66,7 @@ namespace XIVComboExpandedPlugin.Combos
                 DragonKick = 50,
                 PerfectBalance = 50,
                 FormShift = 52,
+                EnhancedPerfectBalance = 60,
                 MasterfulBlitz = 60,
                 RiddleOfFire = 68,
                 Brotherhood = 70,
@@ -79,24 +84,24 @@ namespace XIVComboExpandedPlugin.Combos
         {
             if (actionID == MNK.MasterfulBlitz)
             {
-                var gauge = new MyMNKGauge(GetJobGauge<MNKGauge>());
+                var gauge = GetJobGauge<MNKGauge>();
 
                 // Blitz
-                if (!gauge.BeastChakra.Contains(BeastChakra2.NONE))
+                if (level >= MNK.Levels.MasterfulBlitz && !gauge.BeastChakra.Contains(BeastChakra.NONE))
                     return OriginalHook(MNK.MasterfulBlitz);
 
                 if (level >= MNK.Levels.PerfectBalance && HasEffect(MNK.Buffs.PerfectBalance))
                 {
-                    // Solar or Both
-                    if (!gauge.Nadi.HasFlag(Nadi.SOLAR) || gauge.Nadi.HasFlag(Nadi.LUNAR))
+                    // Solar
+                    if (level >= MNK.Levels.EnhancedPerfectBalance && !gauge.Nadi.HasFlag(Nadi.SOLAR))
                     {
-                        if (level >= MNK.Levels.FourPointFury && !gauge.BeastChakra.Contains(BeastChakra2.RAPTOR))
+                        if (level >= MNK.Levels.FourPointFury && !gauge.BeastChakra.Contains(BeastChakra.RAPTOR))
                             return MNK.FourPointFury;
 
-                        if (level >= MNK.Levels.Rockbreaker && !gauge.BeastChakra.Contains(BeastChakra2.COEURL))
+                        if (level >= MNK.Levels.Rockbreaker && !gauge.BeastChakra.Contains(BeastChakra.COEURL))
                             return MNK.Rockbreaker;
 
-                        if (level >= MNK.Levels.ArmOfTheDestroyer && !gauge.BeastChakra.Contains(BeastChakra2.OPOOPO))
+                        if (level >= MNK.Levels.ArmOfTheDestroyer && !gauge.BeastChakra.Contains(BeastChakra.OPOOPO))
                             // Shadow of the Destroyer
                             return OriginalHook(MNK.ArmOfTheDestroyer);
 
@@ -105,13 +110,10 @@ namespace XIVComboExpandedPlugin.Combos
                             : MNK.Rockbreaker;
                     }
 
-                    // Lunar
-                    if (!gauge.Nadi.HasFlag(Nadi.LUNAR))
-                    {
-                        return level >= MNK.Levels.ShadowOfTheDestroyer
-                            ? MNK.ShadowOfTheDestroyer
-                            : MNK.Rockbreaker;
-                    }
+                    // Lunar.  Also used if we have both Nadi as Tornado Kick/Phantom Rush isn't picky, or under 60.
+                    return level >= MNK.Levels.ShadowOfTheDestroyer
+                        ? MNK.ShadowOfTheDestroyer
+                        : MNK.Rockbreaker;
                 }
 
                 // FPF with FormShift
@@ -170,23 +172,58 @@ namespace XIVComboExpandedPlugin.Combos
 
                 if (IsEnabled(CustomComboPreset.MonkDragonKickMeditationFeature))
                 {
-                    if (level >= MNK.Levels.Meditation && gauge.Chakra < 5 && !HasCondition(ConditionFlag.InCombat))
+                    if (level >= MNK.Levels.Meditation && gauge.Chakra < 5 && !InCombat())
                         return MNK.Meditation;
                 }
 
                 if (IsEnabled(CustomComboPreset.MonkDragonKickBalanceFeature))
                 {
-                    if (!gauge.BeastChakra.Contains(BeastChakra.NONE))
+                    if (level >= MNK.Levels.MasterfulBlitz && !gauge.BeastChakra.Contains(BeastChakra.NONE))
                         return OriginalHook(MNK.MasterfulBlitz);
                 }
 
                 if (IsEnabled(CustomComboPreset.MonkBootshineFeature))
                 {
-                    if (HasEffect(MNK.Buffs.LeadenFist))
+                    if (level < MNK.Levels.DragonKick || HasEffect(MNK.Buffs.LeadenFist))
                         return MNK.Bootshine;
+                }
+            }
 
-                    if (level < MNK.Levels.DragonKick)
-                        return MNK.Bootshine;
+            return actionID;
+        }
+    }
+
+    internal class MonkTwinSnakes : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MnkAny;
+
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == MNK.TwinSnakes)
+            {
+                if (IsEnabled(CustomComboPreset.MonkTwinSnakesFeature))
+                {
+                    if (level < MNK.Levels.TwinSnakes || FindEffect(MNK.Buffs.DisciplinedFist)?.RemainingTime > 6.0)
+                        return MNK.TrueStrike;
+                }
+            }
+
+            return actionID;
+        }
+    }
+
+    internal class MonkDemolish : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MnkAny;
+
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == MNK.Demolish)
+            {
+                if (IsEnabled(CustomComboPreset.MonkDemolishFeature))
+                {
+                    if (level < MNK.Levels.Demolish || FindTargetEffect(MNK.Debuffs.Demolish)?.RemainingTime > 6.0)
+                        return MNK.SnapPunch;
                 }
             }
 
@@ -236,47 +273,5 @@ namespace XIVComboExpandedPlugin.Combos
 
             return actionID;
         }
-    }
-
-    internal unsafe class MyMNKGauge
-    {
-        private readonly IntPtr address;
-
-        internal MyMNKGauge(MNKGauge gauge)
-        {
-            this.address = gauge.Address;
-        }
-
-        public byte Chakra => *(byte*)(this.address + 0x8);
-
-        public BeastChakra2[] BeastChakra => new[]
-        {
-            *(BeastChakra2*)(this.address + 0x9),
-            *(BeastChakra2*)(this.address + 0xA),
-            *(BeastChakra2*)(this.address + 0xB),
-        };
-
-        public Nadi Nadi => *(Nadi*)(this.address + 0xC);
-
-        public ushort BlitzTimeRemaining => *(ushort*)(this.address + 0xE);
-    }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Pending PR")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Pending PR")]
-    internal enum BeastChakra2 : byte
-    {
-        NONE = 0,
-        COEURL = 1,
-        OPOOPO = 2,
-        RAPTOR = 3,
-    }
-
-    [Flags]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Pending PR")]
-    internal enum Nadi : byte
-    {
-        NONE = 0,
-        LUNAR = 2,
-        SOLAR = 4,
     }
 }
