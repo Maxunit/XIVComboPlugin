@@ -83,6 +83,10 @@ namespace XIVComboExpandedPlugin
         #endregion
         // ====================================================================================
         #region ADV
+
+        [CustomComboInfo("Swift Raise Feature", "Replace Ascend, Ressurection, Egeiro, Raise, and Verraise with Swiftcast when it is off cooldown (and Dualcast isn't up).", ADV.JobID)]
+        AllSwiftcastFeature = 1000,
+
         #endregion
         // ====================================================================================
         #region ASTROLOGIAN
@@ -93,7 +97,7 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Minor Arcana to Crown Play Feature", "Replace Minor Arcana with Crown Play when a card drawn.", AST.JobID)]
         AstrologianMinorArcanaCrownPlayFeature = 3302,
 
-        [CustomComboInfo("Benefic 2 to Benefic Level Sync", "Changes Benefic 2 to Benefic when below level 26 in synced content.", AST.JobID)]
+        [CustomComboInfo("Benefic 2 to Benefic Level Sync", "Replaces Benefic 2 to Benefic when below level 26 in synced content.", AST.JobID)]
         AstrologianBeneficSyncFeature = 3303,
 
         [CustomComboInfo("Play to Astrodyne", "Replace Play with Astrodyne when seals are full.", AST.JobID)]
@@ -119,13 +123,13 @@ namespace XIVComboExpandedPlugin
         // ====================================================================================
         #region BLACK MAGE
 
-        [CustomComboInfo("Enochian Feature", "Change Fire 4 or Blizzard 4 to whichever action you can currently use.", BLM.JobID)]
+        [CustomComboInfo("Enochian Feature", "Replace Fire 4 and Blizzard 4 with whichever action you can currently use.", BLM.JobID)]
         BlackEnochianFeature = 2501,
 
-        [CustomComboInfo("Umbral Soul/Transpose Switcher", "Change Transpose into Umbral Soul when Umbral Soul is usable.", BLM.JobID)]
+        [CustomComboInfo("Umbral Soul/Transpose Switcher", "Replace Transpose with Umbral Soul when Umbral Soul is usable.", BLM.JobID)]
         BlackManaFeature = 2502,
 
-        [CustomComboInfo("(Between the) Ley Lines", "Change Ley Lines into BTL when Ley Lines is active.", BLM.JobID)]
+        [CustomComboInfo("(Between the) Ley Lines", "Replace Ley Lines with BTL when Ley Lines is active.", BLM.JobID)]
         BlackLeyLinesFeature = 2503,
 
         [CustomComboInfo("Fire 1/3 Feature", "Fire 1 becomes Fire 3 outside of Astral Fire, and when Firestarter is up.", BLM.JobID)]
@@ -148,7 +152,7 @@ namespace XIVComboExpandedPlugin
 
         [SecretCustomCombo]
         [ParentCombo(BlackEnochianFeature)]
-        [CustomComboInfo("Enochian Despair Feature", "Change Fire 4 or Blizzard 4 to Despair when in Astral Fire with less than 2400 mana.", BLM.JobID)]
+        [CustomComboInfo("Enochian Despair Feature", "Replace Fire 4 and Blizzard 4 with Despair when in Astral Fire with less than 2400 mana.", BLM.JobID)]
         BlackEnochianDespairFeature = 2510,
 
         [CustomComboInfo("Fire 2/Ice 2 Option", "Fire 2 and Blizzard 2 will not change unless you're at max Astral Fire or Umbral Ice.", BLM.JobID)]
@@ -478,6 +482,10 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Demolish / Snap Punch Feature", "Replace Demolish with Snap Punch if Demolish has more than 6s remaining on your current target.", MNK.JobID)]
         MonkDemolishFeature = 2010,
 
+        [ParentCombo(MonkTwinSnakesFeature)]
+        [CustomComboInfo("Formless Snakes Option", "While Formless Fist is active, do not replace Twin Snakes.", MNK.JobID)]
+        MonkFormlessSnakesOption = 2011,
+
         #endregion
         // ====================================================================================
         #region NINJA
@@ -575,6 +583,9 @@ namespace XIVComboExpandedPlugin
         [ConflictingCombos(PaladinRoyalAuthorityAtonementFeature)]
         [CustomComboInfo("Goring Blade Atonement Feature", "Replace Goring Blade with Atonement when under the effect of Sword Oath.", PLD.JobID)]
         PaladinGoringBladeAtonementFeature = 1908,
+
+        [CustomComboInfo("Shields on your Feet Feature", "Replace Shield Bash with Low Blow when available.", PLD.JobID)]
+        PaladinShieldBashFeature = 1909,
 
         #endregion
         // ====================================================================================
@@ -710,31 +721,26 @@ namespace XIVComboExpandedPlugin
         // ====================================================================================
         #region RED MAGE
 
-        [CustomComboInfo("Red Mage AoE Combo", "Replace Veraero/Verthunder 2 with Impact when Dualcast or Swiftcast are active.", RDM.JobID)]
-        RedMageAoECombo = 3501,
+        [CustomComboInfo("AoE Combo", "Replace Veraero/Verthunder 2 with Impact when various instant-cast effects are active.", RDM.JobID)]
+        RedMageAoEFeature = 3501,
 
-        [CustomComboInfo("Redoublement combo", "Replace Redoublement with its combo chain, following enchantment rules.", RDM.JobID)]
+        [CustomComboInfo("Melee combo", "Replace Redoublement with its combo chain, following enchantment rules.", RDM.JobID)]
         RedMageMeleeCombo = 3502,
 
-        [SecretCustomCombo]
-        [ParentCombo(RedMageMeleeCombo)]
-        [CustomComboInfo("Redoublement Combo Plus", "Replace Redoublement with Verflare/Verholy (and then Scorch and Resolution) after Enchanted Redoublement, whichever is more appropriate.", RDM.JobID)]
-        RedMageMeleeComboPlus = 3503,
+        [CustomComboInfo("Melee Capstone Combo", "Replace Redoublement and Moulinet with Scorch and Resolution when available.", RDM.JobID)]
+        RedMageMeleeCapstoneCombo = 3503,
 
-        [CustomComboInfo("Verproc into Jolt", "Replace Verstone/Verfire with Jolt/Scorch when no proc is available.", RDM.JobID)]
-        RedMageVerprocCombo = 3504,
+        [CustomComboInfo("Verstone/Verfire Feature", "Replace Verstone/Verfire with Jolt/Scorch when no proc is available.", RDM.JobID)]
+        RedMageVerprocFeature = 3504,
 
-        [ParentCombo(RedMageVerprocCombo)]
-        [CustomComboInfo("Verproc into Jolt Plus", "Additionally replaces Verstone/Verfire with Veraero/Verthunder if Dualcast, Swiftcast, or Lost Chainspell are up.", RDM.JobID)]
-        RedMageVerprocComboPlus = 3505,
+        [CustomComboInfo("Verstone/Verfire Plus Feature", "Replace Verstone/Verfire with Veraero/Verthunder when various instant-cast effects are active.", RDM.JobID)]
+        RedMageVerprocPlusFeature = 3505,
 
-        [ParentCombo(RedMageVerprocComboPlus)]
-        [CustomComboInfo("Verproc into Jolt Plus Opener Feature (Stone)", "Replace Verstone with Veraero when out of combat.", RDM.JobID)]
-        RedMageVerprocOpenerFeatureStone = 3506,
+        [CustomComboInfo("Verstone/Verfire Plus Opener Feature (Stone)", "Replace Verstone with Veraero when out of combat.", RDM.JobID)]
+        RedMageVerprocOpenerStoneFeature = 3506,
 
-        [ParentCombo(RedMageVerprocComboPlus)]
-        [CustomComboInfo("Verproc into Jolt Plus Opener Feature (Fire)", "Replace Verfire with Verthunder when out of combat.", RDM.JobID)]
-        RedMageVerprocOpenerFeatureFire = 3507,
+        [CustomComboInfo("Verstone/Verfire Plus Opener Feature (Fire)", "Replace Verfire with Verthunder when out of combat.", RDM.JobID)]
+        RedMageVerprocOpenerFireFeature = 3507,
 
         [SecretCustomCombo]
         [CustomComboInfo("Contre Sixte / Fleche Feature", "Replace Contre Sixte and Fleche with whichever is available.", RDM.JobID)]
@@ -750,6 +756,21 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Acceleration with Swiftcast first", "Replace Acceleration with Swiftcast when neither are on cooldown.", RDM.JobID)]
         RedMageAccelerationSwiftcastOption = 3511,
 
+        [CustomComboInfo("Veraero/Verthunder Capstone Combo", "Replace Veraero/Verthunder with Scorch and Resolution when available.", RDM.JobID)]
+        RedMageVeraeroVerthunderCapstoneCombo = 3512,
+
+        [CustomComboInfo("Verstone/Verfire Capstone Combo", "Replace Verstone/Verfire with Scorch and Resolution when available.", RDM.JobID)]
+        RedMageVerprocCapstoneCombo = 3513,
+
+        [CustomComboInfo("AoE Capstone Combo", "Replace Veraero/Verthunder 2 with Scorch and Resolution when available.", RDM.JobID)]
+        RedMageAoECapstoneCombo = 3514,
+
+        [CustomComboInfo("Verstone/Verfire Mana Stacks Feature", "Replace Verstone/Verfire with Verflare/Verholy at 3 mana stacks.", RDM.JobID)]
+        RedMageVerprocManaStacksFeature = 3515,
+
+        [CustomComboInfo("Melee Mana Stacks Feature", "Replace Redoublement and Moulinet with Verflare/Verholy at 3 mana stacks, using whichever mana color is lower.", RDM.JobID)]
+        RedMageMeleeManaStacksFeature = 3516,
+
         #endregion
         // ====================================================================================
         #region SAGE
@@ -761,22 +782,22 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Dosis into Eukrasia & Eukrasia Opener", "Dosis turns into Eukrasia when Eukrasian Dosis is not on Target.", SGE.JobID)]
         SageSmartEukrasiaDosis = 4002,
 
-        [CustomComboInfo("Taurochole Into Druochole Feature", "Replace Taurochole with Druochole when on cooldown", SGE.JobID)]
+        [CustomComboInfo("Taurochole into Druochole Feature", "Replace Taurochole with Druochole when on cooldown", SGE.JobID)]
         SageTaurocholeDruocholeFeature = 4003,
 
-        [CustomComboInfo("Taurochole Into Rhizomata Feature", "Replace Taurochole with Rhizomata when Addersgall is empty.", SGE.JobID)]
+        [CustomComboInfo("Taurochole into Rhizomata Feature", "Replace Taurochole with Rhizomata when Addersgall is empty.", SGE.JobID)]
         SageTaurocholeRhizomataFeature = 4004,
 
-        [CustomComboInfo("Druochole Into Rhizomata Feature", "Replace Druochole with Rhizomata when Addersgall is empty.", SGE.JobID)]
+        [CustomComboInfo("Druochole into Rhizomata Feature", "Replace Druochole with Rhizomata when Addersgall is empty.", SGE.JobID)]
         SageDruocholeRhizomataFeature = 4005,
 
-        [CustomComboInfo("Ixochole Into Rhizomata Feature", "Replace Ixochole with Rhizomata when Addersgall is empty.", SGE.JobID)]
+        [CustomComboInfo("Ixochole into Rhizomata Feature", "Replace Ixochole with Rhizomata when Addersgall is empty.", SGE.JobID)]
         SageIxocholeRhizomataFeature = 4006,
 
-        [CustomComboInfo("Kerachole Into Rhizomata Feature", "Replace Kerachole with Rhizomata when Addersgall is empty.", SGE.JobID)]
+        [CustomComboInfo("Kerachole into Rhizomata Feature", "Replace Kerachole with Rhizomata when Addersgall is empty.", SGE.JobID)]
         SageKeracholaRhizomataFeature = 4007,
 
-        [CustomComboInfo("Dsykrasia Into Toxikon Feature", "Replace Dyskrasia with Toxikon when Addersting is 1 or higher.", SGE.JobID)]
+        [CustomComboInfo("Dsykrasia into Toxikon Feature", "Replace Dyskrasia with Toxikon when Addersting is 1 or higher.", SGE.JobID)]
         DsykrasiaToxikon = 4008,
 
         [CustomComboInfo("Phlegma into Toxikon", "Replace Phlegma with Toxikon when no charges remain and have Addersting.\nThis takes priority over Phlegma into Dyskrasia.", SGE.JobID)]
@@ -784,6 +805,15 @@ namespace XIVComboExpandedPlugin
 
         [CustomComboInfo("Phlegma into Dyskrasia", "Replace Phlegma with Dyskrasia when no charges remain.", SGE.JobID)]
         SagePhlegmaDyskrasia = 4010,
+
+        [CustomComboInfo("Druochole into Taurochole Feature", "Replace Druochole with Taurochole when off cooldown.\nWarning: This will limit your abiility to use Druochole.", SGE.JobID)]
+        SageDruocholeTaurocholeFeature = 4011,
+
+        [CustomComboInfo("Dosis Kardia Feature", "Replace Dosis with Kardia when missing Kardion.", SGE.JobID)]
+        SageDosisKardiaFeature = 4012,
+
+        [CustomComboInfo("Toxikon into Phlegma Feature", "Replace Toxikon with Phlegma when charges are available.", SGE.JobID)]
+        SageToxikonPhlegma = 4013,
 
         // [SecretCustomCombo]
         // [CustomComboInfo("Smart Eukrasia", "This is a work in progress, use at own risk.", SGE.JobID)]
@@ -931,6 +961,9 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Titan's Favor Outburst Feature", "Change Outburst into Mountain Buster (oGCD) when available.", SMN.JobID)]
         SummonerOutburstTitansFavorFeature = 2714,
 
+        [CustomComboInfo("Searing Demi Feature", "Change Summon Bahamut and Summon Phoenix into Searing Light when Bahamut is ready to be summoned, Searing Light is off cooldown, and you are in combat.", SMN.JobID)]
+        SummonerDemiSearingLightFeature = 2715,
+
         #endregion
         // ====================================================================================
         #region WARRIOR
@@ -972,6 +1005,12 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Upheaval and Orogeny Spender", "Adds Upheaval and Orogeny to the Parent Combo if Surging Tempest is active.", WAR.JobID)]
         UpheavalOrogenySpenderFeature = 2111,
 
+        [CustomComboInfo("Healthy Balanaced Diet Feature", "Replace Bloodwhetting with Thrill of Battle, and then Equilibrium when the preceding is on cooldown.", WAR.JobID)]
+        WarriorHealthyBalancedDietFeature = 2112,
+
+        [CustomComboInfo("Mythril Tempest Target Option", "Replace Mythril Tempest only when you have a target.", WAR.JobID)]
+        WarriorMythrilTempestTargetOption = 2113,
+
         // [SecretCustomCombo]
         // [ParentCombo(WarriorStormPathStormEye)]
         // [CustomComboInfo("Angry Beast Feature", "Adds Infuriate to the 'Storm's Path & Storm's Eye Combo' when less then 50 Beast Gauge is available.", WAR.JobID)]
@@ -981,7 +1020,7 @@ namespace XIVComboExpandedPlugin
         // ====================================================================================
         #region WHITE MAGE
 
-        [CustomComboInfo("Solace into Misery", "Replace Afflatus Solace with Afflatus Misery when Misery is ready to be used.", WHM.JobID)]
+        [CustomComboInfo("Solace into Misery", "Replace Afflatus Solace with Afflatus Misery when ready.", WHM.JobID)]
         WhiteMageSolaceMiseryFeature = 2401,
 
         [CustomComboInfo("Rapture into Misery", "Replace Afflatus Rapture with Afflatus Misery when Misery is ready to be used and you have a target.", WHM.JobID)]
@@ -990,11 +1029,14 @@ namespace XIVComboExpandedPlugin
         [CustomComboInfo("Cure 2 Level Sync", "Replace Cure 2 with Cure when below level 30 in synced content.", WHM.JobID)]
         WhiteMageCureFeature = 2403,
 
-        [CustomComboInfo("Afflatus Feature", "Replace Cure 2 with Afflatus Solace and Medica with Afflatus Rapture, when lilies are up.", WHM.JobID)]
+        [CustomComboInfo("Afflatus Feature", "Replace Cure 2 with Afflatus Solace and Medica with Afflatus Rapture when a Lily is available.", WHM.JobID)]
         WhiteMageAfflatusFeature = 2404,
 
-        [CustomComboInfo("Holy into Misery", "Replace Holy/Holy 3 with Afflatus Misery when Misery is ready to be used and you have a target.", WHM.JobID)]
+        [CustomComboInfo("Holy into Misery", "Replace Holy/Holy 3 with Afflatus Misery when ready and you have an enemy target.", WHM.JobID)]
         WhiteMageHolyMiseryFeature = 2405,
+
+        [CustomComboInfo("Targeted Misery", "Only swap to Afflatus Misery when targeting an enemy.", WHM.JobID)]
+        WhiteMageSolaceMiseryTargetFeature = 2406,
 
         #endregion
         // ====================================================================================

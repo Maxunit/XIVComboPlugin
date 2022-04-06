@@ -1,29 +1,49 @@
-﻿namespace XIVComboExpandedPlugin.Combos
+﻿namespace XIVComboExpandedPlugin.Combos;
+
+internal static class ADV
 {
-    internal static class ADV
+    public const byte ClassID = 0;
+    public const byte JobID = 0;
+
+    public const uint
+        LucidDreaming = 1204,
+        Swiftcast = 7561;
+
+    public static class Buffs
     {
-        public const byte ClassID = 0;
-        public const byte JobID = 0;
+        public const ushort
+            Medicated = 49;
+    }
 
-        public const uint
-            LucidDreaming = 1204;
+    public static class Debuffs
+    {
+        public const ushort
+            Placeholder = 0;
+    }
 
-        public static class Buffs
+    public static class Levels
+    {
+        public const byte
+            Swiftcast = 18;
+    }
+}
+
+internal class SwiftRaiseFeature : CustomCombo
+{
+    protected internal override CustomComboPreset Preset => CustomComboPreset.AllSwiftcastFeature;
+
+    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+    {
+        if ((actionID == AST.Ascend && level >= AST.Levels.Ascend) ||
+            (actionID == SCH.Ressurection && level >= SCH.Levels.Ressurection) ||
+            (actionID == SGE.Egeiro && level >= SGE.Levels.Egeiro) ||
+            (actionID == WHM.Raise && level >= WHM.Levels.Raise) ||
+            (actionID == RDM.Verraise && level >= RDM.Levels.Verraise && !HasEffect(RDM.Buffs.Dualcast)))
         {
-            public const ushort
-                Placeholder = 0;
+            if (level >= ADV.Levels.Swiftcast && IsOffCooldown(ADV.Swiftcast))
+                return ADV.Swiftcast;
         }
 
-        public static class Debuffs
-        {
-            public const ushort
-                Placeholder = 0;
-        }
-
-        public static class Levels
-        {
-            public const byte
-                Placeholder = 0;
-        }
+        return actionID;
     }
 }

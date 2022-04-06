@@ -65,6 +65,7 @@ namespace XIVComboExpandedPlugin.Combos
             public const ushort
                 Dosis = 1,
                 Prognosis = 10,
+                Egeiro = 12,
                 Phlegma = 26,
                 Eukrasia = 30,
                 Soteria = 35,
@@ -85,6 +86,49 @@ namespace XIVComboExpandedPlugin.Combos
                 Dosis3 = 82,
                 Krasis = 86,
                 Pneuma = 90;
+        }
+
+        internal class SageDosis : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
+
+            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            {
+                if (actionID == SGE.Dosis)
+                {
+                    if (IsEnabled(CustomComboPreset.SageDosisKardiaFeature))
+                    {
+                        if (!HasEffect(SGE.Buffs.Kardion))
+                            return SGE.Kardia;
+                    }
+                }
+
+                return actionID;
+            }
+        }
+
+        internal class SageToxikon : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
+
+            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            {
+                if (actionID == SGE.Toxikon)
+                {
+                    if (IsEnabled(CustomComboPreset.SageToxikonPhlegma))
+                    {
+                        var phlegma =
+                            level >= SGE.Levels.Phlegma3 ? SGE.Phlegma3 :
+                            level >= SGE.Levels.Phlegma2 ? SGE.Phlegma2 :
+                            level >= SGE.Levels.Phlegma ? SGE.Phlegma : 0;
+
+                        if (phlegma != 0 && HasCharges(phlegma))
+                            return OriginalHook(SGE.Phlegma);
+                    }
+                }
+
+                return actionID;
+            }
         }
 
         internal class SageKardiaFeature : CustomCombo
@@ -148,6 +192,12 @@ namespace XIVComboExpandedPlugin.Combos
                     {
                         if (level >= SGE.Levels.Rhizomata && gauge.Addersgall == 0)
                             return SGE.Rhizomata;
+                    }
+
+                    if (IsEnabled(CustomComboPreset.SageDruocholeTaurocholeFeature))
+                    {
+                        if (level >= SGE.Levels.Taurochole && IsOffCooldown(SGE.Taurochole))
+                            return SGE.Taurochole;
                     }
                 }
 
@@ -340,11 +390,11 @@ namespace XIVComboExpandedPlugin.Combos
                 {
                     var gauge = GetJobGauge<SGEGauge>();
 
-                    // if (IsEnabled(CustomComboPreset.SagePhlegmaDyskrasia))
-                    // {
-                    //    if (!HasTarget())
-                    //        return OriginalHook(SGE.Dyskrasia);
-                    // }
+                    if (IsEnabled(CustomComboPreset.SagePhlegmaDyskrasia))
+                    {
+                        if (HasNoTarget())
+                            return OriginalHook(SGE.Dyskrasia);
+                    }
 
                     if (IsEnabled(CustomComboPreset.SagePhlegmaToxicon))
                     {
@@ -353,7 +403,7 @@ namespace XIVComboExpandedPlugin.Combos
                             level >= SGE.Levels.Phlegma2 ? SGE.Phlegma2 :
                             level >= SGE.Levels.Phlegma ? SGE.Phlegma : 0;
 
-                        if (phlegma != 0 && GetCooldown(phlegma).CooldownRemaining > 45 && gauge.Addersting > 0)
+                        if (phlegma != 0 && HasNoCharges(phlegma) && gauge.Addersting > 0)
                             return OriginalHook(SGE.Toxikon);
                     }
 
@@ -364,7 +414,7 @@ namespace XIVComboExpandedPlugin.Combos
                             level >= SGE.Levels.Phlegma2 ? SGE.Phlegma2 :
                             level >= SGE.Levels.Phlegma ? SGE.Phlegma : 0;
 
-                        if (phlegma != 0 && GetCooldown(phlegma).CooldownRemaining > 45)
+                        if (phlegma != 0 && HasNoCharges(phlegma))
                             return OriginalHook(SGE.Dyskrasia);
                     }
                 }

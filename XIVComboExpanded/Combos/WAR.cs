@@ -12,6 +12,7 @@ namespace XIVComboExpandedPlugin.Combos
             HeavySwing = 31,
             Maim = 37,
             Berserk = 38,
+            ThrillOfBattle = 40,
             Overpower = 41,
             StormsPath = 42,
             StormsEye = 45,
@@ -21,11 +22,13 @@ namespace XIVComboExpandedPlugin.Combos
             FellCleave = 3549,
             Decimate = 3550,
             RawIntuition = 3551,
+            Equilibrium = 3552,
             InnerRelease = 7389,
             MythrilTempest = 16462,
             ChaoticCyclone = 16463,
             NascentFlash = 16464,
             InnerChaos = 16465,
+            Bloodwhetting = 25751,
             PrimalRend = 25753,
             Upheaval = 7387,
             Orogeny = 25752;
@@ -52,17 +55,22 @@ namespace XIVComboExpandedPlugin.Combos
                 Maim = 4,
                 Berserk = 6,
                 StormsPath = 26,
+                ThrillOfBattle = 30,
+                InnerBeast = 35,
                 MythrilTempest = 40,
                 StormsEye = 50,
                 Infuriate = 50,
                 InnerBeastMastery = 54,
                 FellCleave = 54,
+                RawIntuition = 56,
+                Equilibrium = 58,
                 Decimate = 60,
                 Upheaval = 64,
                 InnerRelease = 70,
                 MythrilTempestTrait = 74,
                 NascentFlash = 76,
                 InnerChaos = 80,
+                Bloodwhetting = 82,
                 Orogeny = 86,
                 PrimalRend = 90;
         }
@@ -121,9 +129,7 @@ namespace XIVComboExpandedPlugin.Combos
                 if (comboTime > 0)
                 {
                     if (lastComboMove == WAR.Maim && level >= WAR.Levels.StormsEye)
-                    {
                         return WAR.StormsEye;
-                    }
 
                     if (lastComboMove == WAR.HeavySwing && level >= WAR.Levels.Maim)
                         return WAR.Maim;
@@ -145,6 +151,13 @@ namespace XIVComboExpandedPlugin.Combos
             if (actionID == WAR.MythrilTempest)
             {
                 var gauge = GetJobGauge<WARGauge>().BeastGauge;
+
+                if (IsEnabled(CustomComboPreset.WarriorMythrilTempestTargetOption))
+                {
+                    if (level >= WAR.Levels.MythrilTempest && !HasTarget())
+                        return WAR.MythrilTempest;
+                }
+
                 if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
                     return OriginalHook(WAR.Decimate);
                 if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.MythrilTempestTrait)
@@ -329,6 +342,34 @@ namespace XIVComboExpandedPlugin.Combos
                 }
 
                 return WAR.HeavySwing;
+            }
+
+            return actionID;
+        }
+    }
+
+    internal class WarriorBloodwhetting : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.WarAny;
+
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == WAR.Bloodwhetting || actionID == WAR.RawIntuition)
+            {
+                if (IsEnabled(CustomComboPreset.WarriorHealthyBalancedDietFeature))
+                {
+                    if (level >= WAR.Levels.Bloodwhetting)
+                    {
+                        if (IsOffCooldown(WAR.Bloodwhetting))
+                            return WAR.Bloodwhetting;
+                    }
+
+                    if (level >= WAR.Levels.ThrillOfBattle && IsOffCooldown(WAR.ThrillOfBattle))
+                        return WAR.ThrillOfBattle;
+
+                    if (level >= WAR.Levels.Equilibrium && IsOffCooldown(WAR.Equilibrium))
+                        return WAR.Equilibrium;
+                }
             }
 
             return actionID;
