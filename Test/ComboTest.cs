@@ -9,7 +9,7 @@ namespace Test
     /// <summary>
     /// Unit tests.
     /// </summary>
-    public class ComboTests
+    public class ComboTest
     {
         /// <summary>
         /// Test unique enum values.
