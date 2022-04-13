@@ -152,12 +152,6 @@ internal class WarriorMythrilTempestCombo : CustomCombo
         {
             var gauge = GetJobGauge<WARGauge>().BeastGauge;
 
-            if (IsEnabled(CustomComboPreset.WarriorMythrilTempestTargetOption))
-            {
-                if (level >= WAR.Levels.MythrilTempest && !HasTarget())
-                    return WAR.MythrilTempest;
-            }
-
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
                 return OriginalHook(WAR.Decimate);
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.MythrilTempestTrait)
@@ -362,6 +356,11 @@ internal class WarriorBloodwhetting : CustomCombo
                 {
                     if (IsOffCooldown(WAR.Bloodwhetting))
                         return WAR.Bloodwhetting;
+                }
+                else if (level >= WAR.Levels.RawIntuition)
+                {
+                    if (IsOffCooldown(WAR.RawIntuition))
+                        return WAR.RawIntuition;
                 }
 
                 if (level >= WAR.Levels.ThrillOfBattle && IsOffCooldown(WAR.ThrillOfBattle))

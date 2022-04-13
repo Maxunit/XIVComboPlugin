@@ -177,8 +177,9 @@ public enum CustomComboPreset
     // ====================================================================================
     #region BARD
 
-    [CustomComboInfo("Wanderer's into Pitch Perfect", "Replace Wanderer's Minuet with Pitch Perfect while in WM.", BRD.JobID)]
-    BardWanderersPitchPerfectFeature = 2301,
+    // <--REMOVED->>
+    // [CustomComboInfo("Wanderer's into Pitch Perfect", "Replace Wanderer's Minuet with Pitch Perfect while in WM.", BRD.JobID)]
+    // BardWanderersPitchPerfectFeature = 2301,
 
     [CustomComboInfo("Heavy Shot into Straight Shot", "Replace Heavy Shot with Straight Shot/Refulgent Arrow when available.", BRD.JobID)]
     BardStraightShotUpgradeFeature = 2302,
@@ -235,8 +236,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Dance Step Combo", "Replace Standard Step and Technical Step with each dance step while dancing.", DNC.JobID)]
     DancerDanceStepCombo = 3802,
 
-    [CustomComboInfo("Flourish Proc Saver", "Replace Flourish with any available procs while off cooldown.", DNC.JobID)]
-    DancerFlourishFeature = 3803,
+    // <-- REMOVED -->
+    // [CustomComboInfo("Flourish Proc Saver", "Replace Flourish with any available procs while off cooldown.", DNC.JobID)]
+    // DancerFlourishFeature = 3803,
 
     [ConflictingCombos(DancerSingleTargetProcs)]
     [CustomComboInfo("Single Target Multibutton", "Replace Cascade with its procs and combos as they activate.", DNC.JobID)]
@@ -313,8 +315,9 @@ public enum CustomComboPreset
     // ====================================================================================
     #region DRAGOON
 
-    [CustomComboInfo("Jump + Mirage Dive", "Replace (High) Jump with Mirage Dive when Dive Ready.", DRG.JobID)]
-    DragoonJumpFeature = 2201,
+    // <-- REMOVED -->
+    // [CustomComboInfo("Jump + Mirage Dive", "Replace (High) Jump with Mirage Dive when Dive Ready.", DRG.JobID)]
+    // DragoonJumpFeature = 2201,
 
     [CustomComboInfo("Coerthan Torment Combo", "Replace Coerthan Torment with its combo chain.", DRG.JobID)]
     DragoonCoerthanTormentCombo = 2202,
@@ -955,8 +958,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Radiant Carbuncle Feature", "Change Radiant Aegis into Summon Carbuncle when no pet has been summoned.", SMN.JobID)]
     SummonerRadiantCarbuncleFeature = 2711,
 
-    [CustomComboInfo("Searing Carbuncle Feature", "Change Searing Light into Summon Carbuncle when no pet has been summoned.", SMN.JobID)]
-    SummonerSearingCarbuncleFeature = 2712,
+    // <-- REMOVED -->
+    // [CustomComboInfo("Searing Carbuncle Feature", "Change Searing Light into Summon Carbuncle when no pet has been summoned.", SMN.JobID)]
+    // SummonerSearingCarbuncleFeature = 2712,
 
     [CustomComboInfo("Titan's Favor Ruin Feature", "Change Ruin into Mountain Buster (oGCD) when available.", SMN.JobID)]
     SummonerRuinTitansFavorFeature = 2713,
@@ -1011,8 +1015,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Healthy Balanaced Diet Feature", "Replace Bloodwhetting with Thrill of Battle, and then Equilibrium when the preceding is on cooldown.", WAR.JobID)]
     WarriorHealthyBalancedDietFeature = 2112,
 
-    [CustomComboInfo("Mythril Tempest Target Option", "Replace Mythril Tempest only when you have a target.", WAR.JobID)]
-    WarriorMythrilTempestTargetOption = 2113,
+    // <-- REMOVED -->
+    // [CustomComboInfo("Mythril Tempest Target Option", "Replace Mythril Tempest only when you have a target.", WAR.JobID)]
+    // WarriorMythrilTempestTargetOption = 2113,
 
     // [SecretCustomCombo]
     // [ParentCombo(WarriorStormPathStormEye)]

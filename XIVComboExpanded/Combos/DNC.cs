@@ -40,10 +40,12 @@ internal static class DNC
     public static class Buffs
     {
         public const ushort
-            FlourishingSymmetry = 2693,
-            FlourishingFlow = 2694,
+            FlourishingSymmetry = 3017,
+            FlourishingFlow = 3018,
             FlourishingFinish = 2698,
             FlourishingStarfall = 2700,
+            SilkenSymmetry = 2693,
+            SilkenFlow = 2694,
             StandardStep = 1818,
             TechnicalStep = 1819,
             ThreefoldFanDance = 1820,
@@ -202,24 +204,6 @@ internal class DancerFlourish : CustomCombo
                 if (level >= DNC.Levels.FanDance4 && HasEffect(DNC.Buffs.FourfoldFanDance))
                     return DNC.FanDance4;
             }
-
-            if (IsEnabled(CustomComboPreset.DancerFlourishFeature))
-            {
-                if (level >= DNC.Levels.Flourish && IsOffCooldown(DNC.Flourish))
-                {
-                    if (level >= DNC.Levels.Fountainfall && HasEffect(DNC.Buffs.FlourishingFlow))
-                        return DNC.Fountainfall;
-
-                    if (level >= DNC.Levels.FanDance4 && HasEffect(DNC.Buffs.FourfoldFanDance))
-                        return DNC.FanDance4;
-
-                    if (level >= DNC.Levels.ReverseCascade && HasEffect(DNC.Buffs.FlourishingSymmetry))
-                        return DNC.ReverseCascade;
-
-                    if (level >= DNC.Levels.FanDance3 && HasEffect(DNC.Buffs.ThreefoldFanDance))
-                        return DNC.FanDance3;
-                }
-            }
         }
 
         return actionID;
@@ -236,10 +220,10 @@ internal class DancerCascadeFountain : CustomCombo
         {
             if (IsEnabled(CustomComboPreset.DancerSingleTargetMultibutton))
             {
-                if (level >= DNC.Levels.Fountainfall && HasEffect(DNC.Buffs.FlourishingFlow))
+                if (level >= DNC.Levels.Fountainfall && (HasEffect(DNC.Buffs.FlourishingFlow) || HasEffect(DNC.Buffs.SilkenFlow)))
                     return DNC.Fountainfall;
 
-                if (level >= DNC.Levels.ReverseCascade && HasEffect(DNC.Buffs.FlourishingSymmetry))
+                if (level >= DNC.Levels.ReverseCascade && (HasEffect(DNC.Buffs.FlourishingSymmetry) || HasEffect(DNC.Buffs.SilkenSymmetry)))
                     return DNC.ReverseCascade;
 
                 if (lastComboMove == DNC.Cascade && level >= DNC.Levels.Fountain)
@@ -257,7 +241,7 @@ internal class DancerCascadeFountain : CustomCombo
         {
             if (IsEnabled(CustomComboPreset.DancerSingleTargetProcs))
             {
-                if (level >= DNC.Levels.Fountainfall && HasEffect(DNC.Buffs.FlourishingFlow))
+                if (level >= DNC.Levels.Fountainfall && (HasEffect(DNC.Buffs.FlourishingFlow) || HasEffect(DNC.Buffs.SilkenFlow)))
                     return DNC.Fountainfall;
             }
         }
@@ -276,10 +260,10 @@ internal class DancerWindmillBladeshower : CustomCombo
         {
             if (IsEnabled(CustomComboPreset.DancerAoeMultibutton))
             {
-                if (level >= DNC.Levels.Bloodshower && HasEffect(DNC.Buffs.FlourishingFlow))
+                if (level >= DNC.Levels.Bloodshower && (HasEffect(DNC.Buffs.FlourishingFlow) || HasEffect(DNC.Buffs.SilkenFlow)))
                     return DNC.Bloodshower;
 
-                if (level >= DNC.Levels.RisingWindmill && HasEffect(DNC.Buffs.FlourishingSymmetry))
+                if (level >= DNC.Levels.RisingWindmill && (HasEffect(DNC.Buffs.FlourishingSymmetry) || HasEffect(DNC.Buffs.SilkenSymmetry)))
                     return DNC.RisingWindmill;
 
                 if (lastComboMove == DNC.Windmill && level >= DNC.Levels.Bladeshower)
@@ -288,7 +272,7 @@ internal class DancerWindmillBladeshower : CustomCombo
 
             if (IsEnabled(CustomComboPreset.DancerAoeProcs))
             {
-                if (level >= DNC.Levels.RisingWindmill && HasEffect(DNC.Buffs.FlourishingSymmetry))
+                if (level >= DNC.Levels.RisingWindmill && (HasEffect(DNC.Buffs.FlourishingSymmetry) || HasEffect(DNC.Buffs.SilkenSymmetry)))
                     return DNC.RisingWindmill;
             }
         }
@@ -297,7 +281,7 @@ internal class DancerWindmillBladeshower : CustomCombo
         {
             if (IsEnabled(CustomComboPreset.DancerAoeProcs))
             {
-                if (level >= DNC.Levels.Bloodshower && HasEffect(DNC.Buffs.FlourishingFlow))
+                if (level >= DNC.Levels.Bloodshower && (HasEffect(DNC.Buffs.FlourishingFlow) || HasEffect(DNC.Buffs.SilkenFlow)))
                     return DNC.Bloodshower;
             }
         }
