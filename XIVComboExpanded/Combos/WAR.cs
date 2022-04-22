@@ -154,7 +154,7 @@ internal class WarriorMythrilTempestCombo : CustomCombo
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
                 return OriginalHook(WAR.Decimate);
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.MythrilTempestTrait)
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
                 return OriginalHook(WAR.SteelCyclone);
             if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease))
                 return OriginalHook(WAR.Decimate);
@@ -184,7 +184,7 @@ internal class WarriorOverpowerCombo : CustomCombo
             var gauge = GetJobGauge<WARGauge>().BeastGauge;
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
                 return OriginalHook(WAR.Decimate);
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.MythrilTempestTrait)
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
                 return OriginalHook(WAR.SteelCyclone);
             if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease))
                 return OriginalHook(WAR.Decimate);

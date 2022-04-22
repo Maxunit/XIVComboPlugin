@@ -119,6 +119,10 @@ public enum CustomComboPreset
     [CustomComboInfo("Gravity to Draw", "Replace Gravity with Draw when no card is drawn and a card is available.", AST.JobID)]
     AstrologianGravityDrawFeature = 3309,
 
+    [ParentCombo(AstrologianMinorArcanaCrownPlayFeature)]
+    [CustomComboInfo("Crown Play Delay Feature", "Delay Crown Play by 1s after using Minor Arcnaa.", AST.JobID)]
+    AstrologianCrownPlayDelayFeature = 3310,
+
     #endregion
     // ====================================================================================
     #region BLACK MAGE
@@ -223,6 +227,9 @@ public enum CustomComboPreset
     [ConflictingCombos(BardBloodletterFeature)]
     [CustomComboInfo("Bloodletter to Rain of Death", "Replace Bloodletter with Rain of Death if there are no self-applied DoTs on your target.", BRD.JobID)]
     BardBloodRainFeature = 2313,
+
+    [CustomComboInfo("Wanderer's Minuet Semi-Fix", "Turns Peloton into Wanderer's Minuet to Pitch Perfect while you have a target, letting you use it regardless of whatever other bards are doing.", BRD.JobID)]
+    BardWanderersPitchPerfectFeature = 2314,
 
     #endregion
     // ====================================================================================
