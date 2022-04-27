@@ -17,6 +17,8 @@ internal static class BRD
         Barrage = 107,
         Bloodletter = 110,
         Windbite = 113,
+        MagesBallad = 114,
+        ArmysPaeon = 116,
         RainOfDeath = 117,
         BattleVoice = 118,
         EmpyrealArrow = 3558,
@@ -39,6 +41,7 @@ internal static class BRD
     {
         public const ushort
             StraightShotReady = 122,
+            WanderersMinuet = 2009,
             BlastShotReady = 2692,
             ShadowbiteReady = 3002;
     }
@@ -59,9 +62,12 @@ internal static class BRD
             RagingStrikes = 4,
             VenomousBite = 6,
             Bloodletter = 12,
+            MagesBallad = 30,
             Windbite = 30,
+            ArmysPaeon = 40,
             RainOfDeath = 45,
             BattleVoice = 50,
+            WanderersMinuet = 52,
             PitchPerfect = 52,
             EmpyrealArrow = 54,
             IronJaws = 56,
@@ -210,6 +216,25 @@ internal class BardBloodletter : CustomCombo
     {
         if (actionID == BRD.Bloodletter)
         {
+            var gauge = GetJobGauge<BRDGauge>();
+
+            if (IsEnabled(CustomComboPreset.BardExpiringPerfectBloodletterFeature))
+            {
+                if (level >= BRD.Levels.PitchPerfect && gauge.Song == Song.WANDERER && gauge.Repertoire >= 1)
+                {
+                    var effect = FindEffect(BRD.Buffs.WanderersMinuet);
+
+                    if (effect?.RemainingTime <= 2.5f)
+                        return BRD.PitchPerfect;
+                }
+            }
+
+            if (IsEnabled(CustomComboPreset.BardPerfectBloodletterFeature))
+            {
+                if (level >= BRD.Levels.PitchPerfect && gauge.Song == Song.WANDERER && gauge.Repertoire == 3)
+                    return BRD.PitchPerfect;
+            }
+
             if (IsEnabled(CustomComboPreset.BardBloodletterFeature))
             {
                 if (level >= BRD.Levels.Sidewinder)
@@ -241,20 +266,42 @@ internal class BardBloodletter : CustomCombo
 
 internal class BardRainOfDeath : CustomCombo
 {
-    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BardRainOfDeathFeature;
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BrdAny;
 
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
         if (actionID == BRD.RainOfDeath)
         {
-            if (level >= BRD.Levels.Sidewinder)
-                return CalcBestAction(actionID, BRD.RainOfDeath, BRD.EmpyrealArrow, BRD.Sidewinder);
+            var gauge = GetJobGauge<BRDGauge>();
 
-            if (level >= BRD.Levels.EmpyrealArrow)
-                return CalcBestAction(actionID, BRD.RainOfDeath, BRD.EmpyrealArrow);
+            if (IsEnabled(CustomComboPreset.BardExpiringPerfectRainOfDeathFeature))
+            {
+                if (level >= BRD.Levels.PitchPerfect && gauge.Song == Song.WANDERER && gauge.Repertoire >= 1)
+                {
+                    var effect = FindEffect(BRD.Buffs.WanderersMinuet);
 
-            if (level >= BRD.Levels.RainOfDeath)
-                return BRD.RainOfDeath;
+                    if (effect?.RemainingTime <= 2.5f)
+                        return BRD.PitchPerfect;
+                }
+            }
+
+            if (IsEnabled(CustomComboPreset.BardPerfectRainOfDeathFeature))
+            {
+                if (level >= BRD.Levels.PitchPerfect && gauge.Song == Song.WANDERER && gauge.Repertoire == 3)
+                    return BRD.PitchPerfect;
+            }
+
+            if (IsEnabled(CustomComboPreset.BardRainOfDeathFeature))
+            {
+                if (level >= BRD.Levels.Sidewinder)
+                    return CalcBestAction(actionID, BRD.RainOfDeath, BRD.EmpyrealArrow, BRD.Sidewinder);
+
+                if (level >= BRD.Levels.EmpyrealArrow)
+                    return CalcBestAction(actionID, BRD.RainOfDeath, BRD.EmpyrealArrow);
+
+                if (level >= BRD.Levels.RainOfDeath)
+                    return BRD.RainOfDeath;
+            }
         }
 
         return actionID;
@@ -345,6 +392,49 @@ internal class BardPeloton : CustomCombo
                 return BRD.PitchPerfect;
 
             return BRD.WanderersMinuet;
+        }
+
+        return actionID;
+    }
+}
+
+internal class BardMagesBallad : CustomCombo
+{
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BardCyclingSongFeature;
+
+    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+    {
+        if (actionID == BRD.MagesBallad)
+        {
+            const ushort remaining = 40000;
+            var gauge = GetJobGauge<BRDGauge>();
+
+            if (level >= BRD.Levels.WanderersMinuet)
+            {
+                if (gauge.Song == Song.WANDERER && gauge.SongTimer >= remaining)
+                    return BRD.WanderersMinuet;
+
+                if (IsOffCooldown(BRD.WanderersMinuet))
+                    return BRD.WanderersMinuet;
+            }
+
+            if (level >= BRD.Levels.ArmysPaeon)
+            {
+                if (gauge.Song == Song.ARMY && gauge.SongTimer >= remaining)
+                    return BRD.ArmysPaeon;
+
+                if (IsOffCooldown(BRD.ArmysPaeon))
+                    return BRD.ArmysPaeon;
+            }
+
+            if (level >= BRD.Levels.MagesBallad)
+            {
+                if (gauge.Song == Song.MAGE && gauge.SongTimer >= remaining)
+                    return BRD.MagesBallad;
+
+                if (IsOffCooldown(BRD.MagesBallad))
+                    return BRD.MagesBallad;
+            }
         }
 
         return actionID;

@@ -148,7 +148,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Scathe/Xenoglossy Feature", "Scathe becomes Xenoglossy when available.", BLM.JobID)]
     BlackScatheFeature = 2507,
 
-    [CustomComboInfo("Fire 2 Feature", "(High) Fire 2 becomes Flare in Astral Fire with 1 or fewer Umbral Hearts.", BLM.JobID)]
+    [CustomComboInfo("Fire 2 Feature", "(High) Fire 2 becomes Flare in Astral Fire when only 1 Umbral Heart is active, less than 3000 mp, or during Enhanced Flare.", BLM.JobID)]
     BlackFire2Feature = 2508,
 
     [CustomComboInfo("Ice 2 Feature", "(High) Blizzard 2 becomes Freeze in Umbral Ice.", BLM.JobID)]
@@ -230,6 +230,25 @@ public enum CustomComboPreset
 
     [CustomComboInfo("Wanderer's Minuet Semi-Fix", "Turns Peloton into Wanderer's Minuet to Pitch Perfect while you have a target, letting you use it regardless of whatever other bards are doing.", BRD.JobID)]
     BardWanderersPitchPerfectFeature = 2314,
+
+    [CustomComboInfo("Cycling Song Feature", "Replace Mage's Ballad with Wanderer's Minuet (and Pitch Perfect), Mage's Ballad, and Army's Paeon, while the previous is on cooldown.", BRD.JobID)]
+    BardCyclingSongFeature = 2315,
+
+    [SecretCustomCombo]
+    [CustomComboInfo("Perfect Bloodletter Feature", "Replace Bloodletter with Pitch Perfect when Repertoire charges are full.", BRD.JobID)]
+    BardPerfectBloodletterFeature = 2316,
+
+    [SecretCustomCombo]
+    [CustomComboInfo("Expiring Perfect Bloodletter Feature", "Replace Bloodletter with Pitch Perfect when Wanderers Minuet has less than 2.5 seconds remaining and atleast one Repertoire charge.", BRD.JobID)]
+    BardExpiringPerfectBloodletterFeature = 2317,
+
+    [SecretCustomCombo]
+    [CustomComboInfo("Perfect Rain of Death Feature", "Replace Rain of Death with Pitch Perfect when Repertoire charges are full.", BRD.JobID)]
+    BardPerfectRainOfDeathFeature = 2318,
+
+    [SecretCustomCombo]
+    [CustomComboInfo("Expiring Perfect Rain of Death Feature", "Replace Rain of Death with Pitch Perfect when Wanderers Minuet has less than 2.5 seconds remaining and atleast one Repertoire charge.", BRD.JobID)]
+    BardExpiringPerfectRainOfDeathFeature = 2319,
 
     #endregion
     // ====================================================================================

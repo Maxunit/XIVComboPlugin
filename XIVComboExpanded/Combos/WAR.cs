@@ -64,10 +64,10 @@ internal static class WAR
             FellCleave = 54,
             RawIntuition = 56,
             Equilibrium = 58,
+            SteelCycloneMastery = 60,
             Decimate = 60,
             Upheaval = 64,
             InnerRelease = 70,
-            MythrilTempestTrait = 74,
             NascentFlash = 76,
             InnerChaos = 80,
             Bloodwhetting = 82,
@@ -152,9 +152,9 @@ internal class WarriorMythrilTempestCombo : CustomCombo
         {
             var gauge = GetJobGauge<WARGauge>().BeastGauge;
 
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.SteelCycloneMastery)
                 return OriginalHook(WAR.Decimate);
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.SteelCycloneMastery)
                 return OriginalHook(WAR.SteelCyclone);
             if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease))
                 return OriginalHook(WAR.Decimate);
@@ -182,9 +182,9 @@ internal class WarriorOverpowerCombo : CustomCombo
         if (actionID == WAR.Overpower)
         {
             var gauge = GetJobGauge<WARGauge>().BeastGauge;
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.SteelCycloneMastery)
                 return OriginalHook(WAR.Decimate);
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.MythrilTempestTrait)
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.SteelCycloneMastery)
                 return OriginalHook(WAR.SteelCyclone);
             if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease))
                 return OriginalHook(WAR.Decimate);
