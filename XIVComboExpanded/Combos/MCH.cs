@@ -57,6 +57,7 @@ internal static class MCH
             SlugShot = 2,
             Reassemble = 10,
             GaussRound = 15,
+            SpreadShot = 18,
             CleanShot = 26,
             Hypercharge = 30,
             HeatBlast = 35,
@@ -130,6 +131,40 @@ internal class MachinistMainCombo : CustomCombo
 
             // Heated
             return OriginalHook(MCH.SplitShot);
+        }
+
+        return actionID;
+    }
+}
+
+internal class MachinistAutoweaveFeatureAoE : CustomCombo
+{
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MachinistAutoweaveFeatureAoE;
+
+    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+    {
+        if (actionID == MCH.SpreadShot || actionID == MCH.Scattergun)
+        {
+            if (IsEnabled(CustomComboPreset.MachinistAutoweaveFeature))
+            {
+                CooldownData gaussCd = GetCooldown(MCH.GaussRound);
+                var maxCharges = level >= MCH.Levels.ChargedActionMastery ? 3 : 2;
+                float gaussCharges = gaussCd.IsCooldown ? gaussCd.CooldownElapsed / (gaussCd.CooldownTotal / maxCharges) : maxCharges;
+                float ricochetCharges = 0;
+                var weaveAction = MCH.GaussRound;
+                if (level >= MCH.Levels.Ricochet)
+                {
+                    CooldownData ricochetCd = GetCooldown(MCH.Ricochet);
+                    ricochetCharges = ricochetCd.IsCooldown ? ricochetCd.CooldownElapsed / (ricochetCd.CooldownTotal / maxCharges) : maxCharges;
+                    if (gaussCharges >= 1 || ricochetCharges >= 1)
+                        weaveAction = CalcBestAction(actionID, MCH.GaussRound, MCH.Ricochet);
+                }
+
+                CooldownData globalCd = GetCooldown(MCH.SpreadShot);
+                bool canWeave = (globalCd.CooldownElapsed / globalCd.CooldownTotal) < 0.7;
+                if (canWeave && (gaussCharges >= 1 || ricochetCharges >= 1))
+                    return weaveAction;
+            }
         }
 
         return actionID;

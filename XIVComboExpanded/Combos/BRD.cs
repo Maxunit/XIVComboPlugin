@@ -64,6 +64,7 @@ internal static class BRD
             Bloodletter = 12,
             MagesBallad = 30,
             Windbite = 30,
+            Barrage = 38,
             ArmysPaeon = 40,
             RainOfDeath = 45,
             BattleVoice = 50,
@@ -200,7 +201,15 @@ internal class BardQuickNock : CustomCombo
             if (IsEnabled(CustomComboPreset.BardShadowbiteFeature))
             {
                 if (level >= BRD.Levels.Shadowbite && HasEffect(BRD.Buffs.ShadowbiteReady))
+                {
+                    if (IsEnabled(CustomComboPreset.BardShadowbiteBarrageFeature))
+                    {
+                        if (level >= BRD.Levels.Barrage && IsOffCooldown(BRD.Barrage))
+                            return BRD.Barrage;
+                    }
+
                     return BRD.Shadowbite;
+                }
             }
         }
 
@@ -222,9 +231,7 @@ internal class BardBloodletter : CustomCombo
             {
                 if (level >= BRD.Levels.PitchPerfect && gauge.Song == Song.WANDERER && gauge.Repertoire >= 1)
                 {
-                    var effect = FindEffect(BRD.Buffs.WanderersMinuet);
-
-                    if (effect?.RemainingTime <= 2.5f)
+                    if (gauge.SongTimer <= 2500)
                         return BRD.PitchPerfect;
                 }
             }
@@ -278,9 +285,7 @@ internal class BardRainOfDeath : CustomCombo
             {
                 if (level >= BRD.Levels.PitchPerfect && gauge.Song == Song.WANDERER && gauge.Repertoire >= 1)
                 {
-                    var effect = FindEffect(BRD.Buffs.WanderersMinuet);
-
-                    if (effect?.RemainingTime <= 2.5f)
+                    if (gauge.SongTimer <= 2500)
                         return BRD.PitchPerfect;
                 }
             }
@@ -315,6 +320,22 @@ internal class BardSidewinder : CustomCombo
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
         if (actionID == BRD.Sidewinder)
+        {
+            if (level >= BRD.Levels.Sidewinder)
+                return CalcBestAction(actionID, BRD.EmpyrealArrow, BRD.Sidewinder);
+        }
+
+        return actionID;
+    }
+}
+
+internal class BardEmpyrealArrow : CustomCombo
+{
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BardEmpyrealArrowFeature;
+
+    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+    {
+        if (actionID == BRD.EmpyrealArrow)
         {
             if (level >= BRD.Levels.Sidewinder)
                 return CalcBestAction(actionID, BRD.EmpyrealArrow, BRD.Sidewinder);

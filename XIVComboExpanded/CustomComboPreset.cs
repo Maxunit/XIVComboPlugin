@@ -250,6 +250,14 @@ public enum CustomComboPreset
     [CustomComboInfo("Expiring Perfect Rain of Death Feature", "Replace Rain of Death with Pitch Perfect when Wanderers Minuet has less than 2.5 seconds remaining and atleast one Repertoire charge.", BRD.JobID)]
     BardExpiringPerfectRainOfDeathFeature = 2319,
 
+    [SecretCustomCombo]
+    [CustomComboInfo("Empyreal Arrow Feature", "Replace Empyreal Arrow with Sidewinder depending on which is available.", BRD.JobID)]
+    BardEmpyrealArrowFeature = 2320,
+
+    [ParentCombo(BardShadowbiteFeature)]
+    [CustomComboInfo("A Barrage of Shadowbites", "Replace Quick Nock with Barrage when off cooldown and Shadowbite is available.", BRD.JobID)]
+    BardShadowbiteBarrageFeature = 2321,
+
     #endregion
     // ====================================================================================
     #region DANCER
@@ -461,7 +469,7 @@ public enum CustomComboPreset
     MachinistHyperfireFeature = 3108,
 
     [EvilCombo]
-    [CustomComboInfo("Gauss Round / Ricochet autoweave Feature", "Weave Gauss Round / Ricochet between attacks when appropriate. Requires (Heated) Shot Combo and Hypercharge Feature.", MCH.JobID)]
+    [CustomComboInfo("Gauss Round / Ricochet autoweave (ST)", "Weave Gauss Round / Ricochet between attacks when appropriate. Requires (Heated) Shot Combo and Hypercharge Feature.", MCH.JobID)]
     MachinistAutoweaveFeature = 3151,
 
     [EvilCombo]
@@ -480,6 +488,10 @@ public enum CustomComboPreset
     [CustomComboInfo("Reassemble feature", "Replace nukes with Reassemble when they both are available. Requires (Heated) Shot Combo and Hot Shot (Air Anchor) / Drill / Chainsaw Feature.", MCH.JobID)]
     MachinistReassembleFeature = 3155,
 
+    [EvilCombo]
+    [CustomComboInfo("Gauss Round / Ricochet autoweave (AoE)", "Replace Spread Shot/Scattergun with Gauss Round or Ricochet when available. Requires Hypercharge Feature.", MCH.JobID)]
+    MachinistAutoweaveFeatureAoE = 3156,
+
     #endregion
     // ====================================================================================
     #region MONK
@@ -496,10 +508,10 @@ public enum CustomComboPreset
     [CustomComboInfo("Dragon Balance Feature", "Replace Dragon Kick with Masterful Blitz if you have 3 Beast Chakra.", MNK.JobID)]
     MonkDragonKickBalanceFeature = 2004,
 
-    [CustomComboInfo("Riddle of Brotherly Fire", "Replace Riddle of Fire with Brotherhood if the former is on cooldown and the latter is not.", MNK.JobID)]
+    [CustomComboInfo("Riddle of Brotherly Fire", "Replace Riddle of Fire with Brotherhood when on cooldown.", MNK.JobID)]
     MonkRiddleOfFireBrotherhood = 2005,
 
-    [CustomComboInfo("Riddle of Fire and Wind", "Replace Riddle of Fire with Riddle of Wind if the former is on cooldown and the latter is not.", MNK.JobID)]
+    [CustomComboInfo("Riddle of Fire and Wind", "Replace Riddle of Fire with Riddle of Wind when on cooldown.", MNK.JobID)]
     MonkRiddleOfFireWind = 2006,
 
     [CustomComboInfo("Dragon Kick / Bootshine Feature", "Replace Dragon Kick with Bootshine if Leaden Fist is up.", MNK.JobID)]
