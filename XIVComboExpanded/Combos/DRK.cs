@@ -48,13 +48,13 @@ internal static class DRK
             FloodOfDarkness = 30,
             BloodWeapon = 35,
             EdgeOfDarkness = 40,
+            StalwartSoul = 40,
             SaltedEarth = 52,
             AbyssalDrain = 56,
             CarveAndSpit = 60,
             Bloodspiller = 62,
             Quietus = 64,
             Delirium = 68,
-            StalwartSoul = 72,
             Shadow = 74,
             LivingShadow = 80,
             SaltAndDarkness = 86,
@@ -167,7 +167,10 @@ internal class DarkCarveAndSpitAbyssalDrain : CustomCombo
         {
             if (IsEnabled(CustomComboPreset.DarkBloodWeaponFeature))
             {
-                if (level < DRK.Levels.CarveAndSpit)
+                if (actionID == DRK.AbyssalDrain && level < DRK.Levels.AbyssalDrain)
+                    return DRK.BloodWeapon;
+
+                if (actionID == DRK.CarveAndSpit && level < DRK.Levels.CarveAndSpit)
                     return DRK.BloodWeapon;
 
                 if (level >= DRK.Levels.BloodWeapon && IsOffCooldown(DRK.BloodWeapon))
