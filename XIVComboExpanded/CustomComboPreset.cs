@@ -564,7 +564,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Huraijin / Ninjutsu Feature", "Replace Huraijin with Ninjutsu if any Mudra are used.", NIN.JobID)]
     NinjaHuraijinNinjutsuFeature = 3009,
 
-    [CustomComboInfo("Huraijin / Armor Crush Combo", "Replace Huraijin with Armor Crush after using Gust Slash.", NIN.JobID)]
+    [CustomComboInfo("Huraijin / Armor Crush Combo", "Replace Huraijin with Armor Crush after using Gust Slash when Huton is missing.", NIN.JobID)]
     NinjaHuraijinArmorCrushCombo = 3010,
 
     [ConflictingCombos(NinjaHuraijinFleetingRaijuFeature)]
