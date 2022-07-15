@@ -333,7 +333,8 @@ internal static class SGE
                 if (HasEffect(SGE.Buffs.Eukrasia))
                     return OriginalHook(SGE.Dosis);
 
-                return OriginalHook(SGE.Eukrasia);
+                if (level >= SGE.Levels.Eukrasia)
+                    return OriginalHook(SGE.Eukrasia);
             }
 
             return actionID;
