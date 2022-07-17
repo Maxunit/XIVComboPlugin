@@ -822,6 +822,7 @@ public enum CustomComboPreset
     // ====================================================================================
     #region SAGE
 
+    [ConflictingCombos(SageDosisKardiaSoteriaFeature)]
     [CustomComboInfo("Kardia Into Soteria", "Kardia turns into Soteria when active and Soteria is off-cooldown.", SGE.JobID)]
     SageKardiaFeature = 4001,
 
@@ -856,11 +857,21 @@ public enum CustomComboPreset
     [CustomComboInfo("Druochole into Taurochole Feature", "Replace Druochole with Taurochole when off cooldown.\nWarning: This will limit your abiility to use Druochole.", SGE.JobID)]
     SageDruocholeTaurocholeFeature = 4011,
 
+    [ConflictingCombos(SageDosisKardiaSoteriaFeature)]
     [CustomComboInfo("Dosis Kardia Feature", "Replace Dosis with Kardia when missing Kardion.", SGE.JobID)]
     SageDosisKardiaFeature = 4012,
 
     [CustomComboInfo("Toxikon into Phlegma Feature", "Replace Toxikon with Phlegma when charges are available.", SGE.JobID)]
     SageToxikonPhlegma = 4013,
+
+    [SecretCustomCombo]
+    [CustomComboInfo("Egeiro Swiftcast Feature", "Replace Egeiro with Swiftcast if not on cooldown.", SGE.JobID)]
+    SageSwiftcastRaiserFeature = 4014,
+
+    [ConflictingCombos(SageKardiaFeature, SageDosisKardiaFeature)]
+    [SecretCustomCombo]
+    [CustomComboInfo("Dosis Kardia Soteria Feature", "Same as Dosis Kardia Feature, but also with Soteria.", SGE.JobID)]
+    SageDosisKardiaSoteriaFeature = 4015,
 
     // [SecretCustomCombo]
     // [CustomComboInfo("Smart Eukrasia", "This is a work in progress, use at own risk.", SGE.JobID)]

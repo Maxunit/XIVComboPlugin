@@ -107,6 +107,28 @@ internal static class SGE
         }
     }
 
+    internal class SageDosisKardiaSoteria : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
+
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == SGE.Dosis)
+            {
+                if (IsEnabled(CustomComboPreset.SageDosisKardiaSoteriaFeature))
+                {
+                    if (!HasEffect(SGE.Buffs.Kardion))
+                        return SGE.Kardia;
+
+                    if (level >= SGE.Levels.Soteria && HasEffect(SGE.Buffs.Kardion) && IsOffCooldown(SGE.Soteria))
+                        return SGE.Soteria;
+                }
+            }
+
+            return actionID;
+        }
+    }
+
     internal class SageToxikon : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
@@ -139,7 +161,7 @@ internal static class SGE
         {
             if (actionID == SGE.Kardia)
             {
-                if (HasEffect(SGE.Buffs.Kardia) && IsOffCooldown(SGE.Soteria))
+                if (level >= SGE.Levels.Soteria && HasEffect(SGE.Buffs.Kardia) && IsOffCooldown(SGE.Soteria))
                     return SGE.Soteria;
 
                 return SGE.Kardia;
@@ -417,6 +439,27 @@ internal static class SGE
 
                     if (phlegma != 0 && HasNoCharges(phlegma))
                         return OriginalHook(SGE.Dyskrasia);
+                }
+            }
+
+            return actionID;
+        }
+    }
+
+    internal class SageSwiftcastRaiserFeature : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
+
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == SGE.Egeiro)
+            {
+                if (IsEnabled(CustomComboPreset.SageSwiftcastRaiserFeature))
+                {
+                    if (IsOffCooldown(ADV.Swiftcast))
+                        return ADV.Swiftcast;
+
+                    return OriginalHook(SGE.Egeiro);
                 }
             }
 
