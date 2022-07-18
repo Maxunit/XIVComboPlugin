@@ -848,11 +848,11 @@ public enum CustomComboPreset
     [CustomComboInfo("Dsykrasia into Toxikon Feature", "Replace Dyskrasia with Toxikon when Addersting is 1 or higher.", SGE.JobID)]
     DsykrasiaToxikon = 4008,
 
-    [CustomComboInfo("Phlegma into Toxikon", "Replace Phlegma with Toxikon when no charges remain and have Addersting.\nThis takes priority over Phlegma into Dyskrasia.", SGE.JobID)]
+/*    [CustomComboInfo("Phlegma into Toxikon", "Replace Phlegma with Toxikon when no charges remain and have Addersting.\nThis takes priority over Phlegma into Dyskrasia.", SGE.JobID)]
     SagePhlegmaToxicon = 4009,
 
     [CustomComboInfo("Phlegma into Dyskrasia", "Replace Phlegma with Dyskrasia when no charges remain.", SGE.JobID)]
-    SagePhlegmaDyskrasia = 4010,
+    SagePhlegmaDyskrasia = 4010, */
 
     [CustomComboInfo("Druochole into Taurochole Feature", "Replace Druochole with Taurochole when off cooldown.\nWarning: This will limit your abiility to use Druochole.", SGE.JobID)]
     SageDruocholeTaurocholeFeature = 4011,
@@ -861,7 +861,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Dosis Kardia Feature", "Replace Dosis with Kardia when missing Kardion.", SGE.JobID)]
     SageDosisKardiaFeature = 4012,
 
-    [CustomComboInfo("Toxikon into Phlegma Feature", "Replace Toxikon with Phlegma when charges are available.", SGE.JobID)]
+    [CustomComboInfo("Toxikon into Phlegma Feature", "Replace Dyskrasia with Toxikon when Level is high enough and Phlegma when charges are available.", SGE.JobID)]
     SageToxikonPhlegma = 4013,
 
     [SecretCustomCombo]
@@ -872,6 +872,9 @@ public enum CustomComboPreset
     [SecretCustomCombo]
     [CustomComboInfo("Dosis Kardia Soteria Feature", "Same as Dosis Kardia Feature, but also with Soteria.", SGE.JobID)]
     SageDosisKardiaSoteriaFeature = 4015,
+
+    // [CustomComboInfo("Phlegma Icarus Feature", "Replace Phlegma with Icarus when out of range.", SGE.JobID)]
+    // SagePhlegmaIcarus = 4016,
 
     // [SecretCustomCombo]
     // [CustomComboInfo("Smart Eukrasia", "This is a work in progress, use at own risk.", SGE.JobID)]

@@ -479,4 +479,23 @@ internal abstract partial class CustomCombo
 
         return true;
     }
+
+    #region SGE settings
+    /// <summary>
+    /// Gets a value indicating whether you are in melee range from the current target.
+    /// </summary>
+    /// <returns>Bool indicating whether you are in melee range.</returns>
+    protected static bool InIcarusRange()
+    {
+        var distance = GetTargetDistance();
+
+        if (distance >= 6)
+            return true;
+
+        if (distance > 25)
+            return false;
+
+        return true;
+    }
+    #endregion
 }

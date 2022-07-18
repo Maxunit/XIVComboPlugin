@@ -17,6 +17,7 @@ internal static class SGE
         Phlegma = 24289,
         Eukrasia = 24290,
         Soteria = 24294,
+        Icarus = 24295,
         Druochole = 24296,
         Dyskrasia = 24297,
         Kerachole = 24298,
@@ -69,6 +70,7 @@ internal static class SGE
             Phlegma = 26,
             Eukrasia = 30,
             Soteria = 35,
+            Icarus = 40,
             Druochole = 45,
             Dyskrasia = 46,
             Kerachole = 50,
@@ -135,8 +137,10 @@ internal static class SGE
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID == SGE.Toxikon)
+            if (actionID == SGE.Dyskrasia)
             {
+                var gauge = GetJobGauge<SGEGauge>();
+
                 if (IsEnabled(CustomComboPreset.SageToxikonPhlegma))
                 {
                     var phlegma =
@@ -403,7 +407,7 @@ internal static class SGE
         }
     }
 
-    internal class SagePhlegma : CustomCombo
+/*    internal class SagePhlegma : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
 
@@ -419,18 +423,18 @@ internal static class SGE
                         return OriginalHook(SGE.Dyskrasia);
                 }
 
-                if (IsEnabled(CustomComboPreset.SagePhlegmaToxicon))
+                if (IsEnabled(CustomComboPreset.SagePhlegmaToxicon) && TargetIsEnemy())
                 {
                     var phlegma =
                         level >= SGE.Levels.Phlegma3 ? SGE.Phlegma3 :
                         level >= SGE.Levels.Phlegma2 ? SGE.Phlegma2 :
                         level >= SGE.Levels.Phlegma ? SGE.Phlegma : 0;
 
-                    if (phlegma != 0 && HasNoCharges(phlegma) && gauge.Addersting > 0)
+                    if (phlegma != 0 && HasNoCharges(phlegma) && gauge.Addersting > 0 && level >= SGE.Levels.Toxikon)
                         return OriginalHook(SGE.Toxikon);
                 }
 
-                if (IsEnabled(CustomComboPreset.SagePhlegmaDyskrasia))
+                if (IsEnabled(CustomComboPreset.SagePhlegmaDyskrasia) && TargetIsEnemy())
                 {
                     var phlegma =
                         level >= SGE.Levels.Phlegma3 ? SGE.Phlegma3 :
@@ -444,7 +448,7 @@ internal static class SGE
 
             return actionID;
         }
-    }
+    } */
 
     internal class SageSwiftcastRaiserFeature : CustomCombo
     {
@@ -466,4 +470,28 @@ internal static class SGE
             return actionID;
         }
     }
+
+//    internal class SagePhlegmaIcarus : CustomCombo
+//    {
+//        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
+//
+//        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+//        {
+//            if (actionID == SGE.Dyskrasia)
+//            {
+//                if (IsEnabled(CustomComboPreset.SagePhlegmaIcarus))
+//                {
+//                    if (level >= SGE.Levels.Icarus && !HasTarget() && !InIcarusRange())
+//                    {
+//                        if (IsOffCooldown(SGE.Icarus))
+//                            return SGE.Icarus;
+//
+//                        return OriginalHook(SGE.Toxikon);
+//                    }
+//                }
+//            }
+//
+//            return actionID;
+//        }
+//    }
 }
