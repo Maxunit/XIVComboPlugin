@@ -407,6 +407,27 @@ internal static class SGE
         }
     }
 
+    internal class SageKrasisDiagnosis : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
+
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+        {
+            if (actionID == Diagnosis)
+            {
+                if (IsEnabled(CustomComboPreset.SageKrasisDiagnosis))
+                {
+                    if (IsOffCooldown(SGE.Krasis) && level >= SGE.Levels.Krasis)
+                        return SGE.Krasis;
+
+                    return SGE.Diagnosis;
+                }
+            }
+
+            return actionID;
+        }
+    }
+
 /*    internal class SagePhlegma : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;

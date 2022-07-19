@@ -873,6 +873,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Dosis Kardia Soteria Feature", "Same as Dosis Kardia Feature, but also with Soteria.", SGE.JobID)]
     SageDosisKardiaSoteriaFeature = 4015,
 
+    [CustomComboInfo("Diagnosis Krasis Feature", "Replace Diagnosis with Krasis whenever not on cooldown.", SGE.JobID)]
+    SageKrasisDiagnosis = 4016,
+
     // [CustomComboInfo("Phlegma Icarus Feature", "Replace Phlegma with Icarus when out of range.", SGE.JobID)]
     // SagePhlegmaIcarus = 4016,
 
