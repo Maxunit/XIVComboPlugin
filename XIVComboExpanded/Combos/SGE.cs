@@ -109,29 +109,7 @@ internal static class SGE
         }
     }
 
-    internal class SageDosisKardiaSoteria : CustomCombo
-    {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
-
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            if (actionID == SGE.Dosis)
-            {
-                if (IsEnabled(CustomComboPreset.SageDosisKardiaSoteriaFeature))
-                {
-                    if (!HasEffect(SGE.Buffs.Kardion))
-                        return SGE.Kardia;
-
-                    if (level >= SGE.Levels.Soteria && HasEffect(SGE.Buffs.Kardion) && IsOffCooldown(SGE.Soteria))
-                        return SGE.Soteria;
-                }
-            }
-
-            return actionID;
-        }
-    }
-
-    internal class SageToxikon : CustomCombo
+    internal class SageDyskrasiaPhlegma : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
 
@@ -141,7 +119,7 @@ internal static class SGE
             {
                 var gauge = GetJobGauge<SGEGauge>();
 
-                if (IsEnabled(CustomComboPreset.SageToxikonPhlegma))
+                if (IsEnabled(CustomComboPreset.SageDyskrasiaPhlegma))
                 {
                     var phlegma =
                         level >= SGE.Levels.Phlegma3 ? SGE.Phlegma3 :
@@ -181,7 +159,7 @@ internal static class SGE
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID == SGE.Taurochole)
+            if (actionID == SGE.Druochole)
             {
                 var gauge = GetJobGauge<SGEGauge>();
 
@@ -283,7 +261,7 @@ internal static class SGE
             {
                 var gauge = GetJobGauge<SGEGauge>();
 
-                if (IsEnabled(CustomComboPreset.DsykrasiaToxikon))
+                if (IsEnabled(CustomComboPreset.SageDsykrasiaToxikon))
                 {
                     if (level >= SGE.Levels.Toxikon && gauge.Addersting >= 1)
                         return OriginalHook(SGE.Toxikon);
@@ -417,7 +395,7 @@ internal static class SGE
             {
                 if (IsEnabled(CustomComboPreset.SageKrasisDiagnosis))
                 {
-                    if (IsOffCooldown(SGE.Krasis) && level >= SGE.Levels.Krasis)
+                    if (!HasEffect(SGE.Buffs.Eukrasia) && IsOffCooldown(SGE.Krasis) && level >= SGE.Levels.Krasis)
                         return SGE.Krasis;
 
                     return SGE.Diagnosis;
@@ -427,49 +405,6 @@ internal static class SGE
             return actionID;
         }
     }
-
-/*    internal class SagePhlegma : CustomCombo
-    {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
-
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            if (actionID == SGE.Phlegma || actionID == SGE.Phlegma2 || actionID == SGE.Phlegma3)
-            {
-                var gauge = GetJobGauge<SGEGauge>();
-
-                if (IsEnabled(CustomComboPreset.SagePhlegmaDyskrasia))
-                {
-                    if (HasNoTarget())
-                        return OriginalHook(SGE.Dyskrasia);
-                }
-
-                if (IsEnabled(CustomComboPreset.SagePhlegmaToxicon) && TargetIsEnemy())
-                {
-                    var phlegma =
-                        level >= SGE.Levels.Phlegma3 ? SGE.Phlegma3 :
-                        level >= SGE.Levels.Phlegma2 ? SGE.Phlegma2 :
-                        level >= SGE.Levels.Phlegma ? SGE.Phlegma : 0;
-
-                    if (phlegma != 0 && HasNoCharges(phlegma) && gauge.Addersting > 0 && level >= SGE.Levels.Toxikon)
-                        return OriginalHook(SGE.Toxikon);
-                }
-
-                if (IsEnabled(CustomComboPreset.SagePhlegmaDyskrasia) && TargetIsEnemy())
-                {
-                    var phlegma =
-                        level >= SGE.Levels.Phlegma3 ? SGE.Phlegma3 :
-                        level >= SGE.Levels.Phlegma2 ? SGE.Phlegma2 :
-                        level >= SGE.Levels.Phlegma ? SGE.Phlegma : 0;
-
-                    if (phlegma != 0 && HasNoCharges(phlegma))
-                        return OriginalHook(SGE.Dyskrasia);
-                }
-            }
-
-            return actionID;
-        }
-    } */
 
     internal class SageSwiftcastRaiserFeature : CustomCombo
     {
@@ -492,27 +427,24 @@ internal static class SGE
         }
     }
 
-//    internal class SagePhlegmaIcarus : CustomCombo
-//    {
-//        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
-//
-//        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-//        {
-//            if (actionID == SGE.Dyskrasia)
-//            {
-//                if (IsEnabled(CustomComboPreset.SagePhlegmaIcarus))
-//                {
-//                    if (level >= SGE.Levels.Icarus && !HasTarget() && !InIcarusRange())
-//                    {
-//                        if (IsOffCooldown(SGE.Icarus))
-//                            return SGE.Icarus;
-//
-//                        return OriginalHook(SGE.Toxikon);
-//                    }
-//                }
-//            }
-//
-//            return actionID;
-//        }
-//    }
+    internal class SageSoteriaPneuma : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
+
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == SGE.Soteria)
+            {
+                if (IsEnabled(CustomComboPreset.SageSoteriaPneuma))
+                {
+                    if (IsOffCooldown(SGE.Soteria))
+                        return SGE.Soteria;
+
+                    return OriginalHook(SGE.Pneuma);
+                }
+            }
+
+            return actionID;
+        }
+    }
 }

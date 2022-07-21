@@ -481,6 +481,7 @@ internal abstract partial class CustomCombo
     }
 
     #region SGE settings
+
     /// <summary>
     /// Gets a value indicating whether you are in melee range from the current target.
     /// </summary>
