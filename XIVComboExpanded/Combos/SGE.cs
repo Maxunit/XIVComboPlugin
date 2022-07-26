@@ -100,8 +100,14 @@ internal static class SGE
             {
                 if (IsEnabled(CustomComboPreset.SageDosisKardiaFeature))
                 {
-                    if (!HasEffect(SGE.Buffs.Kardion))
+                    if (!HasEffect(SGE.Buffs.Kardia))
                         return SGE.Kardia;
+                }
+
+                if (IsEnabled(CustomComboPreset.SageSoteriaDosis))
+                {
+                    if (level >= SGE.Levels.Soteria && HasEffect(SGE.Buffs.Kardia) && IsOffCooldown(SGE.Soteria))
+                        return SGE.Soteria;
                 }
             }
 
@@ -420,27 +426,6 @@ internal static class SGE
                         return ADV.Swiftcast;
 
                     return OriginalHook(SGE.Egeiro);
-                }
-            }
-
-            return actionID;
-        }
-    }
-
-    internal class SageSoteriaPneuma : CustomCombo
-    {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SgeAny;
-
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            if (actionID == SGE.Soteria)
-            {
-                if (IsEnabled(CustomComboPreset.SageSoteriaPneuma))
-                {
-                    if (IsOffCooldown(SGE.Soteria))
-                        return SGE.Soteria;
-
-                    return OriginalHook(SGE.Pneuma);
                 }
             }
 

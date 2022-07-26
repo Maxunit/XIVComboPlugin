@@ -861,8 +861,8 @@ public enum CustomComboPreset
     [CustomComboInfo("Diagnosis into Krasis Feature", "Replace Diagnosis with Krasis when not on cooldown.", SGE.JobID)]
     SageKrasisDiagnosis = 4013,
 
-    [CustomComboInfo("Soteria into Pneuma Feature", "Replace Soteria with Pneuma when Soteria is on cooldown.", SGE.JobID)]
-    SageSoteriaPneuma = 4014,
+    [CustomComboInfo("Dosis into Soteria Feature", "Replace Dosis with Soteria if Kardia is active and when available.", SGE.JobID)]
+    SageSoteriaDosis = 4014,
 
     #endregion
     // ====================================================================================
