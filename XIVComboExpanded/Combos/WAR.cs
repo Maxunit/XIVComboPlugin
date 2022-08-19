@@ -310,16 +310,16 @@ internal class WarriorStormPathStormEye : CustomCombo
                 return OriginalHook(WAR.FellCleave);
             if (IsEnabled(CustomComboPreset.WarriorStormPathStormEye) && level >= WAR.Levels.StormsEye && HasEffect(WAR.Buffs.SurgingTempest) && surgingtempesttime is not null)
             {
-                if (comboTime > 0 && surgingtempesttime.RemainingTime >= 30 && lastComboMove == WAR.Maim)
+                if (comboTime > 0 && surgingtempesttime.RemainingTime >= 30 && lastComboMove == WAR.Maim && level >= WAR.StormsPath)
                     return WAR.StormsPath;
 
-                if (comboTime > 0 && surgingtempesttime.RemainingTime <= 30 && lastComboMove == WAR.Maim)
+                if (comboTime > 0 && surgingtempesttime.RemainingTime <= 30 && lastComboMove == WAR.Maim && level >= WAR.StormsEye)
                     return WAR.StormsEye;
             }
 
             if (comboTime > 0)
             {
-                if (lastComboMove == WAR.Maim && level <= WAR.Levels.StormsEye)
+                if (lastComboMove == WAR.Maim && level >= WAR.StormsPath)
                 {
                     return WAR.StormsPath;
                 }
