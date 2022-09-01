@@ -437,6 +437,9 @@ public enum CustomComboPreset
     [CustomComboInfo("No Mercy Always Double Down Feature", "Replace No Mercy with Double Down while No Mercy is active.", GNB.JobID)]
     GunbreakerNoMercyAlwaysDoubleDownFeature = 3713,
 
+    [CustomComboInfo("Keen Edge Rough Divide Feature", "Replaces Keen Edge with Rough Divide if not within melee range.", GNB.JobID)]
+    KeenEdgeRoughDivide = 3714,
+
     #endregion
     // ====================================================================================
     #region MACHINIST
@@ -862,6 +865,9 @@ public enum CustomComboPreset
 
     [CustomComboInfo("Soteria into Pneuma Feature", "Replace Soteria with Pneuma when Soteria is on cooldown.", SGE.JobID)]
     SageSoteriaPneuma = 4014,
+
+    [CustomComboInfo("Dyskrasia into Icarus", "Replace Dyskrasia with Icarus if not in range.", SGE.JobID)]
+    SageDyskrasiaIcarus = 4015,
 
     /* [CustomComboInfo("Dosis into Soteria Feature", "Replace Dosis with Soteria if Kardia is active and when available.", SGE.JobID)]
     SageSoteriaDosis = 4014, */

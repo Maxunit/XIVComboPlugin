@@ -15,6 +15,7 @@ internal static class GNB
         GnashingFang = 16146,
         DemonSlaughter = 16149,
         SonicBreak = 16153,
+        RoughDivide = 16154,
         Continuation = 16155,
         JugularRip = 16156,
         AbdomenTear = 16157,
@@ -51,6 +52,7 @@ internal static class GNB
             BurstStrike = 30,
             DemonSlaughter = 40,
             SonicBreak = 54,
+            RoughDivide = 56,
             BowShock = 62,
             Continuation = 70,
             FatedCircle = 72,
@@ -69,6 +71,12 @@ internal class GunbreakerSolidBarrel : CustomCombo
     {
         if (actionID == GNB.SolidBarrel)
         {
+            if (IsEnabled(CustomComboPreset.KeenEdgeRoughDivide))
+            {
+                if (level >= GNB.Levels.RoughDivide && HasTarget() && !InMeleeRange() && HasCharges(GNB.RoughDivide))
+                    return GNB.RoughDivide;
+            }
+
             if (comboTime > 0)
             {
                 if (lastComboMove == GNB.BrutalShell && level >= GNB.Levels.SolidBarrel)

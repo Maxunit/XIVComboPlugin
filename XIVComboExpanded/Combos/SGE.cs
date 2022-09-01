@@ -125,6 +125,12 @@ internal static class SGE
             {
                 var gauge = GetJobGauge<SGEGauge>();
 
+                if (IsEnabled(CustomComboPreset.SageDyskrasiaIcarus))
+                {
+                    if (level >= SGE.Levels.Icarus && HasTarget() && !InIcarusRange() && !IsOnCooldown(SGE.Icarus))
+                        return SGE.Icarus;
+                }
+
                 if (IsEnabled(CustomComboPreset.SageDyskrasiaPhlegma))
                 {
                     var phlegma =
