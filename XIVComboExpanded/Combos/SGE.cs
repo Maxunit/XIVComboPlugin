@@ -127,7 +127,7 @@ internal static class SGE
 
                 if (IsEnabled(CustomComboPreset.SageDyskrasiaIcarus))
                 {
-                    if (level >= SGE.Levels.Icarus && HasTarget() && !InIcarusRange() && !IsOnCooldown(SGE.Icarus))
+                    if (level >= SGE.Levels.Icarus && HasTarget() && !InMeleeRange && !IsOnCooldown(SGE.Icarus))
                         return SGE.Icarus;
                 }
 

@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.JobGauge.Types;
@@ -449,6 +451,7 @@ internal abstract partial class CustomCombo
     /// Gets the distance from the target.
     /// </summary>
     /// <returns>Double representing the distance from the target.</returns>
+    /*
     protected static double GetTargetDistance()
     {
         if (CurrentTarget is null)
@@ -461,8 +464,30 @@ internal abstract partial class CustomCombo
         double distanceY = chara.YalmDistanceZ;
 
         return Math.Sqrt(Math.Pow(distanceX, 2) + Math.Pow(distanceY, 2));
+    } */
+    // Took this code from PrincessRTFM.
+    // All credits go to her, not me!
+    // This seems to be more accurate and faster than the previous GetTargetDistance and InMeleeRange.
+    protected internal static double TargetDistance
+    {
+        get
+        {
+            if (LocalPlayer is null || CurrentTarget is null)
+                return 0;
+
+            GameObject target = CurrentTarget;
+
+            Vector2 tPos = new(target.Position.X, target.Position.Z);
+            Vector2 sPos = new(LocalPlayer.Position.X, LocalPlayer.Position.Z);
+
+            return Vector2.Distance(tPos, sPos) - target.HitboxRadius - LocalPlayer.HitboxRadius;
+        }
     }
 
+    protected internal static bool InMeleeRange
+        => TargetDistance <= 3;
+
+    /*
     /// <summary>
     /// Gets a value indicating whether you are in melee range from the current target.
     /// </summary>
@@ -500,4 +525,5 @@ internal abstract partial class CustomCombo
         return true;
     }
     #endregion
+    */
 }
