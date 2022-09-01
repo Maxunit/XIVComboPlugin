@@ -25,7 +25,8 @@ internal static class PLD
         Expiacion = 25747,
         BladeOfFaith = 25748,
         BladeOfTruth = 25749,
-        BladeOfValor = 25750;
+        BladeOfValor = 25750,
+        Intervene = 16461;
 
     public static class Buffs
     {
@@ -53,6 +54,7 @@ internal static class PLD
             GoringBlade = 54,
             RoyalAuthority = 60,
             HolyCircle = 72,
+            Intervene = 74,
             Atonement = 76,
             Confiteor = 80,
             Expiacion = 86,
@@ -70,6 +72,12 @@ internal class PaladinGoringBlade : CustomCombo
     {
         if (actionID == PLD.GoringBlade)
         {
+            if (IsEnabled(CustomComboPreset.FastBladeInterveneFeature))
+            {
+                if (level >= PLD.Levels.Intervene && HasTarget() && !InMeleeRange && HasCharges(PLD.Intervene))
+                    return PLD.FastBlade;
+            }
+
             if (IsEnabled(CustomComboPreset.PaladinGoringBladeAtonementFeature))
             {
                 if (level >= PLD.Levels.Atonement && HasEffect(PLD.Buffs.SwordOath) && lastComboMove != PLD.FastBlade && lastComboMove != PLD.RiotBlade)

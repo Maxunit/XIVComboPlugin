@@ -636,6 +636,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Shields on your Feet Feature", "Replace Shield Bash with Low Blow when available.", PLD.JobID)]
     PaladinShieldBashFeature = 1909,
 
+    [CustomComboInfo("Fast Blade Intervene Feature", "Replaces Fast Blade/Goring Blade with Intervene when not in melee range.", PLD.JobID)]
+    FastBladeInterveneFeature = 1910,
+
     #endregion
     // ====================================================================================
     #region REAPER
@@ -1061,6 +1064,9 @@ public enum CustomComboPreset
 
     [CustomComboInfo("Healthy Balanaced Diet Feature", "Replace Bloodwhetting with Thrill of Battle, and then Equilibrium when the preceding is on cooldown.", WAR.JobID)]
     WarriorHealthyBalancedDietFeature = 2112,
+
+    [CustomComboInfo("Heavy Swing Onslaught Feature", "Replaces Heavy Swing with Onslaught if not within melee range.", WAR.JobID)]
+    HeavySwingOnslaughtFeature = 2113,
 
     // <-- REMOVED -->
     // [CustomComboInfo("Mythril Tempest Target Option", "Replace Mythril Tempest only when you have a target.", WAR.JobID)]

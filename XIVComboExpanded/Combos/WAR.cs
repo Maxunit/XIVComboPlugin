@@ -21,6 +21,7 @@ internal static class WAR
         Infuriate = 52,
         FellCleave = 3549,
         Decimate = 3550,
+        Onslaught = 7386,
         RawIntuition = 3551,
         Equilibrium = 3552,
         InnerRelease = 7389,
@@ -66,6 +67,7 @@ internal static class WAR
             Equilibrium = 58,
             SteelCycloneMastery = 60,
             Decimate = 60,
+            Onslaught = 62,
             Upheaval = 64,
             InnerRelease = 70,
             NascentFlash = 76,
@@ -85,6 +87,8 @@ internal class WarriorStormsPathCombo : CustomCombo
         if (actionID == WAR.StormsPath)
         {
             var gauge = GetJobGauge<WARGauge>().BeastGauge;
+            if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature) && level >= WAR.Levels.Onslaught && HasTarget() && !InMeleeRange && HasCharges(GNB.RoughDivide))
+                return OriginalHook(WAR.Onslaught);
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.InnerBeastMastery)
                 return OriginalHook(WAR.FellCleave);
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.InnerBeastMastery)
