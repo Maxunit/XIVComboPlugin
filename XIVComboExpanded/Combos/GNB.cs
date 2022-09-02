@@ -50,6 +50,7 @@ internal static class GNB
             BrutalShell = 4,
             SolidBarrel = 26,
             BurstStrike = 30,
+            CartridgeCharge1 = 30,
             DemonSlaughter = 40,
             SonicBreak = 54,
             RoughDivide = 56,
@@ -77,23 +78,23 @@ internal class GunbreakerSolidBarrel : CustomCombo
                     return GNB.RoughDivide;
             }
 
+            var gauge = GetJobGauge<GNBGauge>();
+            var maxAmmo = level >= GNB.Levels.CartridgeCharge2 ? 3 : 2;
+
+            if (level >= GNB.Levels.BurstStrike && level <= GNB.Levels.CartridgeCharge2 && gauge.Ammo == maxAmmo)
+                return GNB.BurstStrike;
+
             if (comboTime > 0)
             {
                 if (lastComboMove == GNB.BrutalShell && level >= GNB.Levels.SolidBarrel)
                 {
                     if (IsEnabled(CustomComboPreset.GunbreakerBurstStrikeFeature))
                     {
-                        var gauge = GetJobGauge<GNBGauge>();
-                        var maxAmmo = level >= GNB.Levels.CartridgeCharge2 ? 3 : 2;
-
                         if (IsEnabled(CustomComboPreset.GunbreakerBurstStrikeCont))
                         {
                             if (level >= GNB.Levels.EnhancedContinuation && HasEffect(GNB.Buffs.ReadyToBlast))
                                 return GNB.Hypervelocity;
                         }
-
-                        if (level >= GNB.Levels.BurstStrike && gauge.Ammo == maxAmmo)
-                            return GNB.BurstStrike;
                     }
 
                     return GNB.SolidBarrel;
@@ -201,18 +202,16 @@ internal class GunbreakerDemonSlaughter : CustomCombo
     {
         if (actionID == GNB.DemonSlaughter)
         {
-            if (comboTime > 0 && lastComboMove == GNB.DemonSlice && level >= GNB.Levels.DemonSlaughter)
+            if (IsEnabled(CustomComboPreset.GunbreakerFatedCircleFeature))
             {
-                if (IsEnabled(CustomComboPreset.GunbreakerFatedCircleFeature))
-                {
-                    var gauge = GetJobGauge<GNBGauge>();
-                    var maxAmmo = level >= GNB.Levels.CartridgeCharge2 ? 3 : 2;
+                var gauge = GetJobGauge<GNBGauge>();
+                var maxAmmo = level >= GNB.Levels.CartridgeCharge2 ? 3 : 2;
 
-                    if (level >= GNB.Levels.FatedCircle && gauge.Ammo == maxAmmo)
-                        return GNB.FatedCircle;
-                }
+                if (level >= GNB.Levels.FatedCircle && level <= GNB.Levels.CartridgeCharge2 && gauge.Ammo == maxAmmo)
+                    return GNB.FatedCircle;
 
-                return GNB.DemonSlaughter;
+                if (comboTime > 0 && lastComboMove == GNB.DemonSlice && level >= GNB.Levels.DemonSlaughter)
+                    return GNB.DemonSlaughter;
             }
 
             return GNB.DemonSlice;
