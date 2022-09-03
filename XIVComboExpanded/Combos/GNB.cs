@@ -72,23 +72,37 @@ internal class GunbreakerSolidBarrel : CustomCombo
     {
         if (actionID == GNB.SolidBarrel)
         {
+            var gauge = GetJobGauge<GNBGauge>();
+            var maxAmmo = level >= GNB.Levels.CartridgeCharge2 ? 3 : 2;
+
+            if (IsEnabled(CustomComboPreset.GunbreakerEmptyBloodfestFeature))
+            {
+                if (level >= GNB.Levels.Bloodfest && gauge.Ammo == 0)
+                    return GNB.Bloodfest;
+            }
+
+            if (IsEnabled(CustomComboPreset.GunbreakerDoubleDownFeature))
+            {
+                if (level >= GNB.Levels.DoubleDown && gauge.Ammo >= 2 && IsOffCooldown(GNB.DoubleDown))
+                    return GNB.DoubleDown;
+            }
+
             if (IsEnabled(CustomComboPreset.KeenEdgeRoughDivide))
             {
                 if (level >= GNB.Levels.RoughDivide && HasTarget() && !InMeleeRange && HasCharges(GNB.RoughDivide))
                     return GNB.RoughDivide;
             }
 
-            var gauge = GetJobGauge<GNBGauge>();
-            var maxAmmo = level >= GNB.Levels.CartridgeCharge2 ? 3 : 2;
-
-            if (level >= GNB.Levels.BurstStrike && gauge.Ammo >= maxAmmo)
-                return GNB.BurstStrike;
+            if (IsEnabled(CustomComboPreset.GunbreakerBurstStrikeFeature))
+            {
+                if (level >= GNB.Levels.BurstStrike && gauge.Ammo >= maxAmmo)
+                    return GNB.BurstStrike;
+            }
 
             if (comboTime > 0)
             {
                 if (lastComboMove == GNB.BrutalShell && level >= GNB.Levels.SolidBarrel)
                 {
-                    if (IsEnabled(CustomComboPreset.GunbreakerBurstStrikeFeature))
                     {
                         if (IsEnabled(CustomComboPreset.GunbreakerBurstStrikeCont))
                         {
@@ -154,7 +168,7 @@ internal class GunbreakerBurstStrikeFatedCircle : CustomCombo
             }
         }
 
-        if (actionID == GNB.BurstStrike || actionID == GNB.FatedCircle)
+        /*if (actionID == GNB.BurstStrike || actionID == GNB.FatedCircle)
         {
             var gauge = GetJobGauge<GNBGauge>();
 
@@ -169,7 +183,7 @@ internal class GunbreakerBurstStrikeFatedCircle : CustomCombo
                 if (level >= GNB.Levels.Bloodfest && gauge.Ammo == 0)
                     return GNB.Bloodfest;
             }
-        }
+        }*/
 
         return actionID;
     }
@@ -202,16 +216,22 @@ internal class GunbreakerDemonSlaughter : CustomCombo
     {
         if (actionID == GNB.DemonSlaughter)
         {
+            var gauge = GetJobGauge<GNBGauge>();
+            var maxAmmo = level >= GNB.Levels.CartridgeCharge2 ? 3 : 2;
+
             if (IsEnabled(CustomComboPreset.GunbreakerFatedCircleFeature))
             {
-                var gauge = GetJobGauge<GNBGauge>();
-                var maxAmmo = level >= GNB.Levels.CartridgeCharge2 ? 3 : 2;
-
                 if (level >= GNB.Levels.FatedCircle && gauge.Ammo >= maxAmmo)
                     return GNB.FatedCircle;
 
                 if (comboTime > 0 && lastComboMove == GNB.DemonSlice && level >= GNB.Levels.DemonSlaughter)
                     return GNB.DemonSlaughter;
+            }
+
+            if (IsEnabled(CustomComboPreset.GunbreakerEmptyBloodfestFeature))
+            {
+                if (level >= GNB.Levels.Bloodfest && gauge.Ammo == 0)
+                    return GNB.Bloodfest;
             }
 
             return GNB.DemonSlice;

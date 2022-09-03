@@ -423,7 +423,7 @@ public enum CustomComboPreset
     GunbreakerNoMercyFeature = 3708,
 
     [SecretCustomCombo]
-    [CustomComboInfo("Double Down Feature", "Replace Burst Strike and Fated Circle with Double Down when available.", GNB.JobID)]
+    [CustomComboInfo("Double Down Feature", "Replace Burst Strike with Double Down when available.", GNB.JobID)]
     GunbreakerDoubleDownFeature = 3709,
 
     [ParentCombo(GunbreakerSolidBarrelCombo)]
