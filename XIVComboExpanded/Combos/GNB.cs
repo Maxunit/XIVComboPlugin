@@ -50,7 +50,6 @@ internal static class GNB
             BrutalShell = 4,
             SolidBarrel = 26,
             BurstStrike = 30,
-            CartridgeCharge1 = 30,
             DemonSlaughter = 40,
             SonicBreak = 54,
             RoughDivide = 56,
@@ -81,16 +80,16 @@ internal class GunbreakerSolidBarrel : CustomCombo
                     return GNB.Bloodfest;
             }
 
-            if (IsEnabled(CustomComboPreset.GunbreakerDoubleDownFeature))
-            {
-                if (level >= GNB.Levels.DoubleDown && gauge.Ammo >= 2 && IsOffCooldown(GNB.DoubleDown))
-                    return GNB.DoubleDown;
-            }
-
             if (IsEnabled(CustomComboPreset.KeenEdgeRoughDivide))
             {
                 if (level >= GNB.Levels.RoughDivide && HasTarget() && !InMeleeRange && HasCharges(GNB.RoughDivide))
                     return GNB.RoughDivide;
+            }
+
+            if (IsEnabled(CustomComboPreset.GunbreakerDoubleDownFeature))
+            {
+                if (level >= GNB.Levels.DoubleDown && gauge.Ammo >= 2 && IsOffCooldown(GNB.DoubleDown))
+                    return GNB.DoubleDown;
             }
 
             if (IsEnabled(CustomComboPreset.GunbreakerBurstStrikeFeature))
@@ -219,6 +218,12 @@ internal class GunbreakerDemonSlaughter : CustomCombo
             var gauge = GetJobGauge<GNBGauge>();
             var maxAmmo = level >= GNB.Levels.CartridgeCharge2 ? 3 : 2;
 
+            if (IsEnabled(CustomComboPreset.GunbreakerEmptyBloodfestFeature))
+            {
+                if (level >= GNB.Levels.Bloodfest && gauge.Ammo == 0)
+                    return GNB.Bloodfest;
+            }
+
             if (IsEnabled(CustomComboPreset.GunbreakerFatedCircleFeature))
             {
                 if (level >= GNB.Levels.FatedCircle && gauge.Ammo >= maxAmmo)
@@ -226,12 +231,6 @@ internal class GunbreakerDemonSlaughter : CustomCombo
 
                 if (comboTime > 0 && lastComboMove == GNB.DemonSlice && level >= GNB.Levels.DemonSlaughter)
                     return GNB.DemonSlaughter;
-            }
-
-            if (IsEnabled(CustomComboPreset.GunbreakerEmptyBloodfestFeature))
-            {
-                if (level >= GNB.Levels.Bloodfest && gauge.Ammo == 0)
-                    return GNB.Bloodfest;
             }
 
             return GNB.DemonSlice;
