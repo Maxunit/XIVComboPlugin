@@ -86,15 +86,24 @@ internal class WarriorStormsPathCombo : CustomCombo
     {
         if (actionID == WAR.StormsPath)
         {
-            var gauge = GetJobGauge<WARGauge>().BeastGauge;
+            var gauge = GetJobGauge<WARGauge>();
+
             if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature) && level >= WAR.Levels.Onslaught && HasTarget() && !InMeleeRange && HasCharges(WAR.Onslaught))
                 return OriginalHook(WAR.Onslaught);
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.InnerBeastMastery)
-                return OriginalHook(WAR.FellCleave);
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.InnerBeastMastery)
-                return OriginalHook(WAR.InnerBeast);
-            if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease) && level >= WAR.Levels.FellCleave)
-                return OriginalHook(WAR.FellCleave);
+
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
+            {
+                if (level >= WAR.Levels.InnerRelease && HasEffect(WAR.Buffs.InnerRelease))
+                    return WAR.FellCleave;
+            }
+
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
+            {
+                if (level >= WAR.Levels.InnerBeast && gauge.BeastGauge > 90)
+                    // Fell Cleave
+                    return OriginalHook(WAR.InnerBeast);
+            }
+
             if (comboTime > 0)
             {
                 if (lastComboMove == WAR.Maim && level >= WAR.Levels.StormsPath)
@@ -123,22 +132,35 @@ internal class WarriorStormsEyeCombo : CustomCombo
     {
         if (actionID == WAR.StormsEye)
         {
-            var gauge = GetJobGauge<WARGauge>().BeastGauge;
+            var gauge = GetJobGauge<WARGauge>();
+
             if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature) && level >= WAR.Levels.Onslaught && HasTarget() && !InMeleeRange && HasCharges(WAR.Onslaught))
                 return OriginalHook(WAR.Onslaught);
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.InnerBeastMastery)
-                return OriginalHook(WAR.FellCleave);
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.InnerBeastMastery)
-                return OriginalHook(WAR.InnerBeast);
-            if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease) && level >= WAR.Levels.FellCleave)
-                return OriginalHook(WAR.FellCleave);
+
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
+            {
+                if (level >= WAR.Levels.InnerRelease && HasEffect(WAR.Buffs.InnerRelease))
+                    return WAR.FellCleave;
+            }
+
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
+            {
+                if (level >= WAR.Levels.InnerBeast && gauge.BeastGauge > 90)
+                    // Fell Cleave
+                    return OriginalHook(WAR.InnerBeast);
+            }
+
             if (comboTime > 0)
             {
                 if (lastComboMove == WAR.Maim && level >= WAR.Levels.StormsEye)
+                {
                     return WAR.StormsEye;
+                }
 
                 if (lastComboMove == WAR.HeavySwing && level >= WAR.Levels.Maim)
+                {
                     return WAR.Maim;
+                }
             }
 
             return WAR.HeavySwing;
@@ -241,14 +263,6 @@ internal class WarriorFellCleaveDecimate : CustomCombo
                 if (level >= WAR.Levels.PrimalRend && HasEffect(WAR.Buffs.PrimalRendReady))
                     return WAR.PrimalRend;
             }
-
-            // if (IsEnabled(CustomComboPreset.WarriorInfuriateBeastFeature))
-            // {
-            //     var gauge = GetJobGauge<WARGauge>();
-
-            // if (level >= WAR.Levels.Infuriate && gauge.BeastGauge < 50 && !HasEffect(WAR.Buffs.InnerRelease))
-            //         return WAR.Infuriate;
-            // }
         }
 
         return actionID;

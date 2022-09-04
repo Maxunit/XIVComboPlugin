@@ -1025,9 +1025,11 @@ public enum CustomComboPreset
     // ====================================================================================
     #region WARRIOR
 
+    [ConflictingCombos(WarriorStormPathStormEye)]
     [CustomComboInfo("Storms Path Combo", "Replace Storms Path with its combo chain.", WAR.JobID)]
     WarriorStormsPathCombo = 2101,
 
+    [ConflictingCombos(WarriorStormPathStormEye)]
     [CustomComboInfo("Storms Eye Combo", "Replace Storms Eye with its combo chain.", WAR.JobID)]
     WarriorStormsEyeCombo = 2102,
 
@@ -1067,15 +1069,6 @@ public enum CustomComboPreset
 
     [CustomComboInfo("Heavy Swing Onslaught Feature", "Replaces Heavy Swing with Onslaught if not within melee range.", WAR.JobID)]
     HeavySwingOnslaughtFeature = 2113,
-
-    // <-- REMOVED -->
-    // [CustomComboInfo("Mythril Tempest Target Option", "Replace Mythril Tempest only when you have a target.", WAR.JobID)]
-    // WarriorMythrilTempestTargetOption = 2113,
-
-    // [SecretCustomCombo]
-    // [ParentCombo(WarriorStormPathStormEye)]
-    // [CustomComboInfo("Angry Beast Feature", "Adds Infuriate to the 'Storm's Path & Storm's Eye Combo' when less then 50 Beast Gauge is available.", WAR.JobID)]
-    // WarriorInfuriateBeastFeature = 2112,
 
     #endregion
     // ====================================================================================
