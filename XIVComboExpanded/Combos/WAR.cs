@@ -87,7 +87,7 @@ internal class WarriorStormsPathCombo : CustomCombo
         if (actionID == WAR.StormsPath)
         {
             var gauge = GetJobGauge<WARGauge>().BeastGauge;
-            if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature) && level >= WAR.Levels.Onslaught && HasTarget() && !InMeleeRange && HasCharges(GNB.RoughDivide))
+            if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature) && level >= WAR.Levels.Onslaught && HasTarget() && !InMeleeRange && HasCharges(WAR.Onslaught))
                 return OriginalHook(WAR.Onslaught);
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.InnerBeastMastery)
                 return OriginalHook(WAR.FellCleave);
@@ -124,6 +124,8 @@ internal class WarriorStormsEyeCombo : CustomCombo
         if (actionID == WAR.StormsEye)
         {
             var gauge = GetJobGauge<WARGauge>().BeastGauge;
+            if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature) && level >= WAR.Levels.Onslaught && HasTarget() && !InMeleeRange && HasCharges(WAR.Onslaught))
+                return OriginalHook(WAR.Onslaught);
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.InnerBeastMastery)
                 return OriginalHook(WAR.FellCleave);
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.InnerBeastMastery)
@@ -305,6 +307,9 @@ internal class WarriorStormPathStormEye : CustomCombo
         if (actionID == WAR.HeavySwing)
         {
             var gauge = GetJobGauge<WARGauge>();
+
+            if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature) && level >= WAR.Levels.Onslaught && HasTarget() && !InMeleeRange && HasCharges(WAR.Onslaught))
+                return OriginalHook(WAR.Onslaught);
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
             {
