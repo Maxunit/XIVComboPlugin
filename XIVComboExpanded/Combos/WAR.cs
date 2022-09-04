@@ -304,33 +304,37 @@ internal class WarriorStormPathStormEye : CustomCombo
     {
         if (actionID == WAR.HeavySwing)
         {
-            var gauge = GetJobGauge<WARGauge>().BeastGauge;
-            Status? surgingtempesttime = FindEffect(WAR.Buffs.SurgingTempest);
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.InnerBeastMastery)
-                return OriginalHook(WAR.FellCleave);
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.InnerBeastMastery)
-                return OriginalHook(WAR.InnerBeast);
-            if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease) && level >= WAR.Levels.FellCleave)
-                return OriginalHook(WAR.FellCleave);
-            if (IsEnabled(CustomComboPreset.WarriorStormPathStormEye) && level >= WAR.Levels.StormsEye && HasEffect(WAR.Buffs.SurgingTempest) && surgingtempesttime is not null)
-            {
-                if (comboTime > 0 && surgingtempesttime.RemainingTime >= 30 && lastComboMove == WAR.Maim && level >= WAR.StormsPath)
-                    return WAR.StormsPath;
+            var gauge = GetJobGauge<WARGauge>();
 
-                if (comboTime > 0 && surgingtempesttime.RemainingTime <= 30 && lastComboMove == WAR.Maim && level >= WAR.StormsEye)
-                    return WAR.StormsEye;
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
+            {
+                if (level >= WAR.Levels.InnerRelease && HasEffect(WAR.Buffs.InnerRelease))
+                    return WAR.FellCleave;
+            }
+
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
+            {
+                if (level >= WAR.Levels.InnerBeast && gauge.BeastGauge > 90)
+                    // Fell Cleave
+                    return OriginalHook(WAR.InnerBeast);
             }
 
             if (comboTime > 0)
             {
-                if (lastComboMove == WAR.Maim && level >= WAR.StormsPath)
+                if (lastComboMove == WAR.Maim && level >= WAR.Levels.StormsPath)
                 {
-                    return WAR.StormsPath;
-                }
+                    var surgingTempest = FindEffect(WAR.Buffs.SurgingTempest);
+                    if (surgingTempest is null)
+                        return WAR.StormsEye;
 
-                if (lastComboMove == WAR.Maim && level >= WAR.Levels.StormsEye)
-                {
-                    return WAR.StormsEye;
+                    // Medicated + Opener
+                    if (HasEffect(ADV.Buffs.Medicated) && surgingTempest.RemainingTime > 10)
+                        return WAR.StormsPath;
+
+                    if (surgingTempest.RemainingTime < 30)
+                        return WAR.StormsEye;
+
+                    return WAR.StormsPath;
                 }
 
                 if (lastComboMove == WAR.HeavySwing && level >= WAR.Levels.Maim)
