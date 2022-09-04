@@ -2,6 +2,8 @@ Foreword:
 
 This fork of XIVCombo is based on the fork from daemitus and contains code changes from their respective owners. On top of that, it contains code changes and additions based on/from PrincessRTFM and Evil Crab.
 
+Please keep in mind, that this fork and plugin are for private use and it might contain changes or bugs, which tend to be fixed with silent patches (means, no version bumps).
+
 # XIVComboPlugin
 This plugin condenses combos and mutually exclusive abilities onto a single button. Thanks to Meli for the initial start, and obviously goat for making any of this possible.
 
