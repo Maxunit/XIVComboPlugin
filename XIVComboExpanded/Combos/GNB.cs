@@ -69,7 +69,7 @@ internal class GunbreakerSolidBarrel : CustomCombo
 
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
-        if (actionID == GNB.SolidBarrel)
+        if (actionID == GNB.KeenEdge)
         {
             var gauge = GetJobGauge<GNBGauge>();
             var maxAmmo = level >= GNB.Levels.CartridgeCharge2 ? 3 : 2;
@@ -86,10 +86,10 @@ internal class GunbreakerSolidBarrel : CustomCombo
                     return GNB.RoughDivide;
             }
 
-            if (IsEnabled(CustomComboPreset.GunbreakerDoubleDownFeature))
+            if (IsEnabled(CustomComboPreset.GunbreakerBurstStrikeCont))
             {
-                if (level >= GNB.Levels.DoubleDown && gauge.Ammo >= 2 && IsOffCooldown(GNB.DoubleDown))
-                    return GNB.DoubleDown;
+                if (level >= GNB.Levels.EnhancedContinuation && HasEffect(GNB.Buffs.ReadyToBlast))
+                    return GNB.Hypervelocity;
             }
 
             if (IsEnabled(CustomComboPreset.GunbreakerBurstStrikeFeature))
@@ -102,14 +102,6 @@ internal class GunbreakerSolidBarrel : CustomCombo
             {
                 if (lastComboMove == GNB.BrutalShell && level >= GNB.Levels.SolidBarrel)
                 {
-                    {
-                        if (IsEnabled(CustomComboPreset.GunbreakerBurstStrikeCont))
-                        {
-                            if (level >= GNB.Levels.EnhancedContinuation && HasEffect(GNB.Buffs.ReadyToBlast))
-                                return GNB.Hypervelocity;
-                        }
-                    }
-
                     return GNB.SolidBarrel;
                 }
 
@@ -152,7 +144,7 @@ internal class GunbreakerGnashingFang : CustomCombo
     }
 }
 
-internal class GunbreakerBurstStrikeFatedCircle : CustomCombo
+/* internal class GunbreakerBurstStrikeFatedCircle : CustomCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GnbAny;
 
@@ -167,7 +159,7 @@ internal class GunbreakerBurstStrikeFatedCircle : CustomCombo
             }
         }
 
-        /*if (actionID == GNB.BurstStrike || actionID == GNB.FatedCircle)
+        if (actionID == GNB.BurstStrike || actionID == GNB.FatedCircle)
         {
             var gauge = GetJobGauge<GNBGauge>();
 
@@ -182,11 +174,11 @@ internal class GunbreakerBurstStrikeFatedCircle : CustomCombo
                 if (level >= GNB.Levels.Bloodfest && gauge.Ammo == 0)
                     return GNB.Bloodfest;
             }
-        }*/
+        }
 
         return actionID;
     }
-}
+} */
 
 internal class GunbreakerBowShockSonicBreak : CustomCombo
 {
@@ -222,6 +214,12 @@ internal class GunbreakerDemonSlaughter : CustomCombo
             {
                 if (level >= GNB.Levels.Bloodfest && gauge.Ammo == 0)
                     return GNB.Bloodfest;
+            }
+
+            if (IsEnabled(CustomComboPreset.GunbreakerDoubleDownFeature))
+            {
+                if (level >= GNB.Levels.DoubleDown && gauge.Ammo >= 2 && IsOffCooldown(GNB.DoubleDown))
+                    return GNB.DoubleDown;
             }
 
             if (IsEnabled(CustomComboPreset.GunbreakerFatedCircleFeature))
