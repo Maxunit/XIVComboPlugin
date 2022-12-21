@@ -87,6 +87,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Swift Raise Feature", "Replace Ascend, Ressurection, Egeiro, Raise, Verraise, and Angel Whisper with Swiftcast when it is off cooldown (and Dualcast isn't up).", ADV.JobID)]
     AllSwiftcastFeature = 1000,
 
+    [CustomComboInfo("Rampart/Reprisal Combo", "Replaces Rampart with Reprisal if not on cooldown.", ADV.JobID)]
+    RampartReprisalCombo = 1001,
+
     #endregion
     // ====================================================================================
     #region ASTROLOGIAN
@@ -605,9 +608,11 @@ public enum CustomComboPreset
     // ====================================================================================
     #region PALADIN
 
+    [ConflictingCombos(PaladinFastBladeSingleCombo)]
     [CustomComboInfo("Goring Blade Combo", "Replace Goring Blade with its combo chain.", PLD.JobID)]
     PaladinGoringBladeCombo = 1901,
 
+    [ConflictingCombos(PaladinFastBladeSingleCombo)]
     [CustomComboInfo("Royal Authority Combo", "Replace Royal Authority with its combo chain.", PLD.JobID)]
     PaladinRoyalAuthorityCombo = 1902,
 
@@ -625,6 +630,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Confiteor Feature", "Replace Holy Spirit/Circle with Confiteor when Requiescat is up and MP is under 2000 or only one stack remains.", PLD.JobID)]
     PaladinConfiteorFeature = 1906,
 
+    [ConflictingCombos(PaladinScornfulSpiritsExtended)]
     [SecretCustomCombo]
     [CustomComboInfo("Scornful Spirits Feature", "Replace Spirits Within and Circle of Scorn with whichever is available soonest.", PLD.JobID)]
     PaladinScornfulSpiritsFeature = 1907,
@@ -638,6 +644,16 @@ public enum CustomComboPreset
 
     [CustomComboInfo("Fast Blade Intervene Feature", "Replaces Fast Blade/Goring Blade with Intervene when not in melee range.", PLD.JobID)]
     FastBladeInterveneFeature = 1910,
+
+    [ConflictingCombos(PaladinGoringBladeCombo, PaladinRoyalAuthorityCombo)]
+    [EvilCombo]
+    [CustomComboInfo("Paladin One Button Combo", "Replaces Fast Blade with its combo chain and tracks Goring Blade Debuff.", PLD.JobID)]
+    PaladinFastBladeSingleCombo = 1911,
+
+    [ConflictingCombos(PaladinScornfulSpiritsFeature)]
+    [EvilCombo]
+    [CustomComboInfo("Scornful Spirits Extended", "Same as Scornful Spirits Feature, but adds Fight or Flight.", PLD.JobID)]
+    PaladinScornfulSpiritsExtended = 1912,
 
     #endregion
     // ====================================================================================
@@ -1020,6 +1036,9 @@ public enum CustomComboPreset
 
     [CustomComboInfo("Searing Demi Feature", "Change Summon Bahamut and Summon Phoenix into Searing Light when Bahamut is ready to be summoned, Searing Light is off cooldown, and you are in combat.", SMN.JobID)]
     SummonerDemiSearingLightFeature = 2715,
+
+    [CustomComboInfo("Radiant Bahamut Feature", "Change Summon Bahamut into Summon Carbuncle when no pet has been summoned.", SMN.JobID)]
+    SummonerBahamutCarbuncleFeature = 2716,
 
     #endregion
     // ====================================================================================

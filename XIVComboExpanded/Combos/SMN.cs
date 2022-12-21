@@ -1,4 +1,5 @@
 using Dalamud.Game.ClientState.JobGauge.Types;
+using System.Reflection.Metadata.Ecma335;
 
 namespace XIVComboExpandedPlugin.Combos;
 
@@ -31,7 +32,10 @@ internal static class SMN
         Slipstream = 25837,
         CrimsonStrike = 25885,
         Gemshine = 25883,
-        PreciousBrilliance = 25884;
+        PreciousBrilliance = 25884,
+        Physick = 16230,
+        Deathflare = 3582,
+        Rekindle = 25830;
 
     public static class Buffs
     {
@@ -53,6 +57,7 @@ internal static class SMN
         public const byte
             SummonCarbuncle = 2,
             RadiantAegis = 2,
+            Physick = 4,
             Gemshine = 6,
             EnergyDrain = 10,
             Fester = 10,
@@ -60,12 +65,14 @@ internal static class SMN
             Painflare = 40,
             EnergySyphon = 52,
             Ruin3 = 54,
+            AstralFlow = 60,
+            Deathflare = 60,
             Ruin4 = 62,
             SearingLight = 66,
             EnkindleBahamut = 70,
             Rekindle = 80,
-            ElementalMastery = 86,
-            SummonPhoenix = 80;
+            SummonPhoenix = 80,
+            ElementalMastery = 86;
     }
 }
 
@@ -202,7 +209,7 @@ internal class SummonerGemshinePreciousBrilliance : CustomCombo
             if (IsEnabled(CustomComboPreset.SummonerShinyEnkindleFeature))
             {
                 if (level >= SMN.Levels.EnkindleBahamut && !gauge.IsIfritAttuned && !gauge.IsTitanAttuned && !gauge.IsGarudaAttuned && gauge.SummonTimerRemaining > 0)
-                    // Rekindle
+                    // Enkindle
                     return OriginalHook(SMN.EnkindleBahamut);
             }
 
@@ -236,7 +243,7 @@ internal class SummonerDemiFeature : CustomCombo
             if (IsEnabled(CustomComboPreset.SummonerDemiEnkindleFeature))
             {
                 if (level >= SMN.Levels.EnkindleBahamut && !gauge.IsIfritAttuned && !gauge.IsTitanAttuned && !gauge.IsGarudaAttuned && gauge.SummonTimerRemaining > 0)
-                    // Rekindle
+                    // Enkindle
                     return OriginalHook(SMN.EnkindleBahamut);
             }
         }
@@ -245,13 +252,31 @@ internal class SummonerDemiFeature : CustomCombo
     }
 }
 
-internal class SummonerRadiantCarbundleFeature : CustomCombo
+internal class SummonerRadiantCarbuncleFeature : CustomCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SummonerRadiantCarbuncleFeature;
 
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
         if (actionID == SMN.RadiantAegis)
+        {
+            var gauge = GetJobGauge<SMNGauge>();
+
+            if (level >= SMN.Levels.SummonCarbuncle && !HasPetPresent() && gauge.Attunement == 0)
+                return SMN.SummonCarbuncle;
+        }
+
+        return actionID;
+    }
+}
+
+internal class SummonerBahamutCarbuncleFeature : CustomCombo
+{
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SummonerBahamutCarbuncleFeature;
+
+    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+    {
+        if (actionID == SMN.Aethercharge || actionID == SMN.DreadwyrmTrance || actionID == SMN.SummonBahamut)
         {
             var gauge = GetJobGauge<SMNGauge>();
 

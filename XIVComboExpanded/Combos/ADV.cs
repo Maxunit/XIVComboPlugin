@@ -8,7 +8,9 @@ internal static class ADV
     public const uint
         LucidDreaming = 1204,
         Swiftcast = 7561,
-        AngelWhisper = 18317;
+        AngelWhisper = 18317,
+        Rampart = 7531,
+        Reprisal = 7535;
 
     public static class Buffs
     {
@@ -25,7 +27,9 @@ internal static class ADV
     public static class Levels
     {
         public const byte
-            Swiftcast = 18;
+            Rampart = 8,
+            Swiftcast = 18,
+            Reprisal = 22;
     }
 }
 
@@ -44,6 +48,26 @@ internal class SwiftRaiseFeature : CustomCombo
         {
             if (level >= ADV.Levels.Swiftcast && IsOffCooldown(ADV.Swiftcast))
                 return ADV.Swiftcast;
+        }
+
+        return actionID;
+    }
+}
+
+internal class RampartReprisalCombo : CustomCombo
+{
+    protected internal override CustomComboPreset Preset => CustomComboPreset.RampartReprisalCombo;
+
+    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+    {
+        if (actionID == ADV.Rampart)
+        {
+            if (level >= ADV.Levels.Reprisal && IsOffCooldown(ADV.Reprisal))
+            {
+                return ADV.Reprisal;
+            }
+
+            return ADV.Rampart;
         }
 
         return actionID;
