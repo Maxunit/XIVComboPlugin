@@ -315,6 +315,10 @@ public enum CustomComboPreset
     [CustomComboInfo("AoE to Procs", "Replace Windmill and Bladeshower with Rising Wiindmill and Bloodshower respectively when available.", DNC.JobID)]
     DancerAoeProcs = 3812,
 
+    [EvilCombo]
+    [CustomComboInfo("Fan Dancer Combo", "Replace Cascade and Windmill with any of the fitting Fan Dances when available.", DNC.JobID)]
+    EvilDancerFanDanceCombo = 3813,
+
     #endregion
     // ====================================================================================
     #region DARK KNIGHT
@@ -838,6 +842,9 @@ public enum CustomComboPreset
 
     [CustomComboInfo("Melee Mana Stacks Feature", "Replace Redoublement and Moulinet with Verflare/Verholy at 3 mana stacks, using whichever mana color is lower.", RDM.JobID)]
     RedMageMeleeManaStacksFeature = 3516,
+
+    /* [CustomComboInfo("Gauge Test!", "This is a Gauge Balancer Test! DO NOT USE!", RDM.JobID)]
+    RedMageGaugeTest = 3517, */
 
     #endregion
     // ====================================================================================

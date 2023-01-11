@@ -67,12 +67,15 @@ internal static class DNC
             StandardStep = 15,
             ReverseCascade = 20,
             Bladeshower = 25,
+            FanDance1 = 30,
             RisingWindmill = 35,
             Fountainfall = 40,
             Bloodshower = 45,
+            FanDance2 = 50,
             FanDance3 = 66,
             TechnicalStep = 70,
             Flourish = 72,
+            SaberDance = 76,
             Tillana = 82,
             FanDance4 = 86,
             StarfallDance = 90;
@@ -218,6 +221,26 @@ internal class DancerCascadeFountain : CustomCombo
     {
         if (actionID == DNC.Cascade)
         {
+            var gauge = GetJobGauge<DNCGauge>();
+
+            if (IsEnabled(CustomComboPreset.EvilDancerFanDanceCombo))
+            {
+                if (level >= DNC.Levels.FanDance3 && HasEffect(DNC.Buffs.ThreefoldFanDance))
+                    return DNC.FanDance3;
+
+                if (gauge.Feathers >= 1)
+                {
+                    if (level >= DNC.Levels.FanDance1)
+                        return DNC.FanDance1;
+                }
+
+                if (gauge.Esprit >= 50)
+                {
+                    if (level >= DNC.Levels.SaberDance)
+                        return DNC.SaberDance;
+                }
+            }
+
             if (IsEnabled(CustomComboPreset.DancerSingleTargetMultibutton))
             {
                 if (level >= DNC.Levels.Fountainfall && (HasEffect(DNC.Buffs.FlourishingFlow) || HasEffect(DNC.Buffs.SilkenFlow)))
@@ -258,6 +281,20 @@ internal class DancerWindmillBladeshower : CustomCombo
     {
         if (actionID == DNC.Windmill)
         {
+            var gauge = GetJobGauge<DNCGauge>();
+
+            if (IsEnabled(CustomComboPreset.EvilDancerFanDanceCombo))
+            {
+                if (level >= DNC.Levels.FanDance4 && HasEffect(DNC.Buffs.FourfoldFanDance))
+                    return DNC.FanDance4;
+
+                if (gauge.Feathers >= 1)
+                {
+                    if (level >= DNC.Levels.FanDance2)
+                        return DNC.FanDance2;
+                }
+            }
+
             if (IsEnabled(CustomComboPreset.DancerAoeMultibutton))
             {
                 if (level >= DNC.Levels.Bloodshower && (HasEffect(DNC.Buffs.FlourishingFlow) || HasEffect(DNC.Buffs.SilkenFlow)))

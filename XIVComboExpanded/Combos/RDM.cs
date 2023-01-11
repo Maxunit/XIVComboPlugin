@@ -412,3 +412,42 @@ internal class RedMageContreSixteFleche : CustomCombo
         return actionID;
     }
 }
+
+/* internal class RedMageGaugeTest : CustomCombo
+{
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.RedMageGaugeTest;
+
+    protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+    {
+        if (actionID == RDM.Jolt || actionID == RDM.Jolt2)
+        {
+            var gauge = GetJobGauge<RDMGauge>();
+
+            if (gauge.WhiteMana == 0 && gauge.BlackMana == 0)
+            {
+                return actionID;
+            }
+            else
+            {
+                if (gauge.WhiteMana >= gauge.BlackMana)
+                {
+                    return RDM.Verthunder;
+                }
+            }
+
+            if (gauge.WhiteMana == 0 && gauge.BlackMana == 0)
+            {
+                return actionID;
+            }
+            else
+            {
+                if (gauge.BlackMana >= gauge.WhiteMana)
+                {
+                    return RDM.Veraero;
+                }
+            }
+        }
+
+        return actionID;
+    }
+} */
