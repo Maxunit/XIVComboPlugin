@@ -259,19 +259,25 @@ internal class PaladinFastBladeSingleCombo : CustomCombo
     {
         if (actionID == PLD.FastBlade)
         {
-            if (IsEnabled(CustomComboPreset.FastBladeInterveneFeature) && level >= PLD.Levels.Intervene && HasTarget() && !InMeleeRange && HasCharges(PLD.Intervene))
-                return OriginalHook(PLD.Intervene);
-
             if (IsEnabled(CustomComboPreset.PaladinFastBladeSingleCombo))
             {
+                if (IsEnabled(CustomComboPreset.FastBladeInterveneFeature) && level >= PLD.Levels.Intervene && HasTarget() && !InMeleeRange && HasCharges(PLD.Intervene))
+                    return OriginalHook(PLD.Intervene);
+
+                if (level >= PLD.Levels.RageOfHalone && IsOffCooldown(PLD.GoringBlade))
+                    return OriginalHook(PLD.GoringBlade);
+
+                if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight))
+                    return PLD.HolySpirit;
+
+                if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityAtonementFeature))
+                {
+                    if (level >= PLD.Levels.Atonement && HasEffect(PLD.Buffs.SwordOath) && IsOnCooldown(PLD.GoringBlade) && lastComboMove != PLD.FastBlade && lastComboMove != PLD.RiotBlade)
+                        return PLD.Atonement;
+                }
+
                 if (comboTime > 0)
                 {
-                    if (lastComboMove == PLD.RiotBlade && level >= PLD.Levels.RageOfHalone && IsOffCooldown(PLD.GoringBlade))
-                        return OriginalHook(PLD.GoringBlade);
-
-                    if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight))
-                            return PLD.HolySpirit;
-
                     if (lastComboMove == PLD.RiotBlade && level >= PLD.Levels.RageOfHalone && IsOnCooldown(PLD.GoringBlade))
                         return OriginalHook(PLD.RageOfHalone);
 
