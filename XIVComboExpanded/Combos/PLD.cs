@@ -42,8 +42,7 @@ internal static class PLD
     public static class Debuffs
     {
         public const ushort
-            Placeholder = 0,
-            GoringBlade = 725;
+            Placeholder = 0;
     }
 
     public static class Levels
@@ -70,7 +69,7 @@ internal static class PLD
     }
 }
 
-internal class PaladinGoringBlade : CustomCombo
+/* internal class PaladinGoringBlade : CustomCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PldAny;
 
@@ -104,7 +103,7 @@ internal class PaladinGoringBlade : CustomCombo
 
         return actionID;
     }
-}
+} */
 
 internal class PaladinRoyalAuthority : CustomCombo
 {
@@ -270,25 +269,21 @@ internal class PaladinFastBladeSingleCombo : CustomCombo
             if (IsEnabled(CustomComboPreset.FastBladeInterveneFeature) && level >= PLD.Levels.Intervene && HasTarget() && !InMeleeRange && HasCharges(PLD.Intervene))
                 return OriginalHook(PLD.Intervene);
 
-            if (IsEnabled(CustomComboPreset.PaladinGoringBladeAtonementFeature))
+            /* if (IsEnabled(CustomComboPreset.PaladinGoringBladeAtonementFeature))
             {
                 if (level >= PLD.Levels.Atonement && HasEffect(PLD.Buffs.SwordOath) && lastComboMove != PLD.FastBlade && lastComboMove != PLD.RiotBlade)
                     return PLD.Atonement;
-            }
+            } */
 
             if (IsEnabled(CustomComboPreset.PaladinFastBladeSingleCombo))
             {
                 if (comboTime > 0)
                 {
-                    Status? goringbladedebuff = FindTargetEffect(PLD.Debuffs.GoringBlade);
-                    if (goringbladedebuff is not null)
-                    {
-                        if (lastComboMove == PLD.RiotBlade && level >= PLD.Levels.GoringBlade && TargetHasEffect(PLD.Debuffs.GoringBlade) && goringbladedebuff.RemainingTime <= 7)
-                            return PLD.GoringBlade;
+                    if (lastComboMove == PLD.RiotBlade && level >= PLD.Levels.RageOfHalone && IsOffCooldown(PLD.GoringBlade))
+                        return OriginalHook(PLD.GoringBlade);
 
-                        if (lastComboMove == PLD.RiotBlade && level >= PLD.Levels.RageOfHalone && TargetHasEffect(PLD.Debuffs.GoringBlade) && goringbladedebuff.RemainingTime >= 7)
-                            return OriginalHook(PLD.RageOfHalone);
-                    }
+                    if (lastComboMove == PLD.RiotBlade && level >= PLD.Levels.RageOfHalone && IsOnCooldown(PLD.GoringBlade))
+                        return OriginalHook(PLD.RageOfHalone);
 
                     if (lastComboMove == PLD.RiotBlade && level >= PLD.Levels.GoringBlade)
                         return PLD.GoringBlade;

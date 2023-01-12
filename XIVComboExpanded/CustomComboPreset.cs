@@ -612,52 +612,51 @@ public enum CustomComboPreset
     // ====================================================================================
     #region PALADIN
 
-    [ConflictingCombos(PaladinFastBladeSingleCombo)]
+    /* [ConflictingCombos(PaladinFastBladeSingleCombo)]
     [CustomComboInfo("Goring Blade Combo", "Replace Goring Blade with its combo chain.", PLD.JobID)]
-    PaladinGoringBladeCombo = 1901,
+    PaladinGoringBladeCombo = 1901, */
 
     [ConflictingCombos(PaladinFastBladeSingleCombo)]
     [CustomComboInfo("Royal Authority Combo", "Replace Royal Authority with its combo chain.", PLD.JobID)]
-    PaladinRoyalAuthorityCombo = 1902,
+    PaladinRoyalAuthorityCombo = 1901,
 
-    [ConflictingCombos(PaladinGoringBladeAtonementFeature)]
     [CustomComboInfo("Royal Authority Atonement Feature", "Replace Royal Authority with Atonement when under the effect of Sword Oath.", PLD.JobID)]
-    PaladinRoyalAuthorityAtonementFeature = 1903,
+    PaladinRoyalAuthorityAtonementFeature = 1902,
 
     [CustomComboInfo("Prominence Combo", "Replace Prominence with its combo chain.", PLD.JobID)]
-    PaladinProminenceCombo = 1904,
+    PaladinProminenceCombo = 1903,
 
     [CustomComboInfo("Requiescat Confiteor", "Replace Requiescat with Confiteor while under the effect of Requiescat.", PLD.JobID)]
-    PaladinRequiescatCombo = 1905,
+    PaladinRequiescatCombo = 1904,
 
     [SecretCustomCombo]
     [CustomComboInfo("Confiteor Feature", "Replace Holy Spirit/Circle with Confiteor when Requiescat is up and MP is under 2000 or only one stack remains.", PLD.JobID)]
-    PaladinConfiteorFeature = 1906,
+    PaladinConfiteorFeature = 1905,
 
     [ConflictingCombos(PaladinScornfulSpiritsExtended)]
     [SecretCustomCombo]
     [CustomComboInfo("Scornful Spirits Feature", "Replace Spirits Within and Circle of Scorn with whichever is available soonest.", PLD.JobID)]
-    PaladinScornfulSpiritsFeature = 1907,
+    PaladinScornfulSpiritsFeature = 1906,
 
-    [ConflictingCombos(PaladinRoyalAuthorityAtonementFeature)]
-    [CustomComboInfo("Goring Blade Atonement Feature", "Replace Goring Blade with Atonement when under the effect of Sword Oath.", PLD.JobID)]
-    PaladinGoringBladeAtonementFeature = 1908,
+    /* [ConflictingCombos(PaladinRoyalAuthorityAtonementFeature)]
+    [CustomComboInfo("Royal Authority Atonement Feature", "Replace Rage of Halone/Royal Authority with Atonement when under the effect of Sword Oath.", PLD.JobID)]
+    PaladinGoringBladeAtonementFeature = 1908, */
 
     [CustomComboInfo("Shields on your Feet Feature", "Replace Shield Bash with Low Blow when available.", PLD.JobID)]
-    PaladinShieldBashFeature = 1909,
+    PaladinShieldBashFeature = 1907,
 
     [CustomComboInfo("Fast Blade Intervene Feature", "Replaces Fast Blade/Goring Blade with Intervene when not in melee range.", PLD.JobID)]
-    FastBladeInterveneFeature = 1910,
+    FastBladeInterveneFeature = 1908,
 
-    [ConflictingCombos(PaladinGoringBladeCombo, PaladinRoyalAuthorityCombo)]
+    [ConflictingCombos(PaladinRoyalAuthorityCombo)]
     [EvilCombo]
     [CustomComboInfo("Paladin One Button Combo", "Replaces Fast Blade with its combo chain and tracks Goring Blade Debuff.", PLD.JobID)]
-    PaladinFastBladeSingleCombo = 1911,
+    PaladinFastBladeSingleCombo = 1909,
 
     [ConflictingCombos(PaladinScornfulSpiritsFeature)]
     [EvilCombo]
     [CustomComboInfo("Scornful Spirits Extended", "Same as Scornful Spirits Feature, but adds Fight or Flight.", PLD.JobID)]
-    PaladinScornfulSpiritsExtended = 1912,
+    PaladinScornfulSpiritsExtended = 1910,
 
     #endregion
     // ====================================================================================
