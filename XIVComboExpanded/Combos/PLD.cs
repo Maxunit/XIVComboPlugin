@@ -171,6 +171,10 @@ internal class PaladinHolySpiritHolyCircle : CustomCombo
             {
                 if (level >= PLD.Levels.Confiteor)
                 {
+                    var original = OriginalHook(PLD.Confiteor);
+                    if (original != PLD.Confiteor)
+                        return original;
+
                     if (HasEffect(PLD.Buffs.ConfiteorReady))
                         return OriginalHook(PLD.Confiteor);
                 }
