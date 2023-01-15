@@ -94,7 +94,7 @@ internal class PaladinRoyalAuthority : CustomCombo
                     {
                         if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityDivineMightFeature))
                         {
-                            if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight))
+                            if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight) && LocalPlayer?.CurrentMp > 1000)
                                 return PLD.HolySpirit;
                         }
 
@@ -128,7 +128,7 @@ internal class PaladinProminence : CustomCombo
                 {
                     if (IsEnabled(CustomComboPreset.PaladinProminenceDivineMightFeature))
                     {
-                        if (level >= PLD.Levels.HolyCircle && HasEffect(PLD.Buffs.DivineMight))
+                        if (level >= PLD.Levels.HolyCircle && HasEffect(PLD.Buffs.DivineMight) && LocalPlayer?.CurrentMp > 1000)
                             return PLD.HolyCircle;
                     }
 
@@ -258,21 +258,18 @@ internal class PaladinFastBladeSingleCombo : CustomCombo
                 if (IsEnabled(CustomComboPreset.FastBladeInterveneFeature) && level >= PLD.Levels.Intervene && HasTarget() && !InMeleeRange && HasCharges(PLD.Intervene))
                     return OriginalHook(PLD.Intervene);
 
-                if (level >= PLD.Levels.RageOfHalone && IsOffCooldown(PLD.GoringBlade))
-                    return OriginalHook(PLD.GoringBlade);
-
-                if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight))
+                if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight) && LocalPlayer?.CurrentMp > 1000)
                     return PLD.HolySpirit;
 
                 if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityAtonementFeature))
                 {
-                    if (level >= PLD.Levels.Atonement && HasEffect(PLD.Buffs.SwordOath) && IsOnCooldown(PLD.GoringBlade) && lastComboMove != PLD.FastBlade && lastComboMove != PLD.RiotBlade)
+                    if (level >= PLD.Levels.Atonement && HasEffect(PLD.Buffs.SwordOath) && lastComboMove != PLD.FastBlade && lastComboMove != PLD.RiotBlade)
                         return PLD.Atonement;
                 }
 
                 if (comboTime > 0)
                 {
-                    if (lastComboMove == PLD.RiotBlade && level >= PLD.Levels.RageOfHalone && IsOnCooldown(PLD.GoringBlade))
+                    if (lastComboMove == PLD.RiotBlade && level >= PLD.Levels.RageOfHalone)
                         return OriginalHook(PLD.RageOfHalone);
 
                     if (lastComboMove == PLD.FastBlade && level >= PLD.Levels.RiotBlade)
@@ -295,10 +292,13 @@ internal class PaladinScornfulSpiritsExtended : CustomCombo
     {
         if (actionID == PLD.FightOrFlight)
         {
-            if (level >= PLD.Levels.Expiacion && IsOnCooldown(PLD.FightOrFlight))
+            if (level >= PLD.Levels.GoringBlade && HasEffect(PLD.Buffs.FightOrFlight) && IsOffCooldown(PLD.GoringBlade))
+                return PLD.GoringBlade;
+
+            if (level >= PLD.Levels.Expiacion && IsOnCooldown(PLD.FightOrFlight) && IsOnCooldown(PLD.GoringBlade))
                 return CalcBestAction(actionID, PLD.Expiacion, PLD.CircleOfScorn);
 
-            if (level >= PLD.Levels.CircleOfScorn && IsOnCooldown(PLD.FightOrFlight))
+            if (level >= PLD.Levels.CircleOfScorn && IsOnCooldown(PLD.FightOrFlight) && IsOnCooldown(PLD.GoringBlade))
                 return CalcBestAction(actionID, PLD.SpiritsWithin, PLD.CircleOfScorn);
 
             return PLD.FightOrFlight;

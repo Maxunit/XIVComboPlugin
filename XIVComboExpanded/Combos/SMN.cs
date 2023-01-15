@@ -1,5 +1,6 @@
-using Dalamud.Game.ClientState.JobGauge.Types;
 using System.Reflection.Metadata.Ecma335;
+
+using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboExpandedPlugin.Combos;
 

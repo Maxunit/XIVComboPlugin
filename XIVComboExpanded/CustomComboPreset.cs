@@ -642,14 +642,15 @@ public enum CustomComboPreset
 
     [ConflictingCombos(PaladinRoyalAuthorityCombo, PaladinRoyalAuthorityDivineMightFeature)]
     [EvilCombo]
-    [CustomComboInfo("Paladin One Button Combo", "Replaces Fast Blade with its combo chain and tracks Goring Blade Debuff.", PLD.JobID)]
+    [CustomComboInfo("Paladin One Button Combo", "Replaces Fast Blade with its combo chain. Switches to Royal Authority, Holy Spirit and Attonement when ready.", PLD.JobID)]
     PaladinFastBladeSingleCombo = 1909,
 
-    [ConflictingCombos(PaladinScornfulSpiritsFeature)]
+    [ConflictingCombos(PaladinScornfulSpiritsFeature, PaladinFightOrFlightGoringBladeFeature)]
     [EvilCombo]
-    [CustomComboInfo("Scornful Spirits Extended", "Same as Scornful Spirits Feature, but adds Fight or Flight.", PLD.JobID)]
+    [CustomComboInfo("Scornful Spirits Extended", "Scornful Spirits Feature and Fight or Flight Goring Blade Feature merged.", PLD.JobID)]
     PaladinScornfulSpiritsExtended = 1910,
 
+    [ConflictingCombos(PaladinScornfulSpiritsExtended)]
     [CustomComboInfo("Fight or Flight Goring Blade Feature", "Replace Fight or Flight with Goring Blade while Fight or Flight is active.", PLD.JobID)]
     PaladinFightOrFlightGoringBladeFeature = 1911,
 
