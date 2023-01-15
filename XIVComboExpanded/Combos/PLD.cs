@@ -122,16 +122,16 @@ internal class PaladinProminence : CustomCombo
     {
         if (actionID == PLD.Prominence)
         {
+            if (IsEnabled(CustomComboPreset.PaladinProminenceDivineMightFeature) && level >= PLD.Levels.Prominence)
+            {
+                if (level >= PLD.Levels.HolyCircle && HasEffect(PLD.Buffs.DivineMight) && LocalPlayer?.CurrentMp > 1000)
+                    return OriginalHook(PLD.HolyCircle);
+            }
+
             if (comboTime > 0)
             {
-                if (lastComboMove == PLD.TotalEclipse && level >= PLD.Levels.Prominence)
+                if (lastComboMove == PLD.TotalEclipse)
                 {
-                    if (IsEnabled(CustomComboPreset.PaladinProminenceDivineMightFeature))
-                    {
-                        if (level >= PLD.Levels.HolyCircle && HasEffect(PLD.Buffs.DivineMight) && LocalPlayer?.CurrentMp > 1000)
-                            return PLD.HolyCircle;
-                    }
-
                     return PLD.Prominence;
                 }
             }
@@ -151,14 +151,29 @@ internal class PaladinHolySpiritHolyCircle : CustomCombo
     {
         if (actionID == PLD.HolySpirit || actionID == PLD.HolyCircle)
         {
-            if (level >= PLD.Levels.Confiteor)
+            if (IsEnabled(CustomComboPreset.PaladinConfiteorFeature))
             {
-                var original = OriginalHook(PLD.Confiteor);
-                if (original != PLD.Confiteor)
-                    return original;
+                if (level >= PLD.Levels.Confiteor)
+                {
+                    var original = OriginalHook(PLD.Confiteor);
+                    if (original != PLD.Confiteor)
+                        return original;
 
-                if (HasEffect(PLD.Buffs.ConfiteorReady))
-                    return PLD.Confiteor;
+                    if (HasEffect(PLD.Buffs.ConfiteorReady))
+                        return OriginalHook(PLD.Confiteor);
+                }
+            }
+        }
+
+        if (actionID == PLD.FastBlade)
+        {
+            if (IsEnabled(CustomComboPreset.PaladinFastBladeSingleCombo))
+            {
+                if (level >= PLD.Levels.Confiteor)
+                {
+                    if (HasEffect(PLD.Buffs.ConfiteorReady))
+                        return OriginalHook(PLD.Confiteor);
+                }
             }
         }
 
@@ -259,7 +274,7 @@ internal class PaladinFastBladeSingleCombo : CustomCombo
                     return OriginalHook(PLD.Intervene);
 
                 if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight) && LocalPlayer?.CurrentMp > 1000)
-                    return PLD.HolySpirit;
+                    return OriginalHook(PLD.HolySpirit);
 
                 if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityAtonementFeature))
                 {
