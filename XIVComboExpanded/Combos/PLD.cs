@@ -130,7 +130,7 @@ internal class PaladinProminence : CustomCombo
 
             if (comboTime > 0)
             {
-                if (lastComboMove == PLD.TotalEclipse)
+                if (lastComboMove == PLD.TotalEclipse && level >= PLD.Levels.Prominence)
                 {
                     return PLD.Prominence;
                 }

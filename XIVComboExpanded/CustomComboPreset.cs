@@ -1,3 +1,4 @@
+using System.Xml.Serialization;
 using XIVComboExpandedPlugin.Attributes;
 using XIVComboExpandedPlugin.Combos;
 
