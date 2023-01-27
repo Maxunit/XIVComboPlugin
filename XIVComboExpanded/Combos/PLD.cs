@@ -50,7 +50,7 @@ internal static class PLD
     public static class Levels
     {
         public const byte
-            FightorFlight = 2,
+            FightOrFlight = 2,
             RiotBlade = 4,
             LowBlow = 12,
             SpiritsWithin = 30,
@@ -94,7 +94,7 @@ internal class PaladinRoyalAuthority : CustomCombo
                     {
                         if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityDivineMightFeature))
                         {
-                            if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight) && LocalPlayer?.CurrentMp > 1000)
+                            if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight))
                                 return PLD.HolySpirit;
                         }
 
@@ -206,20 +206,33 @@ internal class PaladinFightOrFlight : CustomCombo
 
 internal class PaladinRequiescat : CustomCombo
 {
-    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PaladinRequiescatCombo;
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PldAny;
 
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
         if (actionID == PLD.Requiescat)
         {
-            if (level >= PLD.Levels.Confiteor)
+            if (IsEnabled(CustomComboPreset.PaladinRequiescatCombo))
             {
-                var original = OriginalHook(PLD.Confiteor);
-                if (original != PLD.Confiteor)
-                    return original;
+                if (level >= PLD.Levels.Confiteor)
+                {
+                    // Blade combo
+                    var original = OriginalHook(PLD.Confiteor);
+                    if (original != PLD.Confiteor)
+                        return original;
 
-                if (HasEffect(PLD.Buffs.ConfiteorReady))
-                    return PLD.Confiteor;
+                    if (HasEffect(PLD.Buffs.ConfiteorReady))
+                        return PLD.Confiteor;
+                }
+
+                if (level >= PLD.Levels.Requiescat && HasEffect(PLD.Buffs.Requiescat))
+                    return PLD.HolySpirit;
+            }
+
+            if (IsEnabled(CustomComboPreset.PaladinRequiescatFightOrFlightFeature))
+            {
+                if (level >= PLD.Levels.FightOrFlight && IsOffCooldown(PLD.FightOrFlight))
+                    return PLD.FightOrFlight;
             }
         }
 

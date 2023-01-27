@@ -94,7 +94,7 @@ internal class WarriorStormsPathCombo : CustomCombo
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
             {
                 if (level >= WAR.Levels.InnerRelease && HasEffect(WAR.Buffs.InnerRelease))
-                    return WAR.FellCleave;
+                    return OriginalHook(WAR.FellCleave);
             }
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))

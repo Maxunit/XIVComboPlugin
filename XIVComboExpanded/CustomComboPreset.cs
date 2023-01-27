@@ -1,4 +1,5 @@
 using System.Xml.Serialization;
+
 using XIVComboExpandedPlugin.Attributes;
 using XIVComboExpandedPlugin.Combos;
 
@@ -181,6 +182,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Enochian No Sync Feature", "Fire 4 and Blizzard 4 will not sync to Fire 1 and Blizzard 1.", BLM.JobID)]
     BlackEnochianNoSyncFeature = 2515,
 
+    [CustomComboInfo("Thunder 3/4 to Sharpcast", "Thunder 3 and Thunder 4 become Sharpcast when available.", BLM.JobID)]
+    BlackThunderFeature = 2516,
+
     #endregion
     // ====================================================================================
     #region BARD
@@ -352,6 +356,18 @@ public enum CustomComboPreset
 
     [CustomComboInfo("Missing Shadowbringer Feature", "Replace Living Shadow with Shadowbringer when charges are available and Living Shadow is on cooldown.", DRK.JobID)]
     DarkLivingShadowbringerHpFeature = 3209,
+
+    [EvilCombo]
+    [CustomComboInfo("Flood of Darkness Upkeep", "Replaces Unleash and its combo chain with Flood of Darkness if Darkside is less than 20 seconds.", DRK.JobID)]
+    FloodofDarknessUpkeep = 3210,
+
+    [EvilCombo]
+    [CustomComboInfo("Edge of Darkness Upkeep", "Replaces Hard Slash and its combo chain with Edge of Darkness if Darkside is less than 20 seconds. Flood of Darkness on low level instead.", DRK.JobID)]
+    EdgeofDarknessUpkeep = 3211,
+
+    [EvilCombo]
+    [CustomComboInfo("Blood Weapon Spender", "Replace Hard Slash with Carve and Spit and Unleash with Abyssal Drain after using Blood Weapon.", DRK.JobID)]
+    DarkBloodWeaponSpender = 3212,
 
     #endregion
     // ====================================================================================
@@ -609,6 +625,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Aeolian Edge / Huton Feature", "Replaces Aeolian Edge with Armor Crush when Huton has less than 30 seconds remaining and Huraijin when missing.", NIN.JobID)]
     NinjaAeolianEdgeHutonFeature = 3019,
 
+    [CustomComboInfo("Hide to Ninjutsu", "Replace Hide with Ninjutsu if any Mudra are active.", NIN.JobID)]
+    NinjaHideNinjutsuFeature = 3020,
+
     #endregion
     // ====================================================================================
     #region PALADIN
@@ -656,13 +675,15 @@ public enum CustomComboPreset
     PaladinFightOrFlightGoringBladeFeature = 1911,
 
     [ConflictingCombos(PaladinFastBladeSingleCombo)]
-    [ParentCombo(PaladinRoyalAuthorityCombo)]
     [CustomComboInfo("Royal Authority Divine Might Feature", "Replace Royal Authority with Holy Spirit when Divine Might is active.", PLD.JobID)]
     PaladinRoyalAuthorityDivineMightFeature = 1912,
 
     [ParentCombo(PaladinProminenceCombo)]
     [CustomComboInfo("Prominence Divine Might Feature", "Replace Prominence with Holy Circle when Divine Might is active.", PLD.JobID)]
     PaladinProminenceDivineMightFeature = 1913,
+
+    [CustomComboInfo("Requiescat Fight or Flight Feature", "Replace Requiescat with Fight or Flight when off cooldown.", PLD.JobID)]
+    PaladinRequiescatFightOrFlightFeature = 1914,
 
     #endregion
     // ====================================================================================
@@ -998,6 +1019,9 @@ public enum CustomComboPreset
 
     [CustomComboInfo("Excogitation to Lustrate", "Replace Excogitation with Lustrate when Excogitation is on cooldown.", SCH.JobID)]
     ScholarExcogitationLustrateFeature = 2809,
+
+    [CustomComboInfo("Adloquium Level Sync", "Replace Adloquium with Physick when below level 30 in synced content.", SCH.JobID)]
+    ScholarAdloquiumSyncFeature = 2810,
 
     #endregion
     // ====================================================================================

@@ -75,7 +75,7 @@ internal class ConfigWindow : Window
         }
 
         var showEvil = Service.Configuration.EnableEvilCombos;
-        if (ImGui.Checkbox("Enable combos added by Evil Crab", ref showEvil))
+        if (ImGui.Checkbox("Enable evil combos (referring to Evil Crab)", ref showEvil))
         {
             Service.Configuration.EnableEvilCombos = showEvil;
             Service.Configuration.Save();
