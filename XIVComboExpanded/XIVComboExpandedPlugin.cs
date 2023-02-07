@@ -24,8 +24,8 @@ public sealed partial class XIVComboExpandedPlugin : IDalamudPlugin
     /// <param name="pluginInterface">Dalamud plugin interface.</param>
     public XIVComboExpandedPlugin(DalamudPluginInterface pluginInterface)
     {
-        // FFXIVClientStructs.Interop.Resolver.GetInstance.SetupSearchSpace();
-        // FFXIVClientStructs.Interop.Resolver.GetInstance.Resolve();
+        FFXIVClientStructs.Interop.Resolver.GetInstance.SetupSearchSpace();
+        FFXIVClientStructs.Interop.Resolver.GetInstance.Resolve();
 
         pluginInterface.Create<Service>();
 

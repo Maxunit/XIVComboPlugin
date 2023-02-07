@@ -18,10 +18,10 @@ internal static class DRK
         Quietus = 7391,
         Bloodspiller = 7392,
         FloodOfDarkness = 16466,
-        EdgeOfDarkness = 16467,
-        StalwartSoul = 16468,
         FloodOfShadow = 16469,
+        EdgeOfDarkness = 16467,
         EdgeOfShadow = 16470,
+        StalwartSoul = 16468,
         LivingShadow = 16472,
         SaltAndDarkness = 25755,
         Shadowbringer = 25757,
@@ -57,7 +57,8 @@ internal static class DRK
             Bloodspiller = 62,
             Quietus = 64,
             Delirium = 68,
-            Shadow = 74,
+            EdgeOfShadow = 74,
+            FloodOfShadow = 74,
             LivingShadow = 80,
             SaltAndDarkness = 86,
             Shadowbringer = 90;
@@ -74,16 +75,12 @@ internal class DarkSouleater : CustomCombo
         {
             var gauge = GetJobGauge<DRKGauge>();
 
-            if (IsEnabled(CustomComboPreset.EdgeofDarknessUpkeep))
+            if (IsEnabled(CustomComboPreset.DarkEdgeSpender))
             {
-                if (level >= DRK.Levels.EdgeOfDarkness && gauge.DarksideTimeRemaining < 20000 && LocalPlayer?.CurrentMp > 3000)
+                if (level >= DRK.Levels.EdgeOfShadow && gauge.DarksideTimeRemaining < 20000 && LocalPlayer?.CurrentMp > 3000)
+                    return DRK.EdgeOfShadow;
+                if (level >= DRK.Levels.EdgeOfDarkness && level <= DRK.Levels.EdgeOfShadow && gauge.DarksideTimeRemaining < 20000 && LocalPlayer?.CurrentMp > 3000)
                     return DRK.EdgeOfDarkness;
-            }
-
-            if (IsEnabled(CustomComboPreset.EdgeofDarknessUpkeep))
-            {
-                if (level >= DRK.Levels.FloodOfDarkness && level <= DRK.Levels.EdgeOfDarkness && gauge.DarksideTimeRemaining < 20000 && LocalPlayer?.CurrentMp > 3000)
-                    return DRK.FloodOfDarkness;
             }
 
             if (IsEnabled(CustomComboPreset.DarkBloodWeaponSpender))
@@ -139,9 +136,11 @@ internal class DarkStalwartSoul : CustomCombo
         {
             var gauge = GetJobGauge<DRKGauge>();
 
-            if (IsEnabled(CustomComboPreset.FloodofDarknessUpkeep))
+            if (IsEnabled(CustomComboPreset.DarkFloodSpender))
             {
-                if (level >= DRK.Levels.FloodOfDarkness && gauge.DarksideTimeRemaining < 20000 && LocalPlayer?.CurrentMp > 3000)
+                if (level >= DRK.Levels.FloodOfShadow && gauge.DarksideTimeRemaining < 20000 && LocalPlayer?.CurrentMp > 3000)
+                    return DRK.FloodOfShadow;
+                if (level >= DRK.Levels.FloodOfDarkness && level <= DRK.Levels.FloodOfShadow && gauge.DarksideTimeRemaining < 20000 && LocalPlayer?.CurrentMp > 3000)
                     return DRK.FloodOfDarkness;
             }
 

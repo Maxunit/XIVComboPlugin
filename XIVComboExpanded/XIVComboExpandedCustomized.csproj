@@ -53,8 +53,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-	<!-- <ProjectReference Include="..\lib\FFXIVClientStructs\FFXIVClientStructs\FFXIVClientStructs.csproj" /> -->
-	<Reference Include="FFXIVClientStructs.dll" Private="False" />
+	<ProjectReference Include="..\lib\FFXIVClientStructs\FFXIVClientStructs\FFXIVClientStructs.csproj" />
+	<!-- <Reference Include="FFXIVClientStructs.dll" Private="False" /> -->
     <Reference Include="Dalamud" Private="False" />
     <Reference Include="ImGui.NET" Private="False" />
     <Reference Include="Lumina" Private="False" />

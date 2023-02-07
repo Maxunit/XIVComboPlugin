@@ -358,12 +358,12 @@ public enum CustomComboPreset
     DarkLivingShadowbringerHpFeature = 3209,
 
     [EvilCombo]
-    [CustomComboInfo("Flood of Darkness Upkeep", "Replaces Unleash and its combo chain with Flood of Darkness if Darkside is less than 20 seconds.", DRK.JobID)]
-    FloodofDarknessUpkeep = 3210,
+    [CustomComboInfo("Flood Spender", "Replaces Unleash and its combo chain with Flood of Darkness/Shadow if Darkside is less than 20 seconds.", DRK.JobID)]
+    DarkFloodSpender = 3210,
 
     [EvilCombo]
-    [CustomComboInfo("Edge of Darkness Upkeep", "Replaces Hard Slash and its combo chain with Edge of Darkness if Darkside is less than 20 seconds. Flood of Darkness on low level instead.", DRK.JobID)]
-    EdgeofDarknessUpkeep = 3211,
+    [CustomComboInfo("Edge Spender", "Replaces Hard Slash and its combo chain with Edge of Darkness/Shadow if Darkside is less than 20 seconds.", DRK.JobID)]
+    DarkEdgeSpender = 3211,
 
     [EvilCombo]
     [CustomComboInfo("Blood Weapon Spender", "Replace Hard Slash with Carve and Spit and Unleash with Abyssal Drain after using Blood Weapon.", DRK.JobID)]
