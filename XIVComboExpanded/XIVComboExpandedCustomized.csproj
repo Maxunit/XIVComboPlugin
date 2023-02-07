@@ -81,8 +81,8 @@
   </Target>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;    	  echo Running Debug Post Build&#xD;&#xA;    	  echo Copying to DevPlugins&#xD;&#xA;    	  xcopy &quot;$(TargetPath)\..&quot; &quot;E:\FFXIV Dalamud Plugins\devPlugins\XIVComboExpanded\&quot; /Y /E&#xD;&#xA;    	  exit /b 0&#xD;&#xA;    	  )" />
-    <Exec Command="if $(ConfigurationName) == Release (&#xD;&#xA;    	  echo Running Release Post Build&#xD;&#xA;    	  echo Copying to DevPlugins&#xD;&#xA;    	  xcopy &quot;$(TargetPath)\..&quot; &quot;E:\FFXIV Dalamud Plugins\devPlugins\XIVComboExpanded\&quot; /Y /E&#xD;&#xA;    	  exit /b 0&#xD;&#xA;    	  )" />
+    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;    	  echo Running Debug Post Build&#xD;&#xA;    	  echo Copying to DevPlugins&#xD;&#xA;    	  xcopy &quot;$(TargetPath)\..&quot; &quot;E:\FFXIV Dalamud Plugins\devPlugins\XIVComboExpandedCustomized\&quot; /Y /E&#xD;&#xA;    	  exit /b 0&#xD;&#xA;    	  )" />
+    <Exec Command="if $(ConfigurationName) == Release (&#xD;&#xA;    	  echo Running Release Post Build&#xD;&#xA;    	  echo Copying to DevPlugins&#xD;&#xA;    	  xcopy &quot;$(TargetPath)\..&quot; &quot;E:\FFXIV Dalamud Plugins\devPlugins\XIVComboExpandedCustomized\&quot; /Y /E&#xD;&#xA;    	  exit /b 0&#xD;&#xA;    	  )" />
   </Target>
 
 </Project>
