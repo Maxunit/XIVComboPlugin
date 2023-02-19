@@ -17,16 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Github Actions", "Github Ac
 		.github\workflows\build.yml = .github\workflows\build.yml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{C73A3AC7-6B7C-4A26-9730-81566177F0F5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FFXIVClientStructs", "FFXIVClientStructs", "{DD713D24-A222-406F-A782-6D6C84AB74EF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FFXIVClientStructs", "lib\FFXIVClientStructs\FFXIVClientStructs\FFXIVClientStructs.csproj", "{E56B1AE2-583B-4815-AADA-A293E6F0D844}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FFXIVClientStructs.InteropSourceGenerators", "lib\FFXIVClientStructs\FFXIVClientStructs.InteropSourceGenerators\FFXIVClientStructs.InteropSourceGenerators.csproj", "{7C741ED2-506D-44A2-96EA-65187E2EBE64}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FFXIVClientStructs.ResolverTester", "lib\FFXIVClientStructs\FFXIVClientStructs.ResolverTester\FFXIVClientStructs.ResolverTester.csproj", "{48F81311-E090-45DB-93F4-8AF466F28F33}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,39 +33,9 @@ Global
 		{619DF476-7225-4783-95A5-D29A8816EE66}.Release|Any CPU.Build.0 = Release|x64
 		{619DF476-7225-4783-95A5-D29A8816EE66}.Release|x64.ActiveCfg = Release|x64
 		{619DF476-7225-4783-95A5-D29A8816EE66}.Release|x64.Build.0 = Release|x64
-		{E56B1AE2-583B-4815-AADA-A293E6F0D844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E56B1AE2-583B-4815-AADA-A293E6F0D844}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E56B1AE2-583B-4815-AADA-A293E6F0D844}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E56B1AE2-583B-4815-AADA-A293E6F0D844}.Debug|x64.Build.0 = Debug|Any CPU
-		{E56B1AE2-583B-4815-AADA-A293E6F0D844}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E56B1AE2-583B-4815-AADA-A293E6F0D844}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E56B1AE2-583B-4815-AADA-A293E6F0D844}.Release|x64.ActiveCfg = Release|Any CPU
-		{E56B1AE2-583B-4815-AADA-A293E6F0D844}.Release|x64.Build.0 = Release|Any CPU
-		{7C741ED2-506D-44A2-96EA-65187E2EBE64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C741ED2-506D-44A2-96EA-65187E2EBE64}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C741ED2-506D-44A2-96EA-65187E2EBE64}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{7C741ED2-506D-44A2-96EA-65187E2EBE64}.Debug|x64.Build.0 = Debug|Any CPU
-		{7C741ED2-506D-44A2-96EA-65187E2EBE64}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C741ED2-506D-44A2-96EA-65187E2EBE64}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C741ED2-506D-44A2-96EA-65187E2EBE64}.Release|x64.ActiveCfg = Release|Any CPU
-		{7C741ED2-506D-44A2-96EA-65187E2EBE64}.Release|x64.Build.0 = Release|Any CPU
-		{48F81311-E090-45DB-93F4-8AF466F28F33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{48F81311-E090-45DB-93F4-8AF466F28F33}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{48F81311-E090-45DB-93F4-8AF466F28F33}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{48F81311-E090-45DB-93F4-8AF466F28F33}.Debug|x64.Build.0 = Debug|Any CPU
-		{48F81311-E090-45DB-93F4-8AF466F28F33}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{48F81311-E090-45DB-93F4-8AF466F28F33}.Release|Any CPU.Build.0 = Release|Any CPU
-		{48F81311-E090-45DB-93F4-8AF466F28F33}.Release|x64.ActiveCfg = Release|Any CPU
-		{48F81311-E090-45DB-93F4-8AF466F28F33}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{DD713D24-A222-406F-A782-6D6C84AB74EF} = {C73A3AC7-6B7C-4A26-9730-81566177F0F5}
-		{E56B1AE2-583B-4815-AADA-A293E6F0D844} = {DD713D24-A222-406F-A782-6D6C84AB74EF}
-		{7C741ED2-506D-44A2-96EA-65187E2EBE64} = {DD713D24-A222-406F-A782-6D6C84AB74EF}
-		{48F81311-E090-45DB-93F4-8AF466F28F33} = {DD713D24-A222-406F-A782-6D6C84AB74EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37674B88-2038-4C63-A979-84404391773A}

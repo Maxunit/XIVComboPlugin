@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -11,6 +12,14 @@ using ImGuiNET;
 using XIVComboExpandedPlugin.Attributes;
 
 namespace XIVComboExpandedPlugin.Interface;
+
+class Version
+{
+    public string GetAssemblyVersion()
+    {
+        return GetType().Assembly.GetName().Version.ToString();
+    }
+}
 
 /// <summary>
 /// Plugin configuration window.
@@ -25,7 +34,7 @@ internal class ConfigWindow : Window
     /// Initializes a new instance of the <see cref="ConfigWindow"/> class.
     /// </summary>
     public ConfigWindow()
-        : base("Custom Combo Setup")
+        : base("Custom Combo Setup - Version: " + $"{new Version().GetAssemblyVersion()}")
     {
         this.RespectCloseHotkey = true;
 
