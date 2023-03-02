@@ -18,6 +18,7 @@ internal partial class CustomComboCache : IDisposable
     // Invalidate these
     private readonly Dictionary<(uint StatusID, uint? TargetID, uint? SourceID), Status?> statusCache = new();
     private readonly Dictionary<uint, CooldownData> cooldownCache = new();
+    private bool? canInterruptTarget = null;
 
     // Do not invalidate these
     private readonly Dictionary<uint, byte> cooldownGroupCache = new();
@@ -38,6 +39,23 @@ internal partial class CustomComboCache : IDisposable
     public void Dispose()
     {
         Service.Framework.Update -= this.Framework_Update;
+    }
+
+    public bool CanInterruptTarget
+    {
+        get
+        {
+            if (!this.canInterruptTarget.HasValue)
+            {
+                GameObject? target = Service.TargetManager.Target;
+                this.canInterruptTarget = target is not null
+                    && target is BattleChara actor
+                    && actor.IsCasting
+                    && actor.IsCastInterruptible;
+            }
+
+            return this.canInterruptTarget.Value;
+        }
     }
 
     /// <summary>
@@ -143,5 +161,6 @@ internal partial class CustomComboCache : IDisposable
     {
         this.statusCache.Clear();
         this.cooldownCache.Clear();
+        this.canInterruptTarget = null;
     }
 }

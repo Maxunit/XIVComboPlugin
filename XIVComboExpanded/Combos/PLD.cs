@@ -1,3 +1,6 @@
+using System.Reflection.Metadata.Ecma335;
+
+using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
 
 namespace XIVComboExpandedPlugin.Combos;
@@ -13,18 +16,20 @@ internal static class PLD
         ShieldBash = 16,
         FightOrFlight = 20,
         RageOfHalone = 21,
+        Bulwark = 22,
         CircleOfScorn = 23,
         SpiritsWithin = 29,
+        Sheltron = 3542,
         GoringBlade = 3538,
         RoyalAuthority = 3539,
         TotalEclipse = 7381,
         Requiescat = 7383,
         HolySpirit = 7384,
-        LowBlow = 7540,
         Prominence = 16457,
         HolyCircle = 16458,
         Confiteor = 16459,
         Atonement = 16460,
+        HolySheltron = 25746,
         Expiacion = 25747,
         BladeOfFaith = 25748,
         BladeOfTruth = 25749,
@@ -52,11 +57,12 @@ internal static class PLD
         public const byte
             FightOrFlight = 2,
             RiotBlade = 4,
-            LowBlow = 12,
             SpiritsWithin = 30,
+            Sheltron = 35,
             CircleOfScorn = 50,
             RageOfHalone = 26,
             Prominence = 40,
+            Bulwark = 52,
             GoringBlade = 54,
             RoyalAuthority = 60,
             HolySpirit = 64,
@@ -65,6 +71,7 @@ internal static class PLD
             Intervene = 74,
             Atonement = 76,
             Confiteor = 80,
+            HolySheltron = 82,
             Expiacion = 86,
             BladeOfFaith = 90,
             BladeOfTruth = 90,
@@ -80,9 +87,16 @@ internal class PaladinRoyalAuthority : CustomCombo
     {
         if (actionID == PLD.RageOfHalone || actionID == PLD.RoyalAuthority)
         {
+            // During FoF, prioritize the higher-potency Divine Might cast over Atonement and the normal combo chain
+            if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityDivineMightFeature))
+            {
+                if (HasEffect(PLD.Buffs.FightOrFlight) && HasEffect(PLD.Buffs.DivineMight))
+                    return PLD.HolySpirit;
+            }
+
             if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityAtonementFeature))
             {
-                if (level >= PLD.Levels.Atonement && HasEffect(PLD.Buffs.SwordOath) && lastComboMove != PLD.FastBlade && lastComboMove != PLD.RiotBlade)
+                if (level >= PLD.Levels.Atonement && lastComboMove != PLD.FastBlade && lastComboMove != PLD.RiotBlade && HasEffect(PLD.Buffs.SwordOath))
                     return PLD.Atonement;
             }
 
@@ -122,6 +136,13 @@ internal class PaladinProminence : CustomCombo
     {
         if (actionID == PLD.Prominence)
         {
+            // During FoF, prioritize the higher-potency Divine Might cast over Atonement and the normal combo chain
+            if (IsEnabled(CustomComboPreset.PaladinProminenceDivineMightFeature))
+            {
+                if (HasEffect(PLD.Buffs.FightOrFlight) && HasEffect(PLD.Buffs.DivineMight))
+                    return PLD.HolyCircle;
+            }
+
             if (IsEnabled(CustomComboPreset.PaladinProminenceDivineMightFeature) && level >= PLD.Levels.Prominence)
             {
                 if (level >= PLD.Levels.HolyCircle && HasEffect(PLD.Buffs.DivineMight) && LocalPlayer?.CurrentMp > 1000)
@@ -153,23 +174,7 @@ internal class PaladinHolySpiritHolyCircle : CustomCombo
         {
             if (IsEnabled(CustomComboPreset.PaladinConfiteorFeature))
             {
-                if (level >= PLD.Levels.Confiteor)
-                {
-                    var original = OriginalHook(PLD.Confiteor);
-                    if (original != PLD.Confiteor)
-                        return original;
-
-                    if (HasEffect(PLD.Buffs.ConfiteorReady))
-                        return OriginalHook(PLD.Confiteor);
-                }
-            }
-        }
-
-        if (actionID == PLD.FastBlade)
-        {
-            if (IsEnabled(CustomComboPreset.PaladinFastBladeSingleCombo))
-            {
-                if (level >= PLD.Levels.Confiteor)
+                if (level >= PLD.Levels.Confiteor && LocalPlayer?.CurrentMp > 1000)
                 {
                     var original = OriginalHook(PLD.Confiteor);
                     if (original != PLD.Confiteor)
@@ -195,7 +200,7 @@ internal class PaladinFightOrFlight : CustomCombo
         {
             if (IsEnabled(CustomComboPreset.PaladinFightOrFlightGoringBladeFeature))
             {
-                if (level >= PLD.Levels.GoringBlade && HasEffect(PLD.Buffs.FightOrFlight))
+                if (level >= PLD.Levels.GoringBlade && HasEffect(PLD.Buffs.FightOrFlight) && IsOffCooldown(PLD.GoringBlade))
                     return PLD.GoringBlade;
             }
         }
@@ -214,7 +219,29 @@ internal class PaladinRequiescat : CustomCombo
         {
             if (IsEnabled(CustomComboPreset.PaladinRequiescatCombo))
             {
-                if (level >= PLD.Levels.Confiteor)
+                // Prioritize Goring Blade over the Confiteor combo.  While Goring Blade deals less damage (700p) than
+                // most of the Confiteor combo (900p -> 700p -> 800p -> 900p), Goring Blade uniquely requires melee
+                // range to cast, while the entire Confiteor combo chain does not.  Since Requiescat also requires
+                // melee range to cast, the most reliable time that the player will be in melee range during the Req
+                // buff is immediately following the usage of Req.  This minimizes potential losses and potential
+                // cooldown drift if the player is forced out of melee range during the Confiteor combo and is unable
+                // to return to melee range by the time it is completed.
+                //
+                // Since Goring Blade, the entire Confiteor combo, *and* one additional GCD (typically Holy Spirit) fits
+                // within even the shortest of party buffs (15s ones like Battle Litany), this should not result in a
+                // net reduction in potency, and *may* in fact increase it if someone is slightly late in applying
+                // their party buffs, as it shifts the high-potency Confiteor cast back into the party buff window by a
+                // single GCD.
+                if (IsEnabled(CustomComboPreset.PaladinRequiescatFightOrFlightFeature) && IsEnabled(CustomComboPreset.PaladinFightOrFlightGoringBladeFeature))
+                {
+                    if (level >= PLD.Levels.GoringBlade && IsOffCooldown(PLD.GoringBlade))
+                    {
+                        if (IsOnCooldown(PLD.FightOrFlight) && (level < PLD.Levels.Requiescat || IsOnCooldown(PLD.Requiescat)))
+                            return PLD.GoringBlade;
+                    }
+                }
+
+                if (level >= PLD.Levels.Confiteor && LocalPlayer?.CurrentMp > 1000)
                 {
                     // Blade combo
                     var original = OriginalHook(PLD.Confiteor);
@@ -231,8 +258,13 @@ internal class PaladinRequiescat : CustomCombo
 
             if (IsEnabled(CustomComboPreset.PaladinRequiescatFightOrFlightFeature))
             {
-                if (level >= PLD.Levels.FightOrFlight && IsOffCooldown(PLD.FightOrFlight))
-                    return PLD.FightOrFlight;
+                // Prefer FoF if it is off cooldown, or if it will be ready sooner than Requiescat.  In practice, this
+                // means that Req should only be returned if FoF is on cooldown and Req is not, ie. immediately after
+                // FoF is cast.  This ensures that the button shows the action that will next be available for use in
+                // that hotbar slot, rather than swapping to FoF at the last instant when FoF comes off cooldown a
+                // a single weave slot earlier than Req.
+                if (level >= PLD.Levels.FightOrFlight)
+                    return CalcBestAction(PLD.FightOrFlight, PLD.FightOrFlight, PLD.Requiescat);
             }
         }
 
@@ -261,16 +293,16 @@ internal class PaladinSpiritsWithinCircleOfScorn : CustomCombo
     }
 }
 
-internal class PaladinShieldBash : CustomCombo
+internal class PaladinShieldBashFeature : CustomCombo
 {
-    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PaladinShieldBashFeature;
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AdvAny;
 
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
         if (actionID == PLD.ShieldBash)
         {
-            if (level >= PLD.Levels.LowBlow && IsOffCooldown(PLD.LowBlow))
-                return PLD.LowBlow;
+            if (IsEnabled(CustomComboPreset.PaladinShieldBashFeature) && level >= ADV.Levels.LowBlow && IsOffCooldown(ADV.LowBlow))
+                return OriginalHook(ADV.LowBlow);
         }
 
         return actionID;
@@ -285,10 +317,22 @@ internal class PaladinFastBladeSingleCombo : CustomCombo
     {
         if (actionID == PLD.FastBlade)
         {
+            var gauge = GetJobGauge<PLDGauge>();
+
+            if (IsEnabled(CustomComboPreset.FastBladeInterveneFeature) && level >= PLD.Levels.Intervene && !InMeleeRange && HasCharges(PLD.Intervene))
+                return OriginalHook(PLD.Intervene);
+
             if (IsEnabled(CustomComboPreset.PaladinFastBladeSingleCombo))
             {
-                if (IsEnabled(CustomComboPreset.FastBladeInterveneFeature) && level >= PLD.Levels.Intervene && HasTarget() && !InMeleeRange && HasCharges(PLD.Intervene))
-                    return OriginalHook(PLD.Intervene);
+                if (level >= PLD.Levels.Confiteor && LocalPlayer?.CurrentMp > 1000)
+                {
+                    var original = OriginalHook(PLD.Confiteor);
+                    if (original != PLD.Confiteor)
+                        return original;
+
+                    if (HasEffect(PLD.Buffs.ConfiteorReady))
+                        return OriginalHook(PLD.Confiteor);
+                }
 
                 if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight) && LocalPlayer?.CurrentMp > 1000)
                     return OriginalHook(PLD.HolySpirit);
@@ -328,12 +372,34 @@ internal class PaladinScornfulSpiritsExtended : CustomCombo
                 return PLD.GoringBlade;
 
             if (level >= PLD.Levels.Expiacion && IsOnCooldown(PLD.FightOrFlight) && IsOnCooldown(PLD.GoringBlade))
-                return CalcBestAction(actionID, PLD.Expiacion, PLD.CircleOfScorn);
+                return CalcBestAction(actionID, PLD.Expiacion, PLD.CircleOfScorn, PLD.Requiescat);
 
-            if (level >= PLD.Levels.CircleOfScorn && IsOnCooldown(PLD.FightOrFlight) && IsOnCooldown(PLD.GoringBlade))
+            if (level >= PLD.Levels.Requiescat && level <= PLD.Levels.Expiacion && IsOnCooldown(PLD.FightOrFlight) && IsOnCooldown(PLD.GoringBlade))
+                return CalcBestAction(actionID, PLD.SpiritsWithin, PLD.CircleOfScorn, PLD.Requiescat);
+
+            if (level >= PLD.Levels.CircleOfScorn && level <= PLD.Levels.Requiescat && IsOnCooldown(PLD.FightOrFlight) && IsOnCooldown(PLD.GoringBlade))
                 return CalcBestAction(actionID, PLD.SpiritsWithin, PLD.CircleOfScorn);
 
+            if (level >= PLD.Levels.SpiritsWithin && level <= PLD.Levels.CircleOfScorn)
+                return PLD.SpiritsWithin;
+
             return PLD.FightOrFlight;
+        }
+
+        return actionID;
+    }
+}
+
+internal class PaladinBulwarkSheltronFeature : CustomCombo
+{
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PaladinBulwarkSheltronFeature;
+
+    protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+    {
+        if (actionID == PLD.Sheltron || actionID == PLD.HolySheltron)
+        {
+            if (level >= PLD.Levels.Bulwark && IsOffCooldown(PLD.Bulwark))
+                return PLD.Bulwark;
         }
 
         return actionID;

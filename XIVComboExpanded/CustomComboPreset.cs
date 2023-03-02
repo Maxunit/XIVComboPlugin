@@ -87,10 +87,16 @@ public enum CustomComboPreset
     #region ADV
 
     [CustomComboInfo("Swift Raise Feature", "Replace Ascend, Ressurection, Egeiro, Raise, Verraise, and Angel Whisper with Swiftcast when it is off cooldown (and Dualcast isn't up).", ADV.JobID)]
-    AllSwiftcastFeature = 1000,
+    AdvSwiftcastFeature = 1000,
 
-    [CustomComboInfo("Rampart/Reprisal Combo", "Replaces Rampart with Reprisal if not on cooldown.", ADV.JobID)]
+    [CustomComboInfo("Rampart/Reprisal Feature", "Replaces Rampart with Reprisal if not on cooldown.", ADV.JobID)]
     RampartReprisalCombo = 1001,
+
+    [CustomComboInfo("Stun/Interrupt Feature", "Replace Low Blow with Interject if Target can be interrupted.", ADV.JobID)]
+    StunInterruptCombo = 1002,
+
+    [CustomComboInfo("Variant Raise Feature", "Replace Ascend, Ressurection, Egeiro, Raise, Verraise, and Angel Whisper with Variant Raise II when in a variant dungeon.", ADV.JobID)]
+    AdvVariantRaiseFeature = 1003,
 
     #endregion
     // ====================================================================================
@@ -99,34 +105,27 @@ public enum CustomComboPreset
     [CustomComboInfo("Play to Draw", "Replace Play with Draw when no card is drawn and a card is available.", AST.JobID)]
     AstrologianPlayDrawFeature = 3301,
 
-    [CustomComboInfo("Minor Arcana to Crown Play Feature", "Replace Minor Arcana with Crown Play when a card drawn.", AST.JobID)]
-    AstrologianMinorArcanaCrownPlayFeature = 3302,
-
     [CustomComboInfo("Benefic 2 to Benefic Level Sync", "Replaces Benefic 2 to Benefic when below level 26 in synced content.", AST.JobID)]
-    AstrologianBeneficSyncFeature = 3303,
+    AstrologianBeneficSyncFeature = 3302,
 
     [CustomComboInfo("Play to Astrodyne", "Replace Play with Astrodyne when seals are full.", AST.JobID)]
-    AstrologianPlayAstrodyneFeature = 3304,
+    AstrologianPlayAstrodyneFeature = 3303,
 
     [CustomComboInfo("Draw Lockout", "Replace Draw (not Play to Draw) with Malefic when a card is drawn.", AST.JobID)]
-    AstrologianDrawLockoutFeature = 3305,
+    AstrologianDrawLockoutFeature = 3304,
 
     [ParentCombo(AstrologianPlayDrawFeature)]
-    [CustomComboInfo("Play to Draw to Astrodyne", "Replace Play with Astrodyne when seals are full and Draw is on Cooldown.", AST.JobID)]
-    AstrologianPlayDrawAstrodyneFeature = 3306,
-
-    [CustomComboInfo("Crown Play to Minor Arcana Feature", "Replace Crown Play with Minor Arcana when no card is drawn.", AST.JobID)]
-    AstrologianCrownPlayMinorArcanaFeature = 3307,
+    [CustomComboInfo("Play to Draw to Astrodyne", "Replace Play with Astrodyne when seals are full and Draw is on cooldown or a card is drawn.", AST.JobID)]
+    AstrologianPlayDrawAstrodyneFeature = 3305,
 
     [CustomComboInfo("Malefic to Draw", "Replace Malefic with Draw when no card is drawn and a card is available.", AST.JobID)]
-    AstrologianMaleficDrawFeature = 3308,
+    AstrologianMaleficDrawFeature = 3306,
 
     [CustomComboInfo("Gravity to Draw", "Replace Gravity with Draw when no card is drawn and a card is available.", AST.JobID)]
-    AstrologianGravityDrawFeature = 3309,
+    AstrologianGravityDrawFeature = 3307,
 
-    [ParentCombo(AstrologianMinorArcanaCrownPlayFeature)]
-    [CustomComboInfo("Crown Play Delay Feature", "Delay Crown Play by 1s after using Minor Arcnaa.", AST.JobID)]
-    AstrologianCrownPlayDelayFeature = 3310,
+    [CustomComboInfo("Play to Redraw", "Replace Play with Redraw if a card is drawn and would grant a seal you already have.", AST.JobID)]
+    AstrologianPlayRedrawFeature = 3308,
 
     #endregion
     // ====================================================================================
@@ -549,6 +548,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Dragon Meditation Feature", "Replace Dragon Kick with Meditation when out of combat and the Fifth Chakra is not open.", MNK.JobID)]
     MonkDragonKickMeditationFeature = 2008,
 
+    [ConflictingCombos(MonkTrueStrikeFeature)]
     [CustomComboInfo("Twin Snakes / True Strike Feature", "Replace Twin Snakes with True Strike if Twin Snakes has more than 6s remaining.", MNK.JobID)]
     MonkTwinSnakesFeature = 2009,
 
@@ -558,6 +558,10 @@ public enum CustomComboPreset
     [ParentCombo(MonkTwinSnakesFeature)]
     [CustomComboInfo("Formless Snakes Option", "While Formless Fist is active, do not replace Twin Snakes.", MNK.JobID)]
     MonkFormlessSnakesOption = 2011,
+
+    [ConflictingCombos(MonkTwinSnakesFeature)]
+    [CustomComboInfo("True Strike / Twin Snakes Feature", "Replace True Strike with Twin Snakes if Twin Snakes has less than 6s remaining.", MNK.JobID)]
+    MonkTrueStrikeFeature = 2012,
 
     #endregion
     // ====================================================================================
@@ -642,7 +646,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Prominence Combo", "Replace Prominence with its combo chain.", PLD.JobID)]
     PaladinProminenceCombo = 1903,
 
-    [CustomComboInfo("Requiescat Confiteor", "Replace Requiescat with Confiteor while under the effect of Requiescat.", PLD.JobID)]
+    [CustomComboInfo("Requiescat Confiteor", "Replace Requiescat with Confiteor and combo chain while under the effect of Requiescat, and then with Holy Spirit if there are remaining charges.", PLD.JobID)]
     PaladinRequiescatCombo = 1904,
 
     [SecretCustomCombo]
@@ -651,13 +655,13 @@ public enum CustomComboPreset
 
     [ConflictingCombos(PaladinScornfulSpiritsExtended)]
     [SecretCustomCombo]
-    [CustomComboInfo("Scornful Spirits Feature", "Replace Spirits Within and Circle of Scorn with whichever is available soonest.", PLD.JobID)]
+    [CustomComboInfo("Scornful Spirits Feature", "Replace Spirits Within/Expiacion and Circle of Scorn with whichever is available soonest.", PLD.JobID)]
     PaladinScornfulSpiritsFeature = 1906,
 
     [CustomComboInfo("Shields on your Feet Feature", "Replace Shield Bash with Low Blow when available.", PLD.JobID)]
     PaladinShieldBashFeature = 1907,
 
-    [CustomComboInfo("Fast Blade Intervene Feature", "Replaces Fast Blade/Goring Blade with Intervene when not in melee range.", PLD.JobID)]
+    [CustomComboInfo("Fast Blade Intervene Feature", "Replaces Fast Blade with Intervene when not in melee range.", PLD.JobID)]
     FastBladeInterveneFeature = 1908,
 
     [ConflictingCombos(PaladinRoyalAuthorityCombo, PaladinRoyalAuthorityDivineMightFeature)]
@@ -665,13 +669,13 @@ public enum CustomComboPreset
     [CustomComboInfo("Paladin One Button Combo", "Replaces Fast Blade with its combo chain. Switches to Royal Authority, Holy Spirit and Attonement when ready.", PLD.JobID)]
     PaladinFastBladeSingleCombo = 1909,
 
-    [ConflictingCombos(PaladinScornfulSpiritsFeature, PaladinFightOrFlightGoringBladeFeature)]
+    [ConflictingCombos(PaladinScornfulSpiritsFeature, PaladinFightOrFlightGoringBladeFeature, PaladinRequiescatFightOrFlightFeature)]
     [EvilCombo]
-    [CustomComboInfo("Scornful Spirits Extended", "Scornful Spirits Feature and Fight or Flight Goring Blade Feature merged.", PLD.JobID)]
+    [CustomComboInfo("Scornful Spirits Extended", "Scornful Spirits Feature and (Requiescat) Fight or Flight (Goring Blade) Feature merged.", PLD.JobID)]
     PaladinScornfulSpiritsExtended = 1910,
 
     [ConflictingCombos(PaladinScornfulSpiritsExtended)]
-    [CustomComboInfo("Fight or Flight Goring Blade Feature", "Replace Fight or Flight with Goring Blade while Fight or Flight is active.", PLD.JobID)]
+    [CustomComboInfo("Fight or Flight Goring Blade Feature", "Replace Fight or Flight with Goring Blade while Fight or Flight is active.  Also applies to Requiescat if the Requiescat Fight or Flight Feature is enabled.", PLD.JobID)]
     PaladinFightOrFlightGoringBladeFeature = 1911,
 
     [ConflictingCombos(PaladinFastBladeSingleCombo)]
@@ -682,8 +686,12 @@ public enum CustomComboPreset
     [CustomComboInfo("Prominence Divine Might Feature", "Replace Prominence with Holy Circle when Divine Might is active.", PLD.JobID)]
     PaladinProminenceDivineMightFeature = 1913,
 
-    [CustomComboInfo("Requiescat Fight or Flight Feature", "Replace Requiescat with Fight or Flight when off cooldown.", PLD.JobID)]
+    [CustomComboInfo("Requiescat Fight or Flight Feature", "Replace Requiescat with Fight or Flight when off cooldown or if it will be ready sooner.", PLD.JobID)]
     PaladinRequiescatFightOrFlightFeature = 1914,
+
+    [EvilCombo]
+    [CustomComboInfo("Sheltron Bulwark Feature", "Replaces (Holy) Sheltron with Bulkwark when off cooldown.", PLD.JobID)]
+    PaladinBulwarkSheltronFeature = 1915,
 
     #endregion
     // ====================================================================================
@@ -1060,9 +1068,8 @@ public enum CustomComboPreset
     [CustomComboInfo("Radiant Carbuncle Feature", "Change Radiant Aegis into Summon Carbuncle when no pet has been summoned.", SMN.JobID)]
     SummonerRadiantCarbuncleFeature = 2711,
 
-    // <-- REMOVED -->
-    // [CustomComboInfo("Searing Carbuncle Feature", "Change Searing Light into Summon Carbuncle when no pet has been summoned.", SMN.JobID)]
-    // SummonerSearingCarbuncleFeature = 2712,
+    [CustomComboInfo("Demi Carbuncle Feature", "Change Summon Bahamut into Summon Carbuncle when no pet has been summoned.", SMN.JobID)]
+    SummonerDemiCarbuncleFeature = 2712,
 
     [CustomComboInfo("Titan's Favor Ruin Feature", "Change Ruin into Mountain Buster (oGCD) when available.", SMN.JobID)]
     SummonerRuinTitansFavorFeature = 2713,

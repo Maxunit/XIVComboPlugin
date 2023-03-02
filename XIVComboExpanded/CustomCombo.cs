@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.JobGauge.Types;
@@ -196,6 +197,15 @@ internal abstract partial class CustomCombo
         => Service.TargetManager.Target;
 
     /// <summary>
+    /// Gets the current territory type.
+    /// 1069: solo.
+    /// 1075: group.
+    /// 1076: savage.
+    /// </summary>
+    protected static ushort CurrentTerritory
+        => Service.ClientState.TerritoryType;
+
+    /// <summary>
     /// Calls the original hook.
     /// </summary>
     /// <param name="actionID">Action ID.</param>
@@ -255,6 +265,13 @@ internal abstract partial class CustomCombo
     /// <returns>A value indicating whether the player has a target.</returns>
     protected static bool HasTarget()
         => CurrentTarget is not null;
+
+    /// <summary>
+    /// Check if the target can be interrupted.
+    /// </summary>
+    /// <returns>A value indicating if the target can be interrupted by the player.</returns>
+    protected static bool CanInterrupt
+        => Service.ComboCache.CanInterruptTarget;
 
     /// <summary>
     /// Find if the player has no target.
