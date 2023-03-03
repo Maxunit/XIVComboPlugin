@@ -322,7 +322,7 @@ internal class WarriorStormPathStormEye : CustomCombo
         {
             var gauge = GetJobGauge<WARGauge>();
 
-            if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature) && level >= WAR.Levels.Onslaught && HasTarget() && !InMeleeRange && HasCharges(WAR.Onslaught))
+            if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature) && level >= WAR.Levels.Onslaught && !InMeleeRange && HasCharges(WAR.Onslaught))
                 return OriginalHook(WAR.Onslaught);
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))

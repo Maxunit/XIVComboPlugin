@@ -661,7 +661,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Shields on your Feet Feature", "Replace Shield Bash with Low Blow when available.", PLD.JobID)]
     PaladinShieldBashFeature = 1907,
 
-    [CustomComboInfo("Fast Blade Intervene Feature", "Replaces Fast Blade with Intervene when not in melee range.", PLD.JobID)]
+    [CustomComboInfo("Fast Blade Intervene Feature", "Replaces Fast Blade with Intervene when not in melee range and when Confiteur and Requiescat are not active.", PLD.JobID)]
     FastBladeInterveneFeature = 1908,
 
     [ConflictingCombos(PaladinRoyalAuthorityCombo, PaladinRoyalAuthorityDivineMightFeature)]

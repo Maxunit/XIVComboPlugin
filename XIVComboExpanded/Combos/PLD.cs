@@ -319,7 +319,7 @@ internal class PaladinFastBladeSingleCombo : CustomCombo
         {
             var gauge = GetJobGauge<PLDGauge>();
 
-            if (IsEnabled(CustomComboPreset.FastBladeInterveneFeature) && level >= PLD.Levels.Intervene && !InMeleeRange && HasCharges(PLD.Intervene))
+            if (IsEnabled(CustomComboPreset.FastBladeInterveneFeature) && level >= PLD.Levels.Intervene && !InMeleeRange && HasCharges(PLD.Intervene) && !HasEffect(PLD.Buffs.ConfiteorReady) && !HasEffect(PLD.Buffs.Requiescat))
                 return OriginalHook(PLD.Intervene);
 
             if (IsEnabled(CustomComboPreset.PaladinFastBladeSingleCombo))

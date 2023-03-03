@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.JobGauge.Types;
+using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
@@ -197,6 +198,12 @@ internal abstract partial class CustomCombo
         => Service.TargetManager.Target;
 
     /// <summary>
+    /// Gets the current soft target or null.
+    /// </summary>
+    protected static GameObject? SoftTarget
+        => Service.TargetManager.SoftTarget;
+
+    /// <summary>
     /// Gets the current territory type.
     /// 1069: solo.
     /// 1075: group.
@@ -267,7 +274,14 @@ internal abstract partial class CustomCombo
         => CurrentTarget is not null;
 
     /// <summary>
-    /// Check if the target can be interrupted.
+    /// Gets a value indicating whether the target is a soft target or not.
+    /// </summary>
+    /// <returns>A value indicating if the target is a soft target or not.</returns>
+    protected static bool HasSoftTarget()
+        => SoftTarget is not null;
+
+    /// <summary>
+    /// Gets a value indicating whether the target can be interrupted or not.
     /// </summary>
     /// <returns>A value indicating if the target can be interrupted by the player.</returns>
     protected static bool CanInterrupt
