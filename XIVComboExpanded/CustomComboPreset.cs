@@ -265,6 +265,10 @@ public enum CustomComboPreset
     [CustomComboInfo("A Barrage of Shadowbites", "Replace Quick Nock with Barrage when off cooldown and Shadowbite is available.", BRD.JobID)]
     BardShadowbiteBarrageFeature = 2321,
 
+    [EvilCombo]
+    [CustomComboInfo("Heavy Shot into Bloodletter", "Replaces Heavy Shot with Bloodletter if charges available.", BRD.JobID)]
+    BardBloodletterUpgradeFeature = 2322,
+
     #endregion
     // ====================================================================================
     #region DANCER
@@ -664,7 +668,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Shields on your Feet Feature", "Replace Shield Bash with Low Blow when available.", PLD.JobID)]
     PaladinShieldBashFeature = 1907,
 
-    [CustomComboInfo("Fast Blade Intervene Feature", "Replaces Fast Blade with Intervene when not in melee range and when Confiteur and Requiescat are not active.", PLD.JobID)]
+    [CustomComboInfo("Fast Blade Intervene Feature", "Replaces Fast Blade (and any combo) with Intervene when not in attack range.", PLD.JobID)]
     FastBladeInterveneFeature = 1908,
 
     [ConflictingCombos(PaladinRoyalAuthorityCombo, PaladinRoyalAuthorityDivineMightFeature)]
@@ -693,8 +697,12 @@ public enum CustomComboPreset
     PaladinRequiescatFightOrFlightFeature = 1914,
 
     [EvilCombo]
-    [CustomComboInfo("Sheltron Bulwark Feature", "Replaces (Holy) Sheltron with Bulkwark when off cooldown.", PLD.JobID)]
+    [CustomComboInfo("Sheltron Bulwark Feature", "Replaces Holy Sheltron with Bulkwark when off cooldown.", PLD.JobID)]
     PaladinBulwarkSheltronFeature = 1915,
+
+    [EvilCombo]
+    [CustomComboInfo("Sheltron Spender", "Adds Sheltron to Fast Blade Combo if Oath Gauge is full. (For really lazy gameplay. Might be inefficient!)", PLD.JobID)]
+    PaladinSheltronSpender = 1916,
 
     #endregion
     // ====================================================================================

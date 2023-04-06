@@ -319,8 +319,17 @@ internal class PaladinFastBladeSingleCombo : CustomCombo
         {
             var gauge = GetJobGauge<PLDGauge>();
 
-            if (IsEnabled(CustomComboPreset.FastBladeInterveneFeature) && level >= PLD.Levels.Intervene && !InMeleeRange && HasCharges(PLD.Intervene) && !HasEffect(PLD.Buffs.ConfiteorReady) && !HasEffect(PLD.Buffs.Requiescat))
+            if (IsEnabled(CustomComboPreset.FastBladeInterveneFeature) && level >= PLD.Levels.Intervene && !InMeleeRange && HasCharges(PLD.Intervene) && !HasEffect(PLD.Buffs.ConfiteorReady) && !HasEffect(PLD.Buffs.Requiescat) && !HasEffect(PLD.Buffs.DivineMight))
                 return OriginalHook(PLD.Intervene);
+
+            if (IsEnabled(CustomComboPreset.PaladinSheltronSpender) && InCombat())
+            {
+                if (level >= PLD.Levels.Sheltron && level <= PLD.Levels.HolySheltron && gauge.OathGauge >= 99)
+                    return OriginalHook(PLD.Sheltron);
+
+                if (level >= PLD.Levels.HolySheltron && gauge.OathGauge >= 99)
+                    return OriginalHook(PLD.HolySheltron);
+            }
 
             if (IsEnabled(CustomComboPreset.PaladinFastBladeSingleCombo))
             {
@@ -396,7 +405,7 @@ internal class PaladinBulwarkSheltronFeature : CustomCombo
 
     protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
     {
-        if (actionID == PLD.Sheltron || actionID == PLD.HolySheltron)
+        if (actionID == PLD.HolySheltron)
         {
             if (level >= PLD.Levels.Bulwark && IsOffCooldown(PLD.Bulwark))
                 return PLD.Bulwark;

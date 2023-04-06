@@ -92,6 +92,12 @@ internal class BardHeavyShot : CustomCombo
     {
         if (actionID == BRD.HeavyShot || actionID == BRD.BurstShot)
         {
+            if (IsEnabled(CustomComboPreset.BardBloodletterUpgradeFeature))
+            {
+                if (level >= BRD.Levels.Bloodletter && HasCharges(BRD.Bloodletter))
+                    return BRD.Bloodletter;
+            }
+
             if (IsEnabled(CustomComboPreset.BardApexFeature))
             {
                 var gauge = GetJobGauge<BRDGauge>();
@@ -410,9 +416,9 @@ internal class BardPeloton : CustomCombo
             var gauge = GetJobGauge<BRDGauge>();
 
             if (level >= BRD.Levels.PitchPerfect && gauge.Song == Song.WANDERER && HasTarget())
-                return BRD.PitchPerfect;
+                return BRD.WanderersMinuet;
 
-            return BRD.WanderersMinuet;
+            return BRD.Peloton;
         }
 
         return actionID;
