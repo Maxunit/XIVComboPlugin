@@ -134,8 +134,8 @@ public enum CustomComboPreset
     [CustomComboInfo("Enochian Feature", "Replace Fire 4 and Blizzard 4 with whichever action you can currently use.", BLM.JobID)]
     BlackEnochianFeature = 2501,
 
-    [CustomComboInfo("Umbral Soul/Transpose Switcher", "Replace Transpose with Umbral Soul when Umbral Soul is usable.", BLM.JobID)]
-    BlackManaFeature = 2502,
+    [CustomComboInfo("Transpose into Umbral Soul", "Replace Transpose with Umbral Soul when Umbral Soul is usable.", BLM.JobID)]
+    BlackTransposeUmbralSoulFeature = 2502,
 
     [CustomComboInfo("(Between the) Ley Lines", "Replace Ley Lines with BTL when Ley Lines is active.", BLM.JobID)]
     BlackLeyLinesFeature = 2503,
@@ -175,7 +175,7 @@ public enum CustomComboPreset
     BlackFireOption2 = 2513,
 
     [CustomComboInfo("Umbral Soul Feature", "Replace your ice spells with Umbral Soul, while in Umbral Ice and having no target.", BLM.JobID)]
-    BlackUmbralSoulFeature = 2514,
+    BlackSpellsUmbralSoulFeature = 2514,
 
     [ParentCombo(BlackEnochianFeature)]
     [CustomComboInfo("Enochian No Sync Feature", "Fire 4 and Blizzard 4 will not sync to Fire 1 and Blizzard 1.", BLM.JobID)]
@@ -183,6 +183,21 @@ public enum CustomComboPreset
 
     [CustomComboInfo("Thunder 3/4 to Sharpcast", "Thunder 3 and Thunder 4 become Sharpcast when available.", BLM.JobID)]
     BlackThunderFeature = 2516,
+
+    [ParentCombo(BlackThunderFeature)]
+    [CustomComboInfo("Delay replacement after casting Thunder", "Delay changing Thunder into Sharpcast immediately after casting Thunder.", BLM.JobID)]
+    BlackThunderDelayOption = 2517,
+
+    [ParentCombo(BlackBlizzardFeature)]
+    [CustomComboInfo("Paradox only during Umbral Ice", "Only replace Blizzard with Paradox during Umbral Ice.", BLM.JobID)]
+    BlackBlizzardParadoxOption = 2518,
+
+    [CustomComboInfo("Umbral Soul into Transpose", "Replace Umbral Soul with Transpose when Umbral Soul is not usable.", BLM.JobID)]
+    BlackUmbralSoulTransposeFeature = 2519,
+
+    [ParentCombo(BlackFire2Feature)]
+    [CustomComboInfo("Fire 2 Triplecast Option", "Shorten rotation when Triplecast is active to make both Flare casts instant.", BLM.JobID)]
+    BlackFire2TriplecastOption = 2520,
 
     #endregion
     // ====================================================================================
@@ -833,6 +848,16 @@ public enum CustomComboPreset
     [ParentCombo(ReaperHarpeHarvestMoonFeature)]
     [CustomComboInfo("Enhanced Harpe Option", "Prevent replacing Harpe with Harvest Moon when Enhanced Harpe is active.", RPR.JobID)]
     ReaperHarpeHarvestMoonEnhancedFeature = 3939,
+
+    [ParentCombo(ReaperSliceCombo)]
+    [EvilCombo]
+    [CustomComboInfo("Slice Death Design Upkeep", "Adds Shadow of Death to the Slice Combo whenever Death's Design is 10 seconds or less.", RPR.JobID)]
+    ReaperSliceDeathDesignUpkeep = 3940,
+
+    [ParentCombo(ReaperScytheCombo)]
+    [EvilCombo]
+    [CustomComboInfo("Scythe Death Design Upkeep", "Adds Whorl of Death to the Scythe Combo whenever Death's Design is 10 seconds or less.", RPR.JobID)]
+    ReaperScytheDeathDesignUpkeep = 3941,
 
     #endregion
     // ====================================================================================

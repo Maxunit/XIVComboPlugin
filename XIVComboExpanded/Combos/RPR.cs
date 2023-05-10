@@ -1,4 +1,5 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Types;
+using Dalamud.Game.ClientState.Statuses;
 
 namespace XIVComboExpandedPlugin.Combos;
 
@@ -14,6 +15,7 @@ internal static class RPR
         // AoE
         SpinningScythe = 24376,
         NightmareScythe = 24377,
+        WhorlofDeath = 24379,
         // Soul Reaver
         Gibbet = 24382,
         Gallows = 24383,
@@ -63,17 +65,20 @@ internal static class RPR
     public static class Debuffs
     {
         public const ushort
-            Placeholder = 0;
+            Placeholder = 0,
+            DeathsDesign = 2586;
     }
 
     public static class Levels
     {
         public const byte
             WaxingSlice = 5,
+            ShadowOfDeath = 10,
             HellsIngress = 20,
             HellsEgress = 20,
             SpinningScythe = 25,
             InfernalSlice = 30,
+            WhorlofDeath = 35,
             NightmareScythe = 45,
             BloodStalk = 50,
             GrimSwathe = 55,
@@ -155,6 +160,17 @@ internal class ReaperSlice : CustomCombo
                     return OriginalHook(RPR.Gallows);
             }
 
+            if (IsEnabled(CustomComboPreset.ReaperSliceDeathDesignUpkeep))
+            {
+                Status? deathsdesign = FindTargetEffect(RPR.Debuffs.DeathsDesign);
+
+                if (level >= RPR.Levels.ShadowOfDeath && HasTarget() && TargetHasEffect(RPR.Debuffs.DeathsDesign) && deathsdesign.RemainingTime <= 10)
+                    return RPR.ShadowOfDeath;
+
+                if (level >= RPR.Levels.ShadowOfDeath && HasTarget() && !TargetHasEffect(RPR.Debuffs.DeathsDesign))
+                    return RPR.ShadowOfDeath;
+            }
+
             if (IsEnabled(CustomComboPreset.ReaperSliceCombo))
             {
                 if (comboTime > 0)
@@ -217,6 +233,17 @@ internal class ReaperScythe : CustomCombo
             {
                 if (level >= RPR.Levels.Soulsow && !InCombat() && !HasEffect(RPR.Buffs.Soulsow))
                     return RPR.Soulsow;
+            }
+
+            if (IsEnabled(CustomComboPreset.ReaperScytheDeathDesignUpkeep))
+            {
+                Status? deathsdesign = FindTargetEffect(RPR.Debuffs.DeathsDesign);
+
+                if (level >= RPR.Levels.WhorlofDeath && HasTarget() && TargetHasEffect(RPR.Debuffs.DeathsDesign) && deathsdesign.RemainingTime <= 10)
+                    return RPR.WhorlofDeath;
+
+                if (level >= RPR.Levels.WhorlofDeath && HasTarget() && !TargetHasEffect(RPR.Debuffs.DeathsDesign))
+                    return RPR.WhorlofDeath;
             }
 
             if (IsEnabled(CustomComboPreset.ReaperScytheCombo))
@@ -328,7 +355,7 @@ internal class ReaperSoulSlice : CustomCombo
                         return RPR.Gluttony;
                 }
 
-                if (level >= RPR.Levels.BloodStalk && gauge.Soul > 50 && gauge.EnshroudedTimeRemaining == 0)
+                if (level >= RPR.Levels.BloodStalk && gauge.Soul >= 50 && gauge.EnshroudedTimeRemaining == 0)
                     // Unveiled Gibbet and Gallows
                     return OriginalHook(RPR.BloodStalk);
             }
@@ -356,7 +383,7 @@ internal class ReaperSoulScythe : CustomCombo
                         return RPR.Gluttony;
                 }
 
-                if (level >= RPR.Levels.GrimSwathe && gauge.Soul > 50 && gauge.EnshroudedTimeRemaining == 0)
+                if (level >= RPR.Levels.GrimSwathe && gauge.Soul >= 50 && gauge.EnshroudedTimeRemaining == 0)
                     return RPR.GrimSwathe;
             }
         }
