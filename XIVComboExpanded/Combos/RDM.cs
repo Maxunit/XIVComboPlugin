@@ -61,6 +61,8 @@ internal static class RDM
             Verthunder = 4,
             Veraero = 10,
             Scatter = 15,
+            Verfire = 26,
+            Verstone = 30,
             Zwerchhau = 35,
             Fleche = 45,
             Redoublement = 50,
@@ -413,41 +415,67 @@ internal class RedMageContreSixteFleche : CustomCombo
     }
 }
 
-/* internal class RedMageGaugeTest : CustomCombo
+internal class RedMageJoltGaugeBalancer : CustomCombo
 {
-    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.RedMageGaugeTest;
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.RedMageJoltGaugeBalancer;
 
-    protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
         if (actionID == RDM.Jolt || actionID == RDM.Jolt2)
         {
             var gauge = GetJobGauge<RDMGauge>();
 
-            if (gauge.WhiteMana == 0 && gauge.BlackMana == 0)
+            if (lastComboMove == RDM.Scorch && level >= RDM.Levels.Resolution)
+                return RDM.Resolution;
+
+            if ((lastComboMove == RDM.Verflare || lastComboMove == RDM.Verholy) && level >= RDM.Levels.Scorch)
+                return RDM.Scorch;
+
+            if (gauge.ManaStacks == 3)
             {
-                return actionID;
-            }
-            else
-            {
-                if (gauge.WhiteMana >= gauge.BlackMana)
-                {
-                    return RDM.Verthunder;
-                }
+                if (level >= RDM.Levels.Verholy && level <= RDM.Levels.Verflare)
+                    return RDM.Verholy;
+
+                if (level >= RDM.Levels.Verholy && level >= RDM.Levels.Verflare && (gauge.WhiteMana >= gauge.BlackMana))
+                    return RDM.Verholy;
+
+                // From 68-70
+                if (level >= RDM.Levels.Verflare && (gauge.BlackMana >= gauge.WhiteMana))
+                    return RDM.Verflare;
             }
 
-            if (gauge.WhiteMana == 0 && gauge.BlackMana == 0)
+            if (HasEffect(RDM.Buffs.VerstoneReady) && level >= RDM.Levels.Verstone)
+                return RDM.Verstone;
+
+            if (HasEffect(RDM.Buffs.VerfireReady) && level >= RDM.Levels.Verfire)
+                return RDM.Verfire;
+
+            if (level >= RDM.Levels.Veraero && (HasEffect(RDM.Buffs.Dualcast) || HasEffect(RDM.Buffs.Acceleration) || HasEffect(RDM.Buffs.Swiftcast) || HasEffect(RDM.Buffs.LostChainspell)) && (gauge.BlackMana >= gauge.WhiteMana || gauge.BlackMana == gauge.WhiteMana))
+                // Veraero3
+                return OriginalHook(RDM.Veraero);
+
+            if (level >= RDM.Levels.Verthunder && (HasEffect(RDM.Buffs.Dualcast) || HasEffect(RDM.Buffs.Acceleration) || HasEffect(RDM.Buffs.Swiftcast) || HasEffect(RDM.Buffs.LostChainspell)) && (gauge.WhiteMana >= gauge.BlackMana))
+                // Veraero3
+                return OriginalHook(RDM.Verthunder);
+
+            if (IsEnabled(CustomComboPreset.RedMageVerprocOpenerStoneFeature))
             {
-                return actionID;
+                if (level >= RDM.Levels.Veraero && !InCombat() && !HasEffect(RDM.Buffs.VerstoneReady))
+                    // Veraero3
+                    return OriginalHook(RDM.Veraero);
             }
-            else
+
+            if (IsEnabled(CustomComboPreset.RedMageVerprocOpenerFireFeature))
             {
-                if (gauge.BlackMana >= gauge.WhiteMana)
-                {
-                    return RDM.Veraero;
-                }
+                if (level >= RDM.Levels.Verthunder && !InCombat() && !HasEffect(RDM.Buffs.VerfireReady))
+                    // Verthunder3
+                    return OriginalHook(RDM.Verthunder);
             }
+
+            // Jolt
+            return OriginalHook(RDM.Jolt2);
         }
 
         return actionID;
     }
-} */
+}

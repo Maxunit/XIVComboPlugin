@@ -913,8 +913,10 @@ public enum CustomComboPreset
     [CustomComboInfo("Melee Mana Stacks Feature", "Replace Redoublement and Moulinet with Verflare/Verholy at 3 mana stacks, using whichever mana color is lower.", RDM.JobID)]
     RedMageMeleeManaStacksFeature = 3516,
 
-    /* [CustomComboInfo("Gauge Test!", "This is a Gauge Balancer Test! DO NOT USE!", RDM.JobID)]
-    RedMageGaugeTest = 3517, */
+    [EvilCombo]
+    [ConflictingCombos(RedMageVerprocCapstoneCombo, RedMageVerprocManaStacksFeature, RedMageVerprocPlusFeature, RedMageVerprocFeature)]
+    [CustomComboInfo("Jolt Gauge Balancer", "Switches between White and Dark Spells depending on how balanced out the Gauge is.", RDM.JobID)]
+    RedMageJoltGaugeBalancer = 3517,
 
     #endregion
     // ====================================================================================
