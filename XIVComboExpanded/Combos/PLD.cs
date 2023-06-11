@@ -377,22 +377,20 @@ internal class PaladinScornfulSpiritsExtended : CustomCombo
     {
         if (actionID == PLD.FightOrFlight)
         {
-            if (level >= PLD.Levels.GoringBlade && HasEffect(PLD.Buffs.FightOrFlight) && IsOffCooldown(PLD.GoringBlade))
-                return PLD.GoringBlade;
-
             if (level >= PLD.Levels.Expiacion && IsOnCooldown(PLD.FightOrFlight))
-                return CalcBestAction(actionID, PLD.Expiacion, PLD.CircleOfScorn, PLD.Requiescat);
+                return CalcBestAction(actionID, PLD.Expiacion, PLD.Requiescat, PLD.GoringBlade, PLD.CircleOfScorn, PLD.SpiritsWithin, PLD.FightOrFlight);
 
             if (level >= PLD.Levels.Requiescat && level <= PLD.Levels.Expiacion && IsOnCooldown(PLD.FightOrFlight))
-                return CalcBestAction(actionID, PLD.SpiritsWithin, PLD.CircleOfScorn, PLD.Requiescat);
+                return CalcBestAction(actionID, PLD.Requiescat, PLD.GoringBlade, PLD.CircleOfScorn, PLD.SpiritsWithin, PLD.FightOrFlight);
 
-            if (level >= PLD.Levels.CircleOfScorn && level <= PLD.Levels.Requiescat && IsOnCooldown(PLD.FightOrFlight))
-                return CalcBestAction(actionID, PLD.SpiritsWithin, PLD.CircleOfScorn);
+            if (level >= PLD.Levels.GoringBlade && level <= PLD.Levels.Requiescat && IsOnCooldown(PLD.FightOrFlight))
+                return CalcBestAction(actionID, PLD.GoringBlade, PLD.CircleOfScorn, PLD.SpiritsWithin, PLD.FightOrFlight);
+
+            if (level >= PLD.Levels.CircleOfScorn && level <= PLD.Levels.GoringBlade && IsOnCooldown(PLD.FightOrFlight))
+                return CalcBestAction(actionID, PLD.CircleOfScorn, PLD.SpiritsWithin, PLD.FightOrFlight);
 
             if (level >= PLD.Levels.SpiritsWithin && level <= PLD.Levels.CircleOfScorn && IsOnCooldown(PLD.FightOrFlight))
-                return PLD.SpiritsWithin;
-
-            return PLD.FightOrFlight;
+                return CalcBestAction(actionID, PLD.SpiritsWithin, PLD.FightOrFlight);
         }
 
         return actionID;
