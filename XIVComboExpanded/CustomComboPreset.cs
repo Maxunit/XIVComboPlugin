@@ -662,6 +662,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Royal Authority Combo", "Replace Royal Authority with its combo chain.", PLD.JobID)]
     PaladinRoyalAuthorityCombo = 1901,
 
+    [ParentCombo(PaladinRoyalAuthorityCombo)]
     [CustomComboInfo("Royal Authority Atonement Feature", "Replace Royal Authority with Atonement when under the effect of Sword Oath.", PLD.JobID)]
     PaladinRoyalAuthorityAtonementFeature = 1902,
 
@@ -701,7 +702,8 @@ public enum CustomComboPreset
     PaladinFightOrFlightGoringBladeFeature = 1911,
 
     [ConflictingCombos(PaladinFastBladeSingleCombo)]
-    [CustomComboInfo("Royal Authority Divine Might Feature", "Replace Royal Authority with Holy Spirit when Divine Might is active.", PLD.JobID)]
+    [ParentCombo(PaladinRoyalAuthorityCombo)]
+    [CustomComboInfo("Royal Authority Divine Might Feature", "Replace Royal Authority with Holy Spirit when Divine Might would overcap.", PLD.JobID)]
     PaladinRoyalAuthorityDivineMightFeature = 1912,
 
     [ParentCombo(PaladinProminenceCombo)]
@@ -718,6 +720,11 @@ public enum CustomComboPreset
     [EvilCombo]
     [CustomComboInfo("Sheltron Spender", "Adds Sheltron to Fast Blade Combo if Oath Gauge is full. (For really lazy gameplay. Might be inefficient!)", PLD.JobID)]
     PaladinSheltronSpender = 1916,
+
+    [ConflictingCombos(PaladinFastBladeSingleCombo)]
+    [ParentCombo(PaladinRoyalAuthorityCombo)]
+    [CustomComboInfo("Royal Authority Fight or Flight Feature", "Replace Royal Authority with Holy Spirit during Fight or Flight when Divine Might is active.", PLD.JobID)]
+    PaladinRoyalAuthorityFightOrFlightFeature = 1917,
 
     #endregion
     // ====================================================================================

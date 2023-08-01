@@ -1,7 +1,4 @@
-using System.Reflection.Metadata.Ecma335;
-
 using Dalamud.Game.ClientState.JobGauge.Types;
-using Dalamud.Game.ClientState.Statuses;
 
 namespace XIVComboExpandedPlugin.Combos;
 
@@ -22,6 +19,7 @@ internal static class PLD
         Sheltron = 3542,
         GoringBlade = 3538,
         RoyalAuthority = 3539,
+        Clemency = 3541,
         TotalEclipse = 7381,
         Requiescat = 7383,
         HolySpirit = 7384,
@@ -66,6 +64,7 @@ internal static class PLD
             GoringBlade = 54,
             RoyalAuthority = 60,
             HolySpirit = 64,
+            DivineMagicMastery = 64,
             Requiescat = 68,
             HolyCircle = 72,
             Intervene = 74,
@@ -79,7 +78,37 @@ internal static class PLD
     }
 }
 
-internal class PaladinRoyalAuthority : CustomCombo
+internal abstract class PaladinCombo : CustomCombo
+{
+    protected bool HasMp(uint spell)
+    {
+        int cost;
+        switch (spell)
+        {
+            case PLD.Clemency:
+                cost = 4000;
+                break;
+            case PLD.HolySpirit:
+            case PLD.HolyCircle:
+            case PLD.Confiteor:
+            case PLD.BladeOfFaith:
+            case PLD.BladeOfTruth:
+            case PLD.BladeOfValor:
+                cost = 2000;
+                break;
+            default:
+                cost = 0;
+                break;
+        }
+
+        if (LocalPlayer?.Level >= PLD.Levels.DivineMagicMastery)
+            cost /= 2;
+
+        return LocalPlayer?.CurrentMp >= cost;
+    }
+}
+
+internal class PaladinRoyalAuthority : PaladinCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PldAny;
 
@@ -88,9 +117,9 @@ internal class PaladinRoyalAuthority : CustomCombo
         if (actionID == PLD.RageOfHalone || actionID == PLD.RoyalAuthority)
         {
             // During FoF, prioritize the higher-potency Divine Might cast over Atonement and the normal combo chain
-            if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityDivineMightFeature))
+            if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityFightOrFlightFeature))
             {
-                if (HasEffect(PLD.Buffs.FightOrFlight) && HasEffect(PLD.Buffs.DivineMight))
+                if (HasEffect(PLD.Buffs.FightOrFlight) && HasEffect(PLD.Buffs.DivineMight) && HasMp(PLD.HolySpirit))
                     return PLD.HolySpirit;
             }
 
@@ -108,7 +137,7 @@ internal class PaladinRoyalAuthority : CustomCombo
                     {
                         if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityDivineMightFeature))
                         {
-                            if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight))
+                            if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight) && HasMp(PLD.HolySpirit))
                                 return PLD.HolySpirit;
                         }
 
@@ -128,7 +157,7 @@ internal class PaladinRoyalAuthority : CustomCombo
     }
 }
 
-internal class PaladinProminence : CustomCombo
+internal class PaladinProminence : PaladinCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PaladinProminenceCombo;
 
@@ -139,7 +168,7 @@ internal class PaladinProminence : CustomCombo
             // During FoF, prioritize the higher-potency Divine Might cast over Atonement and the normal combo chain
             if (IsEnabled(CustomComboPreset.PaladinProminenceDivineMightFeature))
             {
-                if (HasEffect(PLD.Buffs.FightOrFlight) && HasEffect(PLD.Buffs.DivineMight))
+                if (HasEffect(PLD.Buffs.FightOrFlight) && HasEffect(PLD.Buffs.DivineMight) && HasMp(PLD.HolyCircle))
                     return PLD.HolyCircle;
             }
 
@@ -153,6 +182,12 @@ internal class PaladinProminence : CustomCombo
             {
                 if (lastComboMove == PLD.TotalEclipse && level >= PLD.Levels.Prominence)
                 {
+                    if (IsEnabled(CustomComboPreset.PaladinProminenceDivineMightFeature))
+                    {
+                        if (level >= PLD.Levels.HolyCircle && HasEffect(PLD.Buffs.DivineMight) && HasMp(PLD.HolyCircle))
+                            return PLD.HolyCircle;
+                    }
+
                     return PLD.Prominence;
                 }
             }
@@ -164,7 +199,7 @@ internal class PaladinProminence : CustomCombo
     }
 }
 
-internal class PaladinHolySpiritHolyCircle : CustomCombo
+internal class PaladinHolySpiritHolyCircle : PaladinCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PaladinConfiteorFeature;
 
@@ -190,7 +225,7 @@ internal class PaladinHolySpiritHolyCircle : CustomCombo
     }
 }
 
-internal class PaladinFightOrFlight : CustomCombo
+internal class PaladinFightOrFlight : PaladinCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PldAny;
 
@@ -209,7 +244,7 @@ internal class PaladinFightOrFlight : CustomCombo
     }
 }
 
-internal class PaladinRequiescat : CustomCombo
+internal class PaladinRequiescat : PaladinCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PldAny;
 
@@ -272,7 +307,7 @@ internal class PaladinRequiescat : CustomCombo
     }
 }
 
-internal class PaladinSpiritsWithinCircleOfScorn : CustomCombo
+internal class PaladinSpiritsWithinCircleOfScorn : PaladinCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PaladinScornfulSpiritsFeature;
 
@@ -293,7 +328,7 @@ internal class PaladinSpiritsWithinCircleOfScorn : CustomCombo
     }
 }
 
-internal class PaladinShieldBashFeature : CustomCombo
+internal class PaladinShieldBash : PaladinCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AdvAny;
 
@@ -309,7 +344,7 @@ internal class PaladinShieldBashFeature : CustomCombo
     }
 }
 
-internal class PaladinFastBladeSingleCombo : CustomCombo
+internal class PaladinFastBladeSingleCombo : PaladinCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PldAny;
 
@@ -333,7 +368,7 @@ internal class PaladinFastBladeSingleCombo : CustomCombo
 
             if (IsEnabled(CustomComboPreset.PaladinFastBladeSingleCombo))
             {
-                if (level >= PLD.Levels.Confiteor && LocalPlayer?.CurrentMp > 1000)
+                if (level >= PLD.Levels.Confiteor && HasMp(PLD.Confiteor))
                 {
                     var original = OriginalHook(PLD.Confiteor);
                     if (original != PLD.Confiteor)
@@ -343,7 +378,7 @@ internal class PaladinFastBladeSingleCombo : CustomCombo
                         return OriginalHook(PLD.Confiteor);
                 }
 
-                if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight) && LocalPlayer?.CurrentMp > 1000)
+                if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight) && HasMp(PLD.HolySpirit))
                     return OriginalHook(PLD.HolySpirit);
 
                 if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityAtonementFeature))
@@ -403,9 +438,11 @@ internal class PaladinBulwarkSheltronFeature : CustomCombo
 
     protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
     {
-        if (actionID == PLD.HolySheltron)
+        var gauge = GetJobGauge<PLDGauge>();
+
+        if (actionID == PLD.Sheltron)
         {
-            if (level >= PLD.Levels.Bulwark && IsOffCooldown(PLD.Bulwark))
+            if (level >= PLD.Levels.Bulwark && (IsOffCooldown(PLD.Bulwark) && gauge.OathGauge <= 50))
                 return PLD.Bulwark;
         }
 
