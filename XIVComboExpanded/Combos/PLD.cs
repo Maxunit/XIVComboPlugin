@@ -119,8 +119,11 @@ internal class PaladinRoyalAuthority : PaladinCombo
             // During FoF, prioritize the higher-potency Divine Might cast over Atonement and the normal combo chain
             if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityFightOrFlightFeature))
             {
-                if (HasEffect(PLD.Buffs.FightOrFlight) && HasEffect(PLD.Buffs.DivineMight) && HasMp(PLD.HolySpirit))
-                    return PLD.HolySpirit;
+                if (HasEffect(PLD.Buffs.FightOrFlight) && HasEffect(PLD.Buffs.DivineMight))
+                {
+                    if (level >= PLD.Levels.HolySpirit && this.HasMp(PLD.HolySpirit))
+                        return PLD.HolySpirit;
+                }
             }
 
             if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityAtonementFeature))
@@ -137,8 +140,11 @@ internal class PaladinRoyalAuthority : PaladinCombo
                     {
                         if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityDivineMightFeature))
                         {
-                            if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight) && HasMp(PLD.HolySpirit))
-                                return PLD.HolySpirit;
+                            if (HasEffect(PLD.Buffs.DivineMight))
+                            {
+                                if (level >= PLD.Levels.HolySpirit && this.HasMp(PLD.HolySpirit))
+                                    return PLD.HolySpirit;
+                            }
                         }
 
                         // Royal Authority
@@ -165,11 +171,14 @@ internal class PaladinProminence : PaladinCombo
     {
         if (actionID == PLD.Prominence)
         {
-            // During FoF, prioritize the higher-potency Divine Might cast over Atonement and the normal combo chain
+            // During FoF, prioritize the higher-potency Divine Might cast over the normal combo chain
             if (IsEnabled(CustomComboPreset.PaladinProminenceDivineMightFeature))
             {
-                if (HasEffect(PLD.Buffs.FightOrFlight) && HasEffect(PLD.Buffs.DivineMight) && HasMp(PLD.HolyCircle))
-                    return PLD.HolyCircle;
+                if (HasEffect(PLD.Buffs.FightOrFlight) && HasEffect(PLD.Buffs.DivineMight))
+                {
+                    if (level >= PLD.Levels.HolyCircle && this.HasMp(PLD.HolyCircle))
+                        return PLD.HolyCircle;
+                }
             }
 
             if (IsEnabled(CustomComboPreset.PaladinProminenceDivineMightFeature) && level >= PLD.Levels.Prominence)
@@ -184,8 +193,11 @@ internal class PaladinProminence : PaladinCombo
                 {
                     if (IsEnabled(CustomComboPreset.PaladinProminenceDivineMightFeature))
                     {
-                        if (level >= PLD.Levels.HolyCircle && HasEffect(PLD.Buffs.DivineMight) && HasMp(PLD.HolyCircle))
-                            return PLD.HolyCircle;
+                        if (HasEffect(PLD.Buffs.DivineMight))
+                        {
+                            if (level >= PLD.Levels.HolyCircle && this.HasMp(PLD.HolyCircle))
+                                return PLD.HolyCircle;
+                        }
                     }
 
                     return PLD.Prominence;
@@ -368,7 +380,7 @@ internal class PaladinFastBladeSingleCombo : PaladinCombo
 
             if (IsEnabled(CustomComboPreset.PaladinFastBladeSingleCombo))
             {
-                if (level >= PLD.Levels.Confiteor && HasMp(PLD.Confiteor))
+                if (level >= PLD.Levels.Confiteor && this.HasMp(PLD.Confiteor))
                 {
                     var original = OriginalHook(PLD.Confiteor);
                     if (original != PLD.Confiteor)
@@ -378,8 +390,11 @@ internal class PaladinFastBladeSingleCombo : PaladinCombo
                         return OriginalHook(PLD.Confiteor);
                 }
 
-                if (level >= PLD.Levels.HolySpirit && HasEffect(PLD.Buffs.DivineMight) && HasMp(PLD.HolySpirit))
-                    return OriginalHook(PLD.HolySpirit);
+                if (HasEffect(PLD.Buffs.DivineMight))
+                {
+                    if (level >= PLD.Levels.HolySpirit && this.HasMp(PLD.HolySpirit))
+                        return OriginalHook(PLD.HolySpirit);
+                }
 
                 if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityAtonementFeature))
                 {
