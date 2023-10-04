@@ -1,9 +1,11 @@
 using System;
 using System.Linq;
 
+using Dalamud.Game;
 using Dalamud.Game.Command;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
+using Dalamud.Plugin.Services;
 using XIVComboExpandedPlugin.Interface;
 
 namespace XIVComboExpandedPlugin;
@@ -22,7 +24,9 @@ public sealed partial class XIVComboExpandedPlugin : IDalamudPlugin
     /// Initializes a new instance of the <see cref="XIVComboExpandedPlugin"/> class.
     /// </summary>
     /// <param name="pluginInterface">Dalamud plugin interface.</param>
-    public XIVComboExpandedPlugin(DalamudPluginInterface pluginInterface)
+    /// <param name="sigScanner">Dalamud sig scanner.</param>
+    /// <param name="gameInteropProvider">Game Interop Provider.</param>
+    public XIVComboExpandedPlugin(DalamudPluginInterface pluginInterface, ISigScanner sigScanner, IGameInteropProvider gameInteropProvider)
     {
         /* FFXIVClientStructs.Interop.Resolver.GetInstance.SetupSearchSpace();
         FFXIVClientStructs.Interop.Resolver.GetInstance.Resolve(); */
@@ -31,13 +35,13 @@ public sealed partial class XIVComboExpandedPlugin : IDalamudPlugin
 
         Service.Configuration = pluginInterface.GetPluginConfig() as PluginConfiguration ?? new PluginConfiguration();
         Service.Address = new PluginAddressResolver();
-        Service.Address.Setup();
+        Service.Address.Setup((SigScanner)sigScanner);
 
         if (Service.Configuration.Version == 4)
             this.UpgradeConfig4();
 
         Service.ComboCache = new CustomComboCache();
-        Service.IconReplacer = new IconReplacer();
+        Service.IconReplacer = new IconReplacer(gameInteropProvider);
 
         this.configWindow = new();
         this.windowSystem = new("XIVComboExpanded");
