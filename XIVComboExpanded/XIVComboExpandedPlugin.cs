@@ -25,7 +25,7 @@ public sealed partial class XIVComboExpandedPlugin : IDalamudPlugin
     /// </summary>
     /// <param name="pluginInterface">Dalamud plugin interface.</param>
     /// <param name="sigScanner">Dalamud sig scanner.</param>
-    /// <param name="gameInteropProvider">Game Interop Provider.</param>
+    /// <param name="gameInteropProvider">Dalamud Game Interop Provider.</param>
     public XIVComboExpandedPlugin(DalamudPluginInterface pluginInterface, ISigScanner sigScanner, IGameInteropProvider gameInteropProvider)
     {
         /* FFXIVClientStructs.Interop.Resolver.GetInstance.SetupSearchSpace();
