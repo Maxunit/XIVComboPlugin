@@ -52,7 +52,7 @@ internal class SwiftRaiseFeature : CustomCombo
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
         if ((actionID == AST.Ascend && level >= AST.Levels.Ascend) ||
-            (actionID == SCH.Ressurection && level >= SCH.Levels.Ressurection) ||
+            (actionID == SCH.Resurection && level >= SCH.Levels.Resurection) ||
             (actionID == SGE.Egeiro && level >= SGE.Levels.Egeiro) ||
             (actionID == WHM.Raise && level >= WHM.Levels.Raise) ||
             (actionID == RDM.Verraise && level >= RDM.Levels.Verraise && !HasEffect(RDM.Buffs.Dualcast)) ||
@@ -73,7 +73,7 @@ internal class VariantRaiseFeature : CustomCombo
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
         if ((actionID == AST.Ascend && level >= AST.Levels.Ascend) ||
-            (actionID == SCH.Ressurection && level >= SCH.Levels.Ressurection) ||
+            (actionID == SCH.Resurection && level >= SCH.Levels.Resurection) ||
             (actionID == SGE.Egeiro && level >= SGE.Levels.Egeiro) ||
             (actionID == WHM.Raise && level >= WHM.Levels.Raise) ||
             (actionID == RDM.Verraise && level >= RDM.Levels.Verraise && !HasEffect(RDM.Buffs.Dualcast)) ||

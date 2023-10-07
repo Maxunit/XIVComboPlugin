@@ -582,8 +582,16 @@ public enum CustomComboPreset
     MonkFormlessSnakesOption = 2011,
 
     [ConflictingCombos(MonkTwinSnakesFeature)]
-    [CustomComboInfo("True Strike / Twin Snakes Feature", "Replace True Strike with Twin Snakes if Twin Snakes has less than 6s remaining.", MNK.JobID)]
+    [CustomComboInfo("True Strike / Twin Snakes Feature", "Replace True Strike with Twin Snakes if Twin Snakes has less than 6s remaining or isn't applied yet.", MNK.JobID)]
     MonkTrueStrikeFeature = 2012,
+
+    [ConflictingCombos(MonkDemolishFeature)]
+    [CustomComboInfo("Snap Punch / Demolish Feature", "Replace Snap Punch with Demolish if Demolish has less than 6s remaining on your current target or isn't applied yet.", MNK.JobID)]
+    MonkSnapPunchFeature = 2013,
+
+    [ParentCombo(MonkTrueStrikeFeature)]
+    [CustomComboInfo("Formless Strike Option", "While Formless Fist is active, do not replace True Strike.", MNK.JobID)]
+    MonkFormlessStrikeOption = 2014,
 
     #endregion
     // ====================================================================================
@@ -1075,6 +1083,9 @@ public enum CustomComboPreset
 
     [CustomComboInfo("Adloquium Level Sync", "Replace Adloquium with Physick when below level 30 in synced content.", SCH.JobID)]
     ScholarAdloquiumSyncFeature = 2810,
+
+    [CustomComboInfo("Sacred Soil Aetherflow", "Replace Sacred Soil with Aetherflow when you have no more Aetherflow stacks.", SCH.JobID)]
+    ScholarSacredSoilAetherflowFeature = 2811,
 
     #endregion
     // ====================================================================================

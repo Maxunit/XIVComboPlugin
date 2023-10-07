@@ -10,7 +10,7 @@ internal static class SCH
     public const uint
         Aetherflow = 166,
         EnergyDrain = 167,
-        Ressurection = 173,
+        Resurection = 173,
         Adloquium = 185,
         SacredSoil = 188,
         Lustrate = 189,
@@ -48,7 +48,7 @@ internal static class SCH
     public static class Levels
     {
         public const byte
-            Ressurection = 12,
+            Resurection = 12,
             Adloquium = 30,
             Aetherflow = 45,
             Lustrate = 45,
@@ -165,6 +165,24 @@ internal class ScholarIndomitability : CustomCombo
             var gauge = GetJobGauge<SCHGauge>();
 
             if (level >= SCH.Levels.Aetherflow && gauge.Aetherflow == 0 && !HasEffect(SCH.Buffs.Recitation))
+                return SCH.Aetherflow;
+        }
+
+        return actionID;
+    }
+}
+
+internal class ScholarSacredSoil : CustomCombo
+{
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.ScholarSacredSoilAetherflowFeature;
+
+    protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+    {
+        if (actionID == SCH.SacredSoil)
+        {
+            var gauge = GetJobGauge<SCHGauge>();
+
+            if (level >= SCH.Levels.Aetherflow && gauge.Aetherflow == 0)
                 return SCH.Aetherflow;
         }
 
