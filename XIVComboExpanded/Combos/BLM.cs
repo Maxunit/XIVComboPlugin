@@ -93,7 +93,7 @@ internal class BlackFireBlizzard4 : CustomCombo
 
             if (IsEnabled(CustomComboPreset.BlackSpellsUmbralSoulFeature))
             {
-                if (level >= BLM.Levels.UmbralSoul && gauge.InUmbralIce && !HasTarget())
+                if (CanUseAction(BLM.UmbralSoul) && gauge.InUmbralIce && !HasTarget())
                     return BLM.UmbralSoul;
             }
         }
@@ -108,11 +108,11 @@ internal class BlackFireBlizzard4 : CustomCombo
                 {
                     if (IsEnabled(CustomComboPreset.BlackEnochianDespairFeature))
                     {
-                        if (level >= BLM.Levels.Despair && LocalPlayer?.CurrentMp < 2400)
+                        if (CanUseAction(BLM.Despair) && LocalPlayer?.CurrentMp < 2400)
                             return BLM.Despair;
                     }
 
-                    if (IsEnabled(CustomComboPreset.BlackEnochianNoSyncFeature) || level >= BLM.Levels.Fire4)
+                    if (IsEnabled(CustomComboPreset.BlackEnochianNoSyncFeature) || CanUseAction(BLM.Fire4))
                         return BLM.Fire4;
 
                     return BLM.Fire;
@@ -120,7 +120,7 @@ internal class BlackFireBlizzard4 : CustomCombo
 
                 if (gauge.InUmbralIce)
                 {
-                    if (IsEnabled(CustomComboPreset.BlackEnochianNoSyncFeature) || level >= BLM.Levels.Blizzard4)
+                    if (IsEnabled(CustomComboPreset.BlackEnochianNoSyncFeature) || CanUseAction(BLM.Blizzard4))
                         return BLM.Blizzard4;
 
                     return BLM.Blizzard;
@@ -142,7 +142,7 @@ internal class BlackTranspose : CustomCombo
         {
             var gauge = GetJobGauge<BLMGauge>();
 
-            if (level >= BLM.Levels.UmbralSoul && gauge.IsEnochianActive && gauge.InUmbralIce)
+            if (CanUseAction(BLM.UmbralSoul) && gauge.IsEnochianActive && gauge.InUmbralIce)
                 return BLM.UmbralSoul;
         }
 
@@ -160,7 +160,7 @@ internal class BlackUmbralSoul : CustomCombo
         {
             var gauge = GetJobGauge<BLMGauge>();
 
-            if (level < BLM.Levels.UmbralSoul || (gauge.IsEnochianActive && gauge.InAstralFire))
+            if (!CanUseAction(BLM.UmbralSoul) || (gauge.IsEnochianActive && gauge.InAstralFire))
                 return BLM.Transpose;
         }
 
@@ -176,7 +176,7 @@ internal class BlackLeyLines : CustomCombo
     {
         if (actionID == BLM.LeyLines)
         {
-            if (level >= BLM.Levels.BetweenTheLines && HasEffect(BLM.Buffs.LeyLines))
+            if (CanUseAction(BLM.BetweenTheLines) && HasEffect(BLM.Buffs.LeyLines))
                 return BLM.BetweenTheLines;
         }
 
@@ -194,10 +194,10 @@ internal class BlackFire : CustomCombo
         {
             var gauge = GetJobGauge<BLMGauge>();
 
-            if (level >= BLM.Levels.Paradox && gauge.IsParadoxActive && gauge.InUmbralIce)
+            if (CanUseAction(BLM.Paradox) && gauge.IsParadoxActive && gauge.InUmbralIce)
                 return BLM.Paradox;
 
-            if (level >= BLM.Levels.Fire3)
+            if (CanUseAction(BLM.Fire3))
             {
                 if (IsEnabled(CustomComboPreset.BlackFireOption))
                 {
@@ -232,19 +232,19 @@ internal class BlackBlizzard : CustomCombo
 
             if (IsEnabled(CustomComboPreset.BlackSpellsUmbralSoulFeature))
             {
-                if (level >= BLM.Levels.UmbralSoul && gauge.InUmbralIce && !HasTarget())
+                if (CanUseAction(BLM.UmbralSoul) && gauge.InUmbralIce && !HasTarget())
                     return BLM.UmbralSoul;
             }
 
             if (IsEnabled(CustomComboPreset.BlackBlizzardFeature))
             {
-                if (level >= BLM.Levels.Paradox && gauge.IsParadoxActive)
+                if (CanUseAction(BLM.Paradox) && gauge.IsParadoxActive)
                 {
                     if (gauge.InUmbralIce || (!IsEnabled(CustomComboPreset.BlackBlizzardParadoxOption) && LocalPlayer?.CurrentMp >= 1600))
                         return BLM.Paradox;
                 }
 
-                if (level >= BLM.Levels.Blizzard3)
+                if (CanUseAction(BLM.Blizzard3))
                     return BLM.Blizzard3;
 
                 return BLM.Blizzard;
@@ -267,7 +267,7 @@ internal class BlackFreezeFlare : CustomCombo
 
             if (IsEnabled(CustomComboPreset.BlackSpellsUmbralSoulFeature))
             {
-                if (level >= BLM.Levels.UmbralSoul && gauge.InUmbralIce && !HasTarget())
+                if (CanUseAction(BLM.UmbralSoul) && gauge.InUmbralIce && !HasTarget())
                     return BLM.UmbralSoul;
             }
         }
@@ -278,10 +278,10 @@ internal class BlackFreezeFlare : CustomCombo
 
             if (IsEnabled(CustomComboPreset.BlackFreezeFlareFeature))
             {
-                if (level >= BLM.Levels.Freeze && gauge.InUmbralIce)
+                if (CanUseAction(BLM.Freeze) && gauge.InUmbralIce)
                     return BLM.Freeze;
 
-                if (level >= BLM.Levels.Flare && gauge.InAstralFire)
+                if (CanUseAction(BLM.Flare) && gauge.InAstralFire)
                     return BLM.Flare;
             }
         }
@@ -306,7 +306,7 @@ internal class BlackFire2 : CustomCombo
                     return actionID;
             }
 
-            if (level >= BLM.Levels.Flare && gauge.InAstralFire)
+            if (CanUseAction(BLM.Flare) && gauge.InAstralFire)
             {
                 // Lv 50 rotation without Umbral Hearts
                 if (LocalPlayer?.CurrentMp < BLM.MpCosts.Fire2 + BLM.MpCosts.Flare)
@@ -346,7 +346,7 @@ internal class BlackBlizzard2 : CustomCombo
 
             if (IsEnabled(CustomComboPreset.BlackSpellsUmbralSoulFeature))
             {
-                if (level >= BLM.Levels.UmbralSoul && gauge.InUmbralIce && !HasTarget())
+                if (CanUseAction(BLM.UmbralSoul) && gauge.InUmbralIce && !HasTarget())
                     return BLM.UmbralSoul;
             }
 
@@ -358,7 +358,7 @@ internal class BlackBlizzard2 : CustomCombo
                         return actionID;
                 }
 
-                if (level >= BLM.Levels.Freeze && gauge.InUmbralIce)
+                if (CanUseAction(BLM.Freeze) && gauge.InUmbralIce)
                     return BLM.Freeze;
             }
         }
@@ -377,7 +377,7 @@ internal class BlackScathe : CustomCombo
         {
             var gauge = GetJobGauge<BLMGauge>();
 
-            if (level >= BLM.Levels.Xenoglossy && gauge.PolyglotStacks > 0)
+            if (CanUseAction(BLM.Xenoglossy) && gauge.PolyglotStacks > 0)
                 return BLM.Xenoglossy;
         }
 
@@ -401,7 +401,7 @@ internal class BlackThunder : CustomCombo
                 if (HasCharges(BLM.Sharpcast) && !HasEffect(BLM.Buffs.Sharpcast))
                     return BLM.Sharpcast;
             }
-            else if (level >= BLM.Levels.Sharpcast)
+            else if (CanUseAction(BLM.Sharpcast))
             {
                 if (IsOffCooldown(BLM.Sharpcast))
                     return BLM.Sharpcast;

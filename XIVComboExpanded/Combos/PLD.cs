@@ -15,6 +15,7 @@ internal static class PLD
         RageOfHalone = 21,
         Bulwark = 22,
         CircleOfScorn = 23,
+        ShieldLob = 24,
         SpiritsWithin = 29,
         Sheltron = 3542,
         GoringBlade = 3538,
@@ -55,6 +56,7 @@ internal static class PLD
         public const byte
             FightOrFlight = 2,
             RiotBlade = 4,
+            ShieldLob = 15,
             SpiritsWithin = 30,
             Sheltron = 35,
             CircleOfScorn = 50,
@@ -237,6 +239,18 @@ internal class PaladinHolySpiritHolyCircle : PaladinCombo
     }
 }
 
+internal class PaladinHolySpirit : PaladinCombo
+{
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PldAny;
+
+    protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+    {
+        if (actionID == PLD.HolySpirit && level >= PLD.Levels.ShieldLob && level <= PLD.Levels.HolySpirit)
+            return PLD.ShieldLob;
+        return actionID;
+    }
+}
+
 internal class PaladinFightOrFlight : PaladinCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PldAny;
@@ -366,7 +380,7 @@ internal class PaladinFastBladeSingleCombo : PaladinCombo
         {
             var gauge = GetJobGauge<PLDGauge>();
 
-            if (IsEnabled(CustomComboPreset.FastBladeInterveneFeature) && level >= PLD.Levels.Intervene && !InMeleeRange && HasCharges(PLD.Intervene) && !HasEffect(PLD.Buffs.ConfiteorReady) && !HasEffect(PLD.Buffs.Requiescat) && !HasEffect(PLD.Buffs.DivineMight))
+            if (IsEnabled(CustomComboPreset.FastBladeInterveneFeature) && level >= PLD.Levels.Intervene && (!InMeleeRange || !InSoftMeleeRange) && HasCharges(PLD.Intervene) && !HasEffect(PLD.Buffs.ConfiteorReady) && !HasEffect(PLD.Buffs.Requiescat) && !HasEffect(PLD.Buffs.DivineMight))
                 return OriginalHook(PLD.Intervene);
 
             if (IsEnabled(CustomComboPreset.PaladinSheltronSpender) && InCombat())

@@ -123,11 +123,9 @@ internal static class SGE
         {
             if (actionID == SGE.Dyskrasia)
             {
-                var gauge = GetJobGauge<SGEGauge>();
-
                 if (IsEnabled(CustomComboPreset.SageDyskrasiaIcarus))
                 {
-                    if (level >= SGE.Levels.Icarus && HasTarget() && !InMeleeRange && !IsOnCooldown(SGE.Icarus))
+                    if (level >= SGE.Levels.Icarus && (!InMeleeRange || !InSoftMeleeRange) && !IsOnCooldown(SGE.Icarus))
                         return SGE.Icarus;
                 }
 

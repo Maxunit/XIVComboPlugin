@@ -57,7 +57,9 @@ public sealed partial class XIVComboExpandedPlugin : IDalamudPlugin
         });
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Gets and displays the Name.
+    /// </summary>
     public string Name => "XIV Combo Expanded Customized";
 
     /// <inheritdoc/>

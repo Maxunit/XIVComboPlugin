@@ -79,7 +79,7 @@ internal class AstrologianMalefic : CustomCombo
         {
             var gauge = GetJobGauge<ASTGauge>();
 
-            if (level >= AST.Levels.Draw && gauge.DrawnCard == CardType.NONE && HasCharges(AST.Draw))
+            if (CanUseAction(AST.Draw) && gauge.DrawnCard == CardType.NONE && HasCharges(AST.Draw))
                 return AST.Draw;
         }
 
@@ -97,7 +97,7 @@ internal class AstrologianGravity : CustomCombo
         {
             var gauge = GetJobGauge<ASTGauge>();
 
-            if (level >= AST.Levels.Draw && gauge.DrawnCard == CardType.NONE && HasCharges(AST.Draw))
+            if (CanUseAction(AST.Draw) && gauge.DrawnCard == CardType.NONE && HasCharges(AST.Draw))
                 return AST.Draw;
         }
 
@@ -127,7 +127,7 @@ internal class AstrologianPlay : CustomCombo
 
             if (IsEnabled(CustomComboPreset.AstrologianPlayAstrodyneFeature))
             {
-                if (level >= AST.Levels.Astrodyne && !gauge.ContainsSeal(SealType.NONE))
+                if (CanUseAction(AST.Astrodyne) && !gauge.ContainsSeal(SealType.NONE))
                     return AST.Astrodyne;
             }
 
@@ -137,11 +137,11 @@ internal class AstrologianPlay : CustomCombo
                 {
                     var draw = GetCooldown(AST.Draw);
 
-                    if (level >= AST.Levels.Astrodyne && !gauge.ContainsSeal(SealType.NONE) && (draw.RemainingCharges == 0 || gauge.DrawnCard != CardType.NONE))
+                    if (CanUseAction(AST.Astrodyne) && !gauge.ContainsSeal(SealType.NONE) && (draw.RemainingCharges == 0 || gauge.DrawnCard != CardType.NONE))
                         return AST.Astrodyne;
                 }
 
-                if (level >= AST.Levels.Draw && gauge.DrawnCard == CardType.NONE)
+                if (CanUseAction(AST.Draw) && gauge.DrawnCard == CardType.NONE)
                     return AST.Draw;
             }
 
@@ -154,7 +154,7 @@ internal class AstrologianPlay : CustomCombo
                 // ONLY reason to use Play at 3 seals is to try to fish for the 3-different-seals Astrodyne, even though
                 // that's an unmitigated DPS loss over using Astrodyne at only 1 or 2 seals.
 
-                if (level >= AST.Levels.Redraw && gauge.DrawnCard != CardType.NONE && HasEffect(AST.Buffs.ClarifyingDraw))
+                if (CanUseAction(AST.Redraw) && gauge.DrawnCard != CardType.NONE && HasEffect(AST.Buffs.ClarifyingDraw))
                 {
                     var cardSeal = this.CardSeals.GetValueOrDefault(gauge.DrawnCard, SealType.NONE);
 
@@ -187,6 +187,7 @@ internal class AstrologianDraw : CustomCombo
     }
 }
 
+/*
 internal class AstrologianBenefic2 : CustomCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstrologianBeneficSyncFeature;
@@ -196,6 +197,23 @@ internal class AstrologianBenefic2 : CustomCombo
         if (actionID == AST.Benefic2)
         {
             if (level < AST.Levels.Benefic2)
+                return AST.Benefic;
+        }
+
+        return actionID;
+    }
+}
+*/
+
+internal class AstrologianBenefic2 : CustomCombo
+{
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstrologianBeneficSyncFeature;
+
+    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+    {
+        if (actionID == AST.Benefic2)
+        {
+            if (!CanUseAction(AST.Benefic2))
                 return AST.Benefic;
         }
 

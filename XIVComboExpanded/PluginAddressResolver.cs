@@ -2,6 +2,7 @@ using System;
 
 using Dalamud.Game;
 using Dalamud.Logging;
+using Dalamud.Plugin.Services;
 
 namespace XIVComboExpandedPlugin;
 

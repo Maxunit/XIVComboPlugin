@@ -90,7 +90,7 @@ internal class DragoonJump : CustomCombo
     {
         if (actionID == DRG.Jump || actionID == DRG.HighJump)
         {
-            if (level >= DRG.Levels.MirageDive && HasEffect(DRG.Buffs.DiveReady))
+            if (CanUseAction(DRG.MirageDive) && HasEffect(DRG.Buffs.DiveReady))
                 return DRG.MirageDive;
         }
 
@@ -118,10 +118,10 @@ internal class DragoonCoerthanTorment : CustomCombo
             {
                 if (comboTime > 0)
                 {
-                    if (lastComboMove == DRG.SonicThrust && level >= DRG.Levels.CoerthanTorment)
+                    if (lastComboMove == DRG.SonicThrust && CanUseAction(DRG.CoerthanTorment))
                         return DRG.CoerthanTorment;
 
-                    if ((lastComboMove == DRG.DoomSpike || lastComboMove == DRG.DraconianFury) && level >= DRG.Levels.SonicThrust)
+                    if ((lastComboMove == DRG.DoomSpike || lastComboMove == DRG.DraconianFury) && CanUseAction(DRG.SonicThrust))
                         return DRG.SonicThrust;
                 }
 
@@ -144,25 +144,25 @@ internal class DragoonChaosThrust : CustomCombo
         {
             if (IsEnabled(CustomComboPreset.DragoonFangThrustFeature))
             {
-                if (level >= DRG.Levels.FangAndClaw && (HasEffect(DRG.Buffs.SharperFangAndClaw) || HasEffect(DRG.Buffs.EnhancedWheelingThrust)))
+                if (CanUseAction(DRG.FangAndClaw) && (HasEffect(DRG.Buffs.SharperFangAndClaw) || HasEffect(DRG.Buffs.EnhancedWheelingThrust)))
                     return DRG.WheelingThrust;
             }
 
             if (IsEnabled(CustomComboPreset.DragoonChaosThrustCombo))
             {
-                if (level >= DRG.Levels.FangAndClaw && HasEffect(DRG.Buffs.SharperFangAndClaw))
+                if (CanUseAction(DRG.FangAndClaw) && HasEffect(DRG.Buffs.SharperFangAndClaw))
                     return DRG.FangAndClaw;
 
-                if (level >= DRG.Levels.WheelingThrust && HasEffect(DRG.Buffs.EnhancedWheelingThrust))
+                if (CanUseAction(DRG.WheelingThrust) && HasEffect(DRG.Buffs.EnhancedWheelingThrust))
                     return DRG.WheelingThrust;
 
                 if (comboTime > 0)
                 {
-                    if (lastComboMove == DRG.Disembowel && level >= DRG.Levels.ChaosThrust)
+                    if (lastComboMove == DRG.Disembowel && CanUseAction(DRG.ChaosThrust))
                         // ChaoticSpring
                         return OriginalHook(DRG.ChaosThrust);
 
-                    if ((lastComboMove == DRG.TrueThrust || lastComboMove == DRG.RaidenThrust) && level >= DRG.Levels.Disembowel)
+                    if ((lastComboMove == DRG.TrueThrust || lastComboMove == DRG.RaidenThrust) && CanUseAction(DRG.Disembowel))
                         return DRG.Disembowel;
                 }
 
@@ -188,25 +188,25 @@ internal class DragoonFullThrust : CustomCombo
         {
             if (IsEnabled(CustomComboPreset.DragoonFangThrustFeature))
             {
-                if (level >= DRG.Levels.FangAndClaw && (HasEffect(DRG.Buffs.SharperFangAndClaw) || HasEffect(DRG.Buffs.EnhancedWheelingThrust)))
+                if (CanUseAction(DRG.FangAndClaw) && (HasEffect(DRG.Buffs.SharperFangAndClaw) || HasEffect(DRG.Buffs.EnhancedWheelingThrust)))
                     return DRG.FangAndClaw;
             }
 
             if (IsEnabled(CustomComboPreset.DragoonFullThrustCombo))
             {
-                if (level >= DRG.Levels.WheelingThrust && HasEffect(DRG.Buffs.EnhancedWheelingThrust))
+                if (CanUseAction(DRG.WheelingThrust) && HasEffect(DRG.Buffs.EnhancedWheelingThrust))
                     return DRG.WheelingThrust;
 
-                if (level >= DRG.Levels.FangAndClaw && HasEffect(DRG.Buffs.SharperFangAndClaw))
+                if (CanUseAction(DRG.FangAndClaw) && HasEffect(DRG.Buffs.SharperFangAndClaw))
                     return DRG.FangAndClaw;
 
                 if (comboTime > 0)
                 {
-                    if (lastComboMove == DRG.VorpalThrust && level >= DRG.Levels.FullThrust)
+                    if (lastComboMove == DRG.VorpalThrust && CanUseAction(DRG.FullThrust))
                         // Heavens' Thrust
                         return OriginalHook(DRG.FullThrust);
 
-                    if ((lastComboMove == DRG.TrueThrust || lastComboMove == DRG.RaidenThrust) && level >= DRG.Levels.VorpalThrust)
+                    if ((lastComboMove == DRG.TrueThrust || lastComboMove == DRG.RaidenThrust) && CanUseAction(DRG.VorpalThrust))
                         return DRG.VorpalThrust;
                 }
 
@@ -234,14 +234,14 @@ internal class DragoonStardiver : CustomCombo
 
             if (IsEnabled(CustomComboPreset.DragoonStardiverNastrondFeature))
             {
-                if (level >= DRG.Levels.Geirskogul && (!gauge.IsLOTDActive || IsOffCooldown(DRG.Nastrond) || IsOnCooldown(DRG.Stardiver)))
+                if (CanUseAction(DRG.Geirskogul) && (!gauge.IsLOTDActive || IsOffCooldown(DRG.Nastrond) || IsOnCooldown(DRG.Stardiver)))
                     // Nastrond
                     return OriginalHook(DRG.Geirskogul);
             }
 
             if (IsEnabled(CustomComboPreset.DragoonStardiverDragonfireDiveFeature))
             {
-                if (level < DRG.Levels.Stardiver || !gauge.IsLOTDActive || IsOnCooldown(DRG.Stardiver) || (IsOffCooldown(DRG.DragonfireDive) && gauge.LOTDTimer > 7.5))
+                if (!CanUseAction(DRG.Stardiver) || !gauge.IsLOTDActive || IsOnCooldown(DRG.Stardiver) || (IsOffCooldown(DRG.DragonfireDive) && gauge.LOTDTimer > 7.5))
                     return DRG.DragonfireDive;
             }
         }
@@ -258,7 +258,7 @@ internal class DragoonDives : CustomCombo
     {
         if (actionID == DRG.SpineshatterDive || actionID == DRG.DragonfireDive || actionID == DRG.Stardiver)
         {
-            if (level >= DRG.Levels.Stardiver)
+            if (CanUseAction(DRG.Stardiver))
             {
                 var gauge = GetJobGauge<DRGGauge>();
 
@@ -268,10 +268,10 @@ internal class DragoonDives : CustomCombo
                 return CalcBestAction(actionID, DRG.SpineshatterDive, DRG.DragonfireDive);
             }
 
-            if (level >= DRG.Levels.DragonfireDive)
+            if (CanUseAction(DRG.DragonfireDive))
                 return CalcBestAction(actionID, DRG.SpineshatterDive, DRG.DragonfireDive);
 
-            if (level >= DRG.Levels.SpineshatterDive)
+            if (CanUseAction(DRG.SpineshatterDive))
                 return DRG.SpineshatterDive;
         }
 
@@ -287,7 +287,7 @@ internal class DragoonGierskogul : CustomCombo
     {
         if (actionID == DRG.Geirskogul)
         {
-            if (level >= DRG.Levels.WyrmwindThrust)
+            if (CanUseAction(DRG.WyrmwindThrust))
             {
                 var gauge = GetJobGauge<DRGGauge>();
 
@@ -318,10 +318,10 @@ internal class DragoonLanceCharge : CustomCombo
             if (!IsOnCooldown(DRG.LanceCharge))
                 return DRG.LanceCharge;
 
-            if (level >= DRG.Levels.DragonSight && !IsOnCooldown(DRG.DragonSight))
+            if (CanUseAction(DRG.DragonSight) && !IsOnCooldown(DRG.DragonSight))
                 return DRG.DragonSight;
 
-            if (level >= DRG.Levels.BattleLitany && !IsOnCooldown(DRG.BattleLitany))
+            if (CanUseAction(DRG.BattleLitany) && !IsOnCooldown(DRG.BattleLitany))
                 return DRG.BattleLitany;
         }
 

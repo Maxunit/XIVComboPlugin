@@ -221,6 +221,13 @@ internal abstract partial class CustomCombo
         => Service.IconReplacer.OriginalHook(actionID);
 
     /// <summary>
+    /// Gets bool determining if action is greyed out or not.
+    /// </summary>
+    /// <param name="actionID">Action ID.</param>
+    /// <returns>A bool value of whether the action can be used or not.</returns>
+    protected static bool CanUseAction(uint actionID) => Service.IconReplacer.CanUseAction(actionID);
+
+    /// <summary>
     /// Compare the original hook to the given action ID.
     /// </summary>
     /// <param name="actionID">Action ID.</param>
@@ -439,6 +446,12 @@ internal abstract partial class CustomCombo
         => !GetCooldown(actionID).IsCooldown;
 
     /// <summary>
+    /// Checks to see if the GCD would not currently clip if you used a cooldown.
+    /// </summary>
+    /// <returns>A bool indicating if the GCD is greater-than-or-equal-to 0.5s or not.</returns>
+    protected static bool GCDClipCheck() => GetCooldown(PLD.RageOfHalone).CooldownRemaining >= 0.5;
+
+    /// <summary>
     /// Gets a value indicating whether an action has any available charges.
     /// </summary>
     /// <param name="actionID">Action ID to check.</param>
@@ -482,7 +495,6 @@ internal abstract partial class CustomCombo
     /// Gets the distance from the target.
     /// </summary>
     /// <returns>Double representing the distance from the target.</returns>
-    /*
     protected static double GetTargetDistance()
     {
         if (CurrentTarget is null)
@@ -495,9 +507,10 @@ internal abstract partial class CustomCombo
         double distanceY = chara.YalmDistanceZ;
 
         return Math.Sqrt(Math.Pow(distanceX, 2) + Math.Pow(distanceY, 2));
-    } */
+    }
+
     // Took this code from PrincessRTFM.
-    // All credits go to her, not me!
+    // All credits goes to them, not me!
     // This seems to be more accurate and faster than the previous GetTargetDistance and InMeleeRange.
     protected internal static double TargetDistance
     {
@@ -506,7 +519,7 @@ internal abstract partial class CustomCombo
             if (LocalPlayer is null || CurrentTarget is null)
                 return 0;
 
-            GameObject target = CurrentTarget;
+            GameObject? target = CurrentTarget;
 
             Vector2 tPos = new(target.Position.X, target.Position.Z);
             Vector2 sPos = new(LocalPlayer.Position.X, LocalPlayer.Position.Z);
@@ -516,7 +529,26 @@ internal abstract partial class CustomCombo
     }
 
     protected internal static bool InMeleeRange
-        => TargetDistance <= 3;
+        => TargetDistance <= Service.Configuration.MeleeOffset;
+
+    protected internal static double SoftTargetDistance
+    {
+        get
+        {
+            if (LocalPlayer is null || SoftTarget is null)
+                return 0;
+
+            GameObject? target = SoftTarget;
+
+            Vector2 tPos = new(target.Position.X, target.Position.Z);
+            Vector2 sPos = new(LocalPlayer.Position.X, LocalPlayer.Position.Z);
+
+            return Vector2.Distance(tPos, sPos) - target.HitboxRadius - LocalPlayer.HitboxRadius;
+        }
+    }
+
+    protected internal static bool InSoftMeleeRange
+        => SoftTargetDistance <= Service.Configuration.MeleeOffset;
 
     /*
     /// <summary>

@@ -6,7 +6,7 @@ namespace XIVComboExpandedPlugin;
 /// Internal cooldown data.
 /// </summary>
 [StructLayout(LayoutKind.Explicit)]
-internal struct CooldownData
+internal readonly struct CooldownData
 {
     [FieldOffset(0x0)]
     private readonly bool isCooldown;

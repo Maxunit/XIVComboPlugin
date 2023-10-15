@@ -87,7 +87,7 @@ internal class SummonerFester : CustomCombo
         {
             var gauge = GetJobGauge<SMNGauge>();
 
-            if (level >= SMN.Levels.EnergyDrain && !gauge.HasAetherflowStacks)
+            if (CanUseAction(SMN.EnergyDrain) && !gauge.HasAetherflowStacks)
                 return SMN.EnergyDrain;
         }
 
@@ -105,13 +105,13 @@ internal class SummonerPainflare : CustomCombo
         {
             var gauge = GetJobGauge<SMNGauge>();
 
-            if (level >= SMN.Levels.EnergySyphon && !gauge.HasAetherflowStacks)
+            if (CanUseAction(SMN.EnergySyphon) && !gauge.HasAetherflowStacks)
                 return SMN.EnergySyphon;
 
-            if (level >= SMN.Levels.EnergyDrain && !gauge.HasAetherflowStacks)
+            if (CanUseAction(SMN.EnergyDrain) && !gauge.HasAetherflowStacks)
                 return SMN.EnergyDrain;
 
-            if (level < SMN.Levels.Painflare)
+            if (!CanUseAction(SMN.Painflare))
                 return SMN.Fester;
         }
 
@@ -137,7 +137,7 @@ internal class SummonerRuin : CustomCombo
 
             if (IsEnabled(CustomComboPreset.SummonerRuinFeature))
             {
-                if (level >= SMN.Levels.Gemshine)
+                if (CanUseAction(SMN.Gemshine))
                 {
                     if (gauge.IsIfritAttuned || gauge.IsTitanAttuned || gauge.IsGarudaAttuned)
                         return OriginalHook(SMN.Gemshine);
@@ -146,7 +146,7 @@ internal class SummonerRuin : CustomCombo
 
             if (IsEnabled(CustomComboPreset.SummonerFurtherRuinFeature))
             {
-                if (level >= SMN.Levels.Ruin4 && gauge.SummonTimerRemaining == 0 && gauge.AttunmentTimerRemaining == 0 && HasEffect(SMN.Buffs.FurtherRuin))
+                if (CanUseAction(SMN.Ruin4) && gauge.SummonTimerRemaining == 0 && gauge.AttunmentTimerRemaining == 0 && HasEffect(SMN.Buffs.FurtherRuin))
                     return SMN.Ruin4;
             }
         }
@@ -173,7 +173,7 @@ internal class SummonerOutburstTriDisaster : CustomCombo
 
             if (IsEnabled(CustomComboPreset.SummonerOutburstFeature))
             {
-                if (level >= SMN.Levels.PreciousBrilliance)
+                if (CanUseAction(SMN.PreciousBrilliance))
                 {
                     if (gauge.IsIfritAttuned || gauge.IsTitanAttuned || gauge.IsGarudaAttuned)
                         return OriginalHook(SMN.PreciousBrilliance);
@@ -182,7 +182,7 @@ internal class SummonerOutburstTriDisaster : CustomCombo
 
             if (IsEnabled(CustomComboPreset.SummonerFurtherOutburstFeature))
             {
-                if (level >= SMN.Levels.Ruin4 && gauge.SummonTimerRemaining == 0 && gauge.AttunmentTimerRemaining == 0 && HasEffect(SMN.Buffs.FurtherRuin))
+                if (CanUseAction(SMN.Ruin4) && gauge.SummonTimerRemaining == 0 && gauge.AttunmentTimerRemaining == 0 && HasEffect(SMN.Buffs.FurtherRuin))
                     return SMN.Ruin4;
             }
         }
@@ -209,14 +209,14 @@ internal class SummonerGemshinePreciousBrilliance : CustomCombo
 
             if (IsEnabled(CustomComboPreset.SummonerShinyEnkindleFeature))
             {
-                if (level >= SMN.Levels.EnkindleBahamut && !gauge.IsIfritAttuned && !gauge.IsTitanAttuned && !gauge.IsGarudaAttuned && gauge.SummonTimerRemaining > 0)
+                if (CanUseAction(SMN.EnkindleBahamut) && !gauge.IsIfritAttuned && !gauge.IsTitanAttuned && !gauge.IsGarudaAttuned && gauge.SummonTimerRemaining > 0)
                     // Enkindle
                     return OriginalHook(SMN.EnkindleBahamut);
             }
 
             if (IsEnabled(CustomComboPreset.SummonerFurtherShinyFeature))
             {
-                if (level >= SMN.Levels.Ruin4 && gauge.SummonTimerRemaining == 0 && gauge.AttunmentTimerRemaining == 0 && HasEffect(SMN.Buffs.FurtherRuin))
+                if (CanUseAction(SMN.Ruin4) && gauge.SummonTimerRemaining == 0 && gauge.AttunmentTimerRemaining == 0 && HasEffect(SMN.Buffs.FurtherRuin))
                     return SMN.Ruin4;
             }
         }
@@ -240,13 +240,13 @@ internal class SummonerDemiFeature : CustomCombo
 
             if (IsEnabled(CustomComboPreset.SummonerDemiSearingLightFeature))
             {
-                if (level >= SMN.Levels.SearingLight && gauge.IsBahamutReady && InCombat() && IsOffCooldown(SMN.SearingLight))
+                if (CanUseAction(SMN.SearingLight) && gauge.IsBahamutReady && InCombat() && IsOffCooldown(SMN.SearingLight))
                     return SMN.SearingLight;
             }
 
             if (IsEnabled(CustomComboPreset.SummonerDemiEnkindleFeature))
             {
-                if (level >= SMN.Levels.EnkindleBahamut && !gauge.IsIfritAttuned && !gauge.IsTitanAttuned && !gauge.IsGarudaAttuned && gauge.SummonTimerRemaining > 0)
+                if (CanUseAction(SMN.EnkindleBahamut) && !gauge.IsIfritAttuned && !gauge.IsTitanAttuned && !gauge.IsGarudaAttuned && gauge.SummonTimerRemaining > 0)
                     // Enkindle
                     return OriginalHook(SMN.EnkindleBahamut);
             }
@@ -266,7 +266,7 @@ internal class SummonerRadiantCarbuncleFeature : CustomCombo
         {
             var gauge = GetJobGauge<SMNGauge>();
 
-            if (level >= SMN.Levels.SummonCarbuncle && !HasPetPresent() && gauge.Attunement == 0)
+            if (CanUseAction(SMN.SummonCarbuncle) && !HasPetPresent() && gauge.Attunement == 0)
                 return SMN.SummonCarbuncle;
         }
 
@@ -284,7 +284,7 @@ internal class SummonerBahamutCarbuncleFeature : CustomCombo
         {
             var gauge = GetJobGauge<SMNGauge>();
 
-            if (level >= SMN.Levels.SummonCarbuncle && !HasPetPresent() && gauge.Attunement == 0)
+            if (CanUseAction(SMN.SummonCarbuncle) && !HasPetPresent() && gauge.Attunement == 0)
                 return SMN.SummonCarbuncle;
         }
 

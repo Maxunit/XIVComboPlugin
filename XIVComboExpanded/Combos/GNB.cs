@@ -82,7 +82,7 @@ internal class GunbreakerSolidBarrel : CustomCombo
 
             if (IsEnabled(CustomComboPreset.KeenEdgeRoughDivide))
             {
-                if (level >= GNB.Levels.RoughDivide && HasTarget() && !InMeleeRange && HasCharges(GNB.RoughDivide))
+                if (level >= GNB.Levels.RoughDivide && (!InMeleeRange || !InSoftMeleeRange) && HasCharges(GNB.RoughDivide))
                     return GNB.RoughDivide;
             }
 

@@ -70,7 +70,7 @@ internal class ScholarFeyBless : CustomCombo
         {
             var gauge = GetJobGauge<SCHGauge>();
 
-            if (level >= SCH.Levels.Consolation && gauge.SeraphTimer > 0)
+            if (CanUseAction(SCH.Consolation) && gauge.SeraphTimer > 0)
                 return SCH.Consolation;
         }
 
@@ -88,13 +88,13 @@ internal class ScholarExcogitation : CustomCombo
         {
             if (IsEnabled(CustomComboPreset.ScholarExcogitationRecitationFeature))
             {
-                if (level >= SCH.Levels.Recitation && IsOffCooldown(SCH.Recitation))
+                if (CanUseAction(SCH.Recitation) && IsOffCooldown(SCH.Recitation))
                     return SCH.Recitation;
             }
 
             if (IsEnabled(CustomComboPreset.ScholarExcogitationLustrateFeature))
             {
-                if (level < SCH.Levels.Excogitation || IsOnCooldown(SCH.Excogitation))
+                if (!CanUseAction(SCH.Excogitation) || IsOnCooldown(SCH.Excogitation))
                     return SCH.Lustrate;
             }
         }
@@ -113,7 +113,7 @@ internal class ScholarEnergyDrain : CustomCombo
         {
             var gauge = GetJobGauge<SCHGauge>();
 
-            if (level >= SCH.Levels.Aetherflow && gauge.Aetherflow == 0)
+            if (CanUseAction(SCH.Aetherflow) && gauge.Aetherflow == 0)
                 return SCH.Aetherflow;
         }
 
@@ -133,19 +133,19 @@ internal class ScholarLustrate : CustomCombo
 
             if (IsEnabled(CustomComboPreset.ScholarLustrateRecitationFeature))
             {
-                if (level >= SCH.Levels.Recitation && IsOffCooldown(SCH.Recitation))
+                if (CanUseAction(SCH.Recitation) && IsOffCooldown(SCH.Recitation))
                     return SCH.Recitation;
             }
 
             if (IsEnabled(CustomComboPreset.ScholarLustrateExcogitationFeature))
             {
-                if (level >= SCH.Levels.Excogitation && IsOffCooldown(SCH.Excogitation))
+                if (CanUseAction(SCH.Excogitation) && IsOffCooldown(SCH.Excogitation))
                     return SCH.Excogitation;
             }
 
             if (IsEnabled(CustomComboPreset.ScholarLustrateAetherflowFeature))
             {
-                if (level >= SCH.Levels.Aetherflow && gauge.Aetherflow == 0)
+                if (CanUseAction(SCH.Aetherflow) && gauge.Aetherflow == 0)
                     return SCH.Aetherflow;
             }
         }
@@ -164,7 +164,7 @@ internal class ScholarIndomitability : CustomCombo
         {
             var gauge = GetJobGauge<SCHGauge>();
 
-            if (level >= SCH.Levels.Aetherflow && gauge.Aetherflow == 0 && !HasEffect(SCH.Buffs.Recitation))
+            if (CanUseAction(SCH.Aetherflow) && gauge.Aetherflow == 0 && !HasEffect(SCH.Buffs.Recitation))
                 return SCH.Aetherflow;
         }
 
@@ -182,7 +182,7 @@ internal class ScholarSacredSoil : CustomCombo
         {
             var gauge = GetJobGauge<SCHGauge>();
 
-            if (level >= SCH.Levels.Aetherflow && gauge.Aetherflow == 0)
+            if (CanUseAction(SCH.Aetherflow) && gauge.Aetherflow == 0)
                 return SCH.Aetherflow;
         }
 
@@ -217,7 +217,7 @@ internal class ScholarAdloquium : CustomCombo
     {
         if (actionID == SCH.Adloquium)
         {
-            if (level < SCH.Levels.Adloquium)
+            if (!CanUseAction(SCH.Adloquium))
                 return SCH.Physick;
         }
 

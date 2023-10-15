@@ -90,6 +90,11 @@ public class PluginConfiguration : IPluginConfiguration
     };
 
     /// <summary>
+    /// Gets or sets the offset of the melee range check. Default is 0.
+    /// </summary>
+    public double MeleeOffset { get; set; } = 0;
+
+    /// <summary>
     /// Save the configuration to disk.
     /// </summary>
     public void Save()

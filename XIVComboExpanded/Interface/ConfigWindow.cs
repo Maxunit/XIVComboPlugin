@@ -73,17 +73,27 @@ internal class ConfigWindow : Window
     /// <inheritdoc/>
     public override void Draw()
     {
+        ImGui.Text("Welcome to Maxunit's XIVCombo Expanded Testbed.");
         ImGui.Text("This window allows you to enable and disable custom combos to your liking.");
+        ImGui.Text("For features that replace buttons with cooldowns, it is recommended to");
+        ImGui.Text("use something like Job Bars or XIVAuras.");
 
         var showSecrets = Service.Configuration.EnableSecretCombos;
-        if (ImGui.Checkbox("Enable secret forbidden knowledge", ref showSecrets))
+        if (ImGui.Checkbox("Daemitus's Secrets", ref showSecrets))
         {
             Service.Configuration.EnableSecretCombos = showSecrets;
             Service.Configuration.Save();
         }
 
+        if(ImGui.IsItemHovered())
+        {
+            ImGui.BeginTooltip();
+            ImGui.TextUnformatted("The secrets of the creator.");
+            ImGui.EndTooltip();
+        }
+
         var showEvil = Service.Configuration.EnableEvilCombos;
-        if (ImGui.Checkbox("Enable evil combos (referring to Evil Crab)", ref showEvil))
+        if (ImGui.Checkbox("Evil-Crab's Secrets", ref showEvil))
         {
             Service.Configuration.EnableEvilCombos = showEvil;
             Service.Configuration.Save();
@@ -101,6 +111,27 @@ internal class ConfigWindow : Window
         {
             Service.Configuration.HideChildren = hideChildren;
             Service.Configuration.Save();
+        }
+
+        float offset = (float)Service.Configuration.MeleeOffset;
+
+        var inputChangedeth = false;
+        // inputChangedeth |= ImGui.InputFloat("Melee Distance Offset", ref offset);
+        inputChangedeth |= ImGui.SliderFloat("Melee Distance Offset", ref offset, 0.0f, 6.0f, "%.1f");
+
+        if (inputChangedeth)
+        {
+            Service.Configuration.MeleeOffset = (double)offset;
+            Service.Configuration.Save();
+        }
+
+        if (ImGui.IsItemHovered())
+        {
+            ImGui.BeginTooltip();
+            ImGui.TextUnformatted("Configurable melee distance offset. For those who don't want to immediately use their ranged attack if the boss walks slighty out of range.");
+            ImGui.TextUnformatted("0 if you want to snuggle. 3 if you want the maximum melee distance. 4 - 6 leaves (some) room on when switching to ranged.");
+            ImGui.TextUnformatted("Jobs currently using it: Tanks (more planned?)");
+            ImGui.EndTooltip();
         }
 
         ImGui.BeginChild("scrolling", new Vector2(0, -1), true);

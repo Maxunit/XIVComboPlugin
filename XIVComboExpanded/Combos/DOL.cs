@@ -156,7 +156,7 @@ internal class DolGiftoftheLand : CustomCombo
     {
         if (actionID == DOL.PioneersGift1)
         {
-            if (level >= DOL.Levels.PioneersGift2 && HasEffect(DOL.Buffs.GiftoftheLand))
+            if (CanUseAction(DOL.PioneersGift2) && HasEffect(DOL.Buffs.GiftoftheLand))
                 return DOL.PioneersGift2;
 
             return DOL.PioneersGift1;
@@ -164,7 +164,7 @@ internal class DolGiftoftheLand : CustomCombo
 
         if (actionID == DOL.MountaineersGift1)
         {
-            if (level >= DOL.Levels.PioneersGift2 && HasEffect(DOL.Buffs.GiftoftheLand))
+            if (CanUseAction(DOL.PioneersGift2) && HasEffect(DOL.Buffs.GiftoftheLand))
                 return DOL.MountaineersGift2;
 
             return DOL.MountaineersGift1;

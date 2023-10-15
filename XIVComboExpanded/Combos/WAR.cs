@@ -15,6 +15,7 @@ internal static class WAR
         Overpower = 41,
         StormsPath = 42,
         StormsEye = 45,
+        Tomahawk = 46,
         InnerBeast = 49,
         SteelCyclone = 51,
         Infuriate = 52,
@@ -54,10 +55,12 @@ internal static class WAR
         public const byte
             Maim = 4,
             Berserk = 6,
+            Tomahawk = 15,
             StormsPath = 26,
             ThrillOfBattle = 30,
             InnerBeast = 35,
             MythrilTempest = 40,
+            SteelCyclone = 45,
             StormsEye = 50,
             Infuriate = 50,
             InnerBeastMastery = 54,
@@ -87,30 +90,35 @@ internal class WarriorStormsPathCombo : CustomCombo
         {
             var gauge = GetJobGauge<WARGauge>();
 
-            if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature) && level >= WAR.Levels.Onslaught && HasTarget() && !InMeleeRange && HasCharges(WAR.Onslaught))
-                return OriginalHook(WAR.Onslaught);
+            if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature))
+            {
+                if (CanUseAction(WAR.Onslaught) && (!InMeleeRange || !InSoftMeleeRange) && HasCharges(WAR.Onslaught))
+                    return OriginalHook(WAR.Onslaught);
+                if (CanUseAction(WAR.Tomahawk) && (!InMeleeRange || !InSoftMeleeRange))
+                    return OriginalHook(WAR.Tomahawk);
+            }
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
             {
-                if (level >= WAR.Levels.InnerRelease && HasEffect(WAR.Buffs.InnerRelease))
+                if (CanUseAction(WAR.InnerRelease) && HasEffect(WAR.Buffs.InnerRelease))
                     return OriginalHook(WAR.FellCleave);
             }
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
             {
-                if (level >= WAR.Levels.InnerBeast && gauge.BeastGauge > 90)
+                if (CanUseAction(WAR.InnerBeast) && gauge.BeastGauge >= 90)
                     // Fell Cleave
                     return OriginalHook(WAR.InnerBeast);
             }
 
             if (comboTime > 0)
             {
-                if (lastComboMove == WAR.Maim && level >= WAR.Levels.StormsPath)
+                if (lastComboMove == WAR.Maim && CanUseAction(WAR.StormsPath))
                 {
                     return WAR.StormsPath;
                 }
 
-                if (lastComboMove == WAR.HeavySwing && level >= WAR.Levels.Maim)
+                if (lastComboMove == WAR.HeavySwing && CanUseAction(WAR.Maim))
                 {
                     return WAR.Maim;
                 }
@@ -133,30 +141,35 @@ internal class WarriorStormsEyeCombo : CustomCombo
         {
             var gauge = GetJobGauge<WARGauge>();
 
-            if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature) && level >= WAR.Levels.Onslaught && HasTarget() && !InMeleeRange && HasCharges(WAR.Onslaught))
-                return OriginalHook(WAR.Onslaught);
+            if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature))
+            {
+                if (CanUseAction(WAR.Onslaught) && (!InMeleeRange || !InSoftMeleeRange) && HasCharges(WAR.Onslaught))
+                    return OriginalHook(WAR.Onslaught);
+                if (CanUseAction(WAR.Tomahawk) && (!InMeleeRange || !InSoftMeleeRange))
+                    return OriginalHook(WAR.Tomahawk);
+            }
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
             {
-                if (level >= WAR.Levels.InnerRelease && HasEffect(WAR.Buffs.InnerRelease))
+                if (CanUseAction(WAR.InnerRelease) && HasEffect(WAR.Buffs.InnerRelease))
                     return WAR.FellCleave;
             }
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
             {
-                if (level >= WAR.Levels.InnerBeast && gauge.BeastGauge > 90)
+                if (CanUseAction(WAR.InnerBeast) && gauge.BeastGauge >= 90)
                     // Fell Cleave
                     return OriginalHook(WAR.InnerBeast);
             }
 
             if (comboTime > 0)
             {
-                if (lastComboMove == WAR.Maim && level >= WAR.Levels.StormsEye)
+                if (lastComboMove == WAR.Maim && CanUseAction(WAR.StormsEye))
                 {
                     return WAR.StormsEye;
                 }
 
-                if (lastComboMove == WAR.HeavySwing && level >= WAR.Levels.Maim)
+                if (lastComboMove == WAR.HeavySwing && CanUseAction(WAR.Maim))
                 {
                     return WAR.Maim;
                 }
@@ -179,15 +192,15 @@ internal class WarriorMythrilTempestCombo : CustomCombo
         {
             var gauge = GetJobGauge<WARGauge>().BeastGauge;
 
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.SteelCycloneMastery)
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && CanUseAction(WAR.Decimate))
                 return OriginalHook(WAR.Decimate);
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.SteelCycloneMastery)
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && CanUseAction(WAR.SteelCyclone))
                 return OriginalHook(WAR.SteelCyclone);
             if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease))
                 return OriginalHook(WAR.Decimate);
             if (comboTime > 0)
             {
-                if (lastComboMove == WAR.Overpower && level >= WAR.Levels.MythrilTempest)
+                if (lastComboMove == WAR.Overpower && CanUseAction(WAR.MythrilTempest))
                 {
                     return WAR.MythrilTempest;
                 }
@@ -209,15 +222,15 @@ internal class WarriorOverpowerCombo : CustomCombo
         if (actionID == WAR.Overpower)
         {
             var gauge = GetJobGauge<WARGauge>().BeastGauge;
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level >= WAR.Levels.SteelCycloneMastery)
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && CanUseAction(WAR.Decimate))
                 return OriginalHook(WAR.Decimate);
-            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && level <= WAR.Levels.SteelCycloneMastery)
+            if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature) && gauge >= 90 && CanUseAction(WAR.SteelCyclone))
                 return OriginalHook(WAR.SteelCyclone);
             if (IsEnabled(CustomComboPreset.WarriorInnerReleaseFeature) && HasEffect(WAR.Buffs.InnerRelease))
                 return OriginalHook(WAR.Decimate);
             if (comboTime > 0)
             {
-                if (lastComboMove == WAR.Overpower && level >= WAR.Levels.MythrilTempest)
+                if (lastComboMove == WAR.Overpower && CanUseAction(WAR.MythrilTempest))
                 {
                     return WAR.MythrilTempest;
                 }
@@ -238,7 +251,7 @@ internal class WarriorNascentFlashFeature : CustomCombo
     {
         if (actionID == WAR.NascentFlash)
         {
-            if (level >= WAR.Levels.NascentFlash)
+            if (CanUseAction(WAR.NascentFlash))
                 // Bloodwhetting
                 return WAR.NascentFlash;
 
@@ -259,7 +272,7 @@ internal class WarriorFellCleaveDecimate : CustomCombo
         {
             if (IsEnabled(CustomComboPreset.WarriorPrimalBeastFeature))
             {
-                if (level >= WAR.Levels.PrimalRend && HasEffect(WAR.Buffs.PrimalRendReady))
+                if (CanUseAction(WAR.PrimalRend) && HasEffect(WAR.Buffs.PrimalRendReady))
                     return WAR.PrimalRend;
             }
         }
@@ -276,7 +289,7 @@ internal class WArriorPrimalReleaseFeature : CustomCombo
     {
         if (actionID == WAR.Berserk || actionID == WAR.InnerRelease)
         {
-            if (level >= WAR.Levels.PrimalRend && HasEffect(WAR.Buffs.PrimalRendReady))
+            if (CanUseAction(WAR.PrimalRend) && HasEffect(WAR.Buffs.PrimalRendReady))
                 return WAR.PrimalRend;
         }
 
@@ -294,14 +307,14 @@ internal class UpheavalOrogenySpenderFeature : CustomCombo
         {
             if (actionID is WAR.HeavySwing or WAR.Maim)
             {
-                if (level >= WAR.Levels.Upheaval)
+                if (CanUseAction(WAR.Upheaval))
                     return PickByCooldown(actionID, actionID, WAR.Upheaval);
                 return OriginalHook(actionID);
             }
 
             if (actionID is WAR.Overpower or WAR.MythrilTempest)
             {
-                if (level >= WAR.Levels.Orogeny)
+                if (CanUseAction(WAR.Orogeny))
                     return PickByCooldown(actionID, actionID, WAR.Orogeny);
                 return OriginalHook(actionID);
             }
@@ -321,41 +334,49 @@ internal class WarriorStormPathStormEye : CustomCombo
         {
             var gauge = GetJobGauge<WARGauge>();
 
-            if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature) && level >= WAR.Levels.Onslaught && !InMeleeRange && HasCharges(WAR.Onslaught))
-                return OriginalHook(WAR.Onslaught);
+            if (IsEnabled(CustomComboPreset.HeavySwingOnslaughtFeature))
+            {
+                if (CanUseAction(WAR.Onslaught) && (!InMeleeRange || !InSoftMeleeRange) && HasCharges(WAR.Onslaught))
+                    return OriginalHook(WAR.Onslaught);
+                if (CanUseAction(WAR.Tomahawk) && (!InMeleeRange || !InSoftMeleeRange))
+                    return OriginalHook(WAR.Tomahawk);
+            }
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
             {
-                if (level >= WAR.Levels.InnerRelease && HasEffect(WAR.Buffs.InnerRelease))
+                if (CanUseAction(WAR.InnerRelease) && HasEffect(WAR.Buffs.InnerRelease))
                     return WAR.FellCleave;
             }
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
             {
-                if (level >= WAR.Levels.InnerBeast && gauge.BeastGauge > 90)
+                if (CanUseAction(WAR.InnerBeast) && gauge.BeastGauge >= 90)
                     // Fell Cleave
                     return OriginalHook(WAR.InnerBeast);
             }
 
             if (comboTime > 0)
             {
-                if (lastComboMove == WAR.Maim && level >= WAR.Levels.StormsPath)
+                if (lastComboMove == WAR.Maim)
                 {
-                    var surgingTempest = FindEffect(WAR.Buffs.SurgingTempest);
-                    if (surgingTempest is null)
-                        return WAR.StormsEye;
+                    if (CanUseAction(WAR.StormsEye))
+                    {
+                        var surgingTempest = FindEffect(WAR.Buffs.SurgingTempest);
+                        if (surgingTempest is null)
+                            return WAR.StormsEye;
 
-                    // Medicated + Opener
-                    if (HasEffect(ADV.Buffs.Medicated) && surgingTempest.RemainingTime > 10)
-                        return WAR.StormsPath;
+                        // Medicated + Opener
+                        if (HasEffect(ADV.Buffs.Medicated) && surgingTempest.RemainingTime >= 10)
+                            return WAR.StormsPath;
 
-                    if (surgingTempest.RemainingTime < 30)
-                        return WAR.StormsEye;
+                        if (surgingTempest.RemainingTime <= 30)
+                            return WAR.StormsEye;
+                    }
 
                     return WAR.StormsPath;
                 }
 
-                if (lastComboMove == WAR.HeavySwing && level >= WAR.Levels.Maim)
+                if (lastComboMove == WAR.HeavySwing && CanUseAction(WAR.Maim))
                 {
                     return WAR.Maim;
                 }
@@ -374,25 +395,25 @@ internal class WarriorBloodwhetting : CustomCombo
 
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
-        if (actionID == WAR.Bloodwhetting || actionID == WAR.RawIntuition)
+        if (actionID == WAR.ThrillOfBattle)
         {
             if (IsEnabled(CustomComboPreset.WarriorHealthyBalancedDietFeature))
             {
-                if (level >= WAR.Levels.Bloodwhetting)
+                if (CanUseAction(WAR.Bloodwhetting))
                 {
                     if (IsOffCooldown(WAR.Bloodwhetting))
                         return WAR.Bloodwhetting;
                 }
-                else if (level >= WAR.Levels.RawIntuition)
+                else if (CanUseAction(WAR.RawIntuition))
                 {
                     if (IsOffCooldown(WAR.RawIntuition))
                         return WAR.RawIntuition;
                 }
 
-                if (level >= WAR.Levels.ThrillOfBattle && IsOffCooldown(WAR.ThrillOfBattle))
+                if (CanUseAction(WAR.ThrillOfBattle) && IsOffCooldown(WAR.ThrillOfBattle))
                     return WAR.ThrillOfBattle;
 
-                if (level >= WAR.Levels.Equilibrium && IsOffCooldown(WAR.Equilibrium))
+                if (CanUseAction(WAR.Equilibrium) && IsOffCooldown(WAR.Equilibrium))
                     return WAR.Equilibrium;
             }
         }

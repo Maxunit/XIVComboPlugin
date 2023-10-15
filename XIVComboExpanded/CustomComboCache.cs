@@ -42,6 +42,9 @@ internal partial class CustomComboCache : IDisposable
         Service.Framework.Update -= this.Framework_Update;
     }
 
+    /// <summary>
+    /// Gets a value indicating whether the target can be interrupted or not.
+    /// </summary>
     public bool CanInterruptTarget
     {
         get

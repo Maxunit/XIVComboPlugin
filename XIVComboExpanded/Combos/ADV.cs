@@ -51,14 +51,14 @@ internal class SwiftRaiseFeature : CustomCombo
 
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
-        if ((actionID == AST.Ascend && level >= AST.Levels.Ascend) ||
-            (actionID == SCH.Resurection && level >= SCH.Levels.Resurection) ||
-            (actionID == SGE.Egeiro && level >= SGE.Levels.Egeiro) ||
-            (actionID == WHM.Raise && level >= WHM.Levels.Raise) ||
-            (actionID == RDM.Verraise && level >= RDM.Levels.Verraise && !HasEffect(RDM.Buffs.Dualcast)) ||
-            (actionID == BLU.AngelWhisper && level >= BLU.Levels.AngelWhisper))
+        if ((actionID == AST.Ascend && CanUseAction(AST.Ascend)) ||
+            (actionID == SCH.Resurection && CanUseAction(SCH.Resurection)) ||
+            (actionID == SGE.Egeiro && CanUseAction(SGE.Egeiro)) ||
+            (actionID == WHM.Raise && CanUseAction(WHM.Raise)) ||
+            (actionID == RDM.Verraise && CanUseAction(RDM.Verraise) && !HasEffect(RDM.Buffs.Dualcast)) ||
+            (actionID == BLU.AngelWhisper && CanUseAction(BLU.AngelWhisper)))
         {
-            if (level >= ADV.Levels.Swiftcast && IsOffCooldown(ADV.Swiftcast))
+            if (CanUseAction(ADV.Swiftcast) && IsOffCooldown(ADV.Swiftcast))
                 return ADV.Swiftcast;
         }
 
@@ -72,18 +72,18 @@ internal class VariantRaiseFeature : CustomCombo
 
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
-        if ((actionID == AST.Ascend && level >= AST.Levels.Ascend) ||
-            (actionID == SCH.Resurection && level >= SCH.Levels.Resurection) ||
-            (actionID == SGE.Egeiro && level >= SGE.Levels.Egeiro) ||
-            (actionID == WHM.Raise && level >= WHM.Levels.Raise) ||
-            (actionID == RDM.Verraise && level >= RDM.Levels.Verraise && !HasEffect(RDM.Buffs.Dualcast)) ||
-            (actionID == BLU.AngelWhisper && level >= BLU.Levels.AngelWhisper))
+        if ((actionID == AST.Ascend && CanUseAction(AST.Ascend)) ||
+            (actionID == SCH.Resurection && CanUseAction(SCH.Resurection)) ||
+            (actionID == SGE.Egeiro && CanUseAction(SGE.Egeiro)) ||
+            (actionID == WHM.Raise && CanUseAction(WHM.Raise)) ||
+            (actionID == RDM.Verraise && CanUseAction(RDM.Verraise) && !HasEffect(RDM.Buffs.Dualcast)) ||
+            (actionID == BLU.AngelWhisper && CanUseAction(BLU.AngelWhisper)))
         {
             // Per Splatoon:
             // 1069: solo
             // 1075: group
             // 1076: savage
-            if (level >= ADV.Levels.VariantRaise2 && CurrentTerritory == 1075u)
+            if (CanUseAction(ADV.VariantRaise2) && CurrentTerritory == 1075u)
                 return ADV.VariantRaise2;
         }
 
@@ -99,7 +99,7 @@ internal class RampartReprisalCombo : CustomCombo
     {
         if (actionID == ADV.Rampart)
         {
-            if (level >= ADV.Levels.Reprisal && IsOffCooldown(ADV.Reprisal))
+            if (CanUseAction(ADV.Reprisal) && IsOffCooldown(ADV.Reprisal))
             {
                 return ADV.Reprisal;
             }
@@ -119,7 +119,7 @@ internal class StunInterruptCombo : CustomCombo
     {
         if ((actionID == ADV.LowBlow) || (actionID == PLD.ShieldBash))
         {
-            if (IsEnabled(CustomComboPreset.StunInterruptCombo) && level >= ADV.Levels.Interject && IsOffCooldown(ADV.Interject) && CanInterrupt)
+            if (IsEnabled(CustomComboPreset.StunInterruptCombo) && CanUseAction(ADV.Interject) && IsOffCooldown(ADV.Interject) && CanInterrupt)
             {
                 return ADV.Interject;
             }

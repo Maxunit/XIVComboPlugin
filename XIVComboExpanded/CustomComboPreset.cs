@@ -734,6 +734,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Royal Authority Fight or Flight Feature", "Replace Royal Authority with Holy Spirit during Fight or Flight when Divine Might is active.", PLD.JobID)]
     PaladinRoyalAuthorityFightOrFlightFeature = 1917,
 
+    [CustomComboInfo("Holy Spirit Level Sync", "Replace Holy Spirit with Shield Lob when below level 64 in synced content.", PLD.JobID)]
+    PaladinHolySpirit = 1918,
+
     #endregion
     // ====================================================================================
     #region REAPER
@@ -1173,19 +1176,19 @@ public enum CustomComboPreset
     WarriorPrimalReleaseFeature = 2109,
 
     [ConflictingCombos(WarriorStormsPathCombo, WarriorStormsEyeCombo)]
-    [SecretCustomCombo]
+    [EvilCombo]
     [CustomComboInfo("Storm's Path & Storm's Eye", "Replace Storm's Path with Storm's Eye when no Surging Tempest is active or is below 30. (Uses Heavy Swing!)", WAR.JobID)]
     WarriorStormPathStormEye = 2110,
 
     [ParentCombo(WarriorStormPathStormEye)]
-    [SecretCustomCombo]
+    [EvilCombo]
     [CustomComboInfo("Upheaval and Orogeny Spender", "Adds Upheaval and Orogeny to the Parent Combo if Surging Tempest is active.", WAR.JobID)]
     UpheavalOrogenySpenderFeature = 2111,
 
-    [CustomComboInfo("Healthy Balanaced Diet Feature", "Replace Bloodwhetting with Thrill of Battle, and then Equilibrium when the preceding is on cooldown.", WAR.JobID)]
+    [CustomComboInfo("Healthy Balanaced Diet Feature", "Replace Thrill of Battle with Bloodwhetting, and then Equilibrium when the preceding is on cooldown.", WAR.JobID)]
     WarriorHealthyBalancedDietFeature = 2112,
 
-    [CustomComboInfo("Heavy Swing Onslaught Feature", "Replaces Heavy Swing with Onslaught if not within melee range.", WAR.JobID)]
+    [CustomComboInfo("Heavy Swing Tomahawk Onslaught Feature", "Replaces Heavy Swing with either Tomahawk or Onslaught, depending on level, if not within melee range.", WAR.JobID)]
     HeavySwingOnslaughtFeature = 2113,
 
     #endregion
