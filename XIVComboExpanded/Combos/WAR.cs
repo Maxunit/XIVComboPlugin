@@ -373,7 +373,12 @@ internal class WarriorStormPathStormEye : CustomCombo
                             return WAR.StormsEye;
                     }
 
-                    return WAR.StormsPath;
+                    if (CanUseAction(WAR.StormsPath))
+                    {
+                        return WAR.StormsPath;
+                    }
+
+                    return WAR.HeavySwing;
                 }
 
                 if (lastComboMove == WAR.HeavySwing && CanUseAction(WAR.Maim))

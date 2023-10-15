@@ -93,7 +93,7 @@ internal class ConfigWindow : Window
         }
 
         var showEvil = Service.Configuration.EnableEvilCombos;
-        if (ImGui.Checkbox("Evil-Crab's Secrets", ref showEvil))
+        if (ImGui.Checkbox("Evil-Crab's Secrets (and others based on it)", ref showEvil))
         {
             Service.Configuration.EnableEvilCombos = showEvil;
             Service.Configuration.Save();
@@ -102,7 +102,7 @@ internal class ConfigWindow : Window
         if (ImGui.IsItemHovered())
         {
             ImGui.BeginTooltip();
-            ImGui.TextUnformatted("Combos too dangerous for the common folk");
+            ImGui.TextUnformatted("Combos that make a lot of stuff easier...and could be questionable.");
             ImGui.EndTooltip();
         }
 
@@ -117,7 +117,7 @@ internal class ConfigWindow : Window
 
         var inputChangedeth = false;
         // inputChangedeth |= ImGui.InputFloat("Melee Distance Offset", ref offset);
-        inputChangedeth |= ImGui.SliderFloat("Melee Distance Offset", ref offset, 0.0f, 6.0f, "%.1f");
+        inputChangedeth |= ImGui.SliderFloat("Melee Distance Offset", ref offset, 0.0f, 6.0f, "%.0f");
 
         if (inputChangedeth)
         {
