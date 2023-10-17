@@ -100,8 +100,8 @@ internal class WarriorStormsPathCombo : CustomCombo
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
             {
-                if (CanUseAction(WAR.InnerRelease) && HasEffect(WAR.Buffs.InnerRelease))
-                    return OriginalHook(WAR.FellCleave);
+                if (CanUseAction(WAR.FellCleave) && (HasEffect(WAR.Buffs.InnerRelease) || gauge.BeastGauge >= 90))
+                    return WAR.FellCleave;
             }
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
@@ -151,7 +151,7 @@ internal class WarriorStormsEyeCombo : CustomCombo
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
             {
-                if (CanUseAction(WAR.InnerRelease) && HasEffect(WAR.Buffs.InnerRelease))
+                if (CanUseAction(WAR.FellCleave) && (HasEffect(WAR.Buffs.InnerRelease) || gauge.BeastGauge >= 90))
                     return WAR.FellCleave;
             }
 
@@ -344,7 +344,7 @@ internal class WarriorStormPathStormEye : CustomCombo
 
             if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapFeature))
             {
-                if (CanUseAction(WAR.InnerRelease) && HasEffect(WAR.Buffs.InnerRelease))
+                if (CanUseAction(WAR.FellCleave) && (HasEffect(WAR.Buffs.InnerRelease) || gauge.BeastGauge >= 90))
                     return WAR.FellCleave;
             }
 
