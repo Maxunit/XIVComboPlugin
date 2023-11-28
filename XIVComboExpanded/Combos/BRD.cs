@@ -92,6 +92,18 @@ internal class BardHeavyShot : CustomCombo
     {
         if (actionID == BRD.HeavyShot || actionID == BRD.BurstShot)
         {
+            if (IsEnabled(CustomComboPreset.BasicBiteCombo))
+            {
+                var venomous = FindTargetEffect(BRD.Debuffs.VenomousBite);
+                var windbite = FindTargetEffect(BRD.Debuffs.Windbite);
+
+                if (CanUseAction(BRD.Windbite) && (HasTarget() || HasSoftTarget()) && (windbite is null || windbite.RemainingTime <= 15))
+                    return BRD.Windbite;
+
+                if (CanUseAction(BRD.VenomousBite) && (HasTarget() || HasSoftTarget()) && (venomous is null || venomous.RemainingTime <= 15))
+                    return BRD.VenomousBite;
+            }
+
             if (IsEnabled(CustomComboPreset.BardBloodletterUpgradeFeature))
             {
                 if (CanUseAction(BRD.Bloodletter) && HasCharges(BRD.Bloodletter))
@@ -419,6 +431,28 @@ internal class BardPeloton : CustomCombo
                 return BRD.WanderersMinuet;
 
             return BRD.Peloton;
+        }
+
+        return actionID;
+    }
+}
+
+internal class BardDoTCombo : CustomCombo
+{
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BardDoTCombo;
+
+    protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
+    {
+        if (actionID == BRD.VenomousBite)
+        {
+            var venomous = FindTargetEffect(BRD.Debuffs.VenomousBite);
+            var windbite = FindTargetEffect(BRD.Debuffs.Windbite);
+
+            if (CanUseAction(BRD.Windbite) && (windbite is null || windbite.RemainingTime <= 15))
+                return BRD.Windbite;
+
+            if (CanUseAction(BRD.VenomousBite) && (venomous is null || venomous.RemainingTime <= 15))
+                return BRD.VenomousBite;
         }
 
         return actionID;

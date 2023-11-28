@@ -96,7 +96,7 @@ internal class MachinistMainCombo : CustomCombo
                     float gaussCharges = gaussCd.IsCooldown ? gaussCd.CooldownElapsed / (gaussCd.CooldownTotal / maxCharges) : maxCharges;
                     float ricochetCharges = 0;
                     var weaveAction = MCH.GaussRound;
-                    if (CanUseAction(MCH.Ricochet))
+                    if (level >= MCH.Levels.Ricochet)
                     {
                         CooldownData ricochetCd = GetCooldown(MCH.Ricochet);
                         ricochetCharges = ricochetCd.IsCooldown ? ricochetCd.CooldownElapsed / (ricochetCd.CooldownTotal / maxCharges) : maxCharges;
@@ -110,9 +110,9 @@ internal class MachinistMainCombo : CustomCombo
                         return weaveAction;
                 }
 
-                if (lastComboMove == MCH.SlugShot && CanUseAction(MCH.CleanShot))
+                if (lastComboMove == MCH.SlugShot && level >= MCH.Levels.CleanShot)
                 {
-                    if (IsEnabled(CustomComboPreset.MachinistRookFeature) && CanUseAction(MCH.RookAutoturret))
+                    if (IsEnabled(CustomComboPreset.MachinistRookFeature) && level >= MCH.Levels.RookAutoturret)
                     {
                         var gauge = GetJobGauge<MCHGauge>();
 
@@ -124,7 +124,7 @@ internal class MachinistMainCombo : CustomCombo
                     return OriginalHook(MCH.CleanShot);
                 }
 
-                if (lastComboMove == MCH.SplitShot && CanUseAction(MCH.SlugShot))
+                if (lastComboMove == MCH.SplitShot && level >= MCH.Levels.SlugShot)
                     // Heated
                     return OriginalHook(MCH.SlugShot);
             }
@@ -152,7 +152,7 @@ internal class MachinistAutoweaveFeatureAoE : CustomCombo
                 float gaussCharges = gaussCd.IsCooldown ? gaussCd.CooldownElapsed / (gaussCd.CooldownTotal / maxCharges) : maxCharges;
                 float ricochetCharges = 0;
                 var weaveAction = MCH.GaussRound;
-                if (CanUseAction(MCH.Ricochet))
+                if (level >= MCH.Levels.Ricochet)
                 {
                     CooldownData ricochetCd = GetCooldown(MCH.Ricochet);
                     ricochetCharges = ricochetCd.IsCooldown ? ricochetCd.CooldownElapsed / (ricochetCd.CooldownTotal / maxCharges) : maxCharges;
@@ -179,7 +179,7 @@ internal class MachinistGaussRoundRicochet : CustomCombo
     {
         if (actionID == MCH.GaussRound || actionID == MCH.Ricochet)
         {
-            if (CanUseAction(MCH.Ricochet))
+            if (level >= MCH.Levels.Ricochet)
                 return CalcBestAction(actionID, MCH.GaussRound, MCH.Ricochet);
 
             return MCH.GaussRound;
@@ -197,10 +197,10 @@ internal class MachinistWildfire : CustomCombo
     {
         if (actionID == MCH.Hypercharge)
         {
-            if (CanUseAction(MCH.Wildfire) && IsOffCooldown(MCH.Wildfire) && HasTarget())
+            if (level >= MCH.Levels.Wildfire && IsOffCooldown(MCH.Wildfire) && HasTarget())
                 return MCH.Wildfire;
 
-            if (CanUseAction(MCH.Wildfire) && IsOnCooldown(MCH.Hypercharge) && !IsOriginal(MCH.Wildfire))
+            if (level >= MCH.Levels.Wildfire && IsOnCooldown(MCH.Hypercharge) && !IsOriginal(MCH.Wildfire))
                 return MCH.Detonator;
         }
 
@@ -221,18 +221,18 @@ internal class MachinistHeatBlastAutoCrossbow : CustomCombo
             if (IsEnabled(CustomComboPreset.MachinistBarrelStabilizerFeature))
             {
                 CooldownData barrelStabilizerCd = GetCooldown(MCH.BarrelStabilizer);
-                if (CanUseAction(MCH.BarrelStabilizer) && !barrelStabilizerCd.IsCooldown && !gauge.IsOverheated && gauge.Heat < 50)
+                if (level >= MCH.Levels.BarrelStabilizer && !barrelStabilizerCd.IsCooldown && !gauge.IsOverheated && gauge.Heat < 50)
                     return MCH.BarrelStabilizer;
             }
 
             if (IsEnabled(CustomComboPreset.MachinistWildfireFeature))
             {
                 CooldownData wildfireCd = GetCooldown(MCH.Wildfire);
-                if (CanUseAction(MCH.Wildfire) && !wildfireCd.IsCooldown && !gauge.IsOverheated && gauge.Heat >= 50)
+                if (level >= MCH.Levels.Wildfire && !wildfireCd.IsCooldown && !gauge.IsOverheated && gauge.Heat >= 50)
                     return MCH.Wildfire;
             }
 
-            if (CanUseAction(MCH.Hypercharge) && !gauge.IsOverheated)
+            if (level >= MCH.Levels.Hypercharge && !gauge.IsOverheated)
                 return MCH.Hypercharge;
 
             if (IsEnabled(CustomComboPreset.MachinistAutoweaveFeature) && actionID == MCH.HeatBlast)
@@ -242,7 +242,7 @@ internal class MachinistHeatBlastAutoCrossbow : CustomCombo
                 float gaussCharges = gaussCd.IsCooldown ? gaussCd.CooldownElapsed / (gaussCd.CooldownTotal / maxCharges) : maxCharges;
                 float ricochetCharges = 0;
                 var weaveAction = MCH.GaussRound;
-                if (CanUseAction(MCH.Ricochet))
+                if (level >= MCH.Levels.Ricochet)
                 {
                     CooldownData ricochetCd = GetCooldown(MCH.Ricochet);
                     ricochetCharges = ricochetCd.IsCooldown ? ricochetCd.CooldownElapsed / (ricochetCd.CooldownTotal / maxCharges) : maxCharges;
@@ -274,7 +274,7 @@ internal class MachinistSpreadShot : CustomCombo
         {
             var gauge = GetJobGauge<MCHGauge>();
 
-            if (CanUseAction(MCH.AutoCrossbow) && gauge.IsOverheated)
+            if (level >= MCH.Levels.AutoCrossbow && gauge.IsOverheated)
                 return MCH.AutoCrossbow;
         }
 
@@ -292,7 +292,7 @@ internal class MachinistRookAutoturret : CustomCombo
         {
             var gauge = GetJobGauge<MCHGauge>();
 
-            if (CanUseAction(MCH.RookOverdrive) && gauge.IsRobotActive)
+            if (level >= MCH.Levels.RookOverdrive && gauge.IsRobotActive)
                 // Queen Overdrive
                 return OriginalHook(MCH.RookOverdrive);
         }
@@ -310,17 +310,17 @@ internal class MachinistDrillAirAnchorChainsaw : CustomCombo
         if (actionID == MCH.HotShot || actionID == MCH.AirAnchor || actionID == MCH.Drill || actionID == MCH.Chainsaw)
         {
             uint bestAction = MCH.HotShot;
-            if (CanUseAction(MCH.Drill))
+            if (level >= MCH.Levels.Drill)
                 bestAction = CalcBestAction(actionID, MCH.Drill, MCH.HotShot);
 
-            if (CanUseAction(MCH.AirAnchor))
+            if (level >= MCH.Levels.AirAnchor)
                 bestAction = CalcBestAction(actionID, MCH.AirAnchor, MCH.Drill);
 
-            if (CanUseAction(MCH.Chainsaw))
+            if (level >= MCH.Levels.Chainsaw)
                 bestAction = CalcBestAction(actionID, MCH.Chainsaw, MCH.AirAnchor, MCH.Drill);
 
             CooldownData bestActionCd = GetCooldown(bestAction);
-            if (IsEnabled(CustomComboPreset.MachinistReassembleFeature) && CanUseAction(MCH.Reassemble) && !HasEffect(MCH.Buffs.Reassembled) && !bestActionCd.IsCooldown)
+            if (IsEnabled(CustomComboPreset.MachinistReassembleFeature) && level >= MCH.Levels.Reassemble && !HasEffect(MCH.Buffs.Reassembled) && !bestActionCd.IsCooldown)
             {
                 CooldownData reassembleCd = GetCooldown(MCH.Reassemble);
 
@@ -331,7 +331,7 @@ internal class MachinistDrillAirAnchorChainsaw : CustomCombo
                     bestAction = MCH.Reassemble;
             }
 
-            if (IsEnabled(CustomComboPreset.MachinistRookFeature) && CanUseAction(MCH.RookAutoturret) && (bestAction == MCH.HotShot || bestAction == MCH.AirAnchor))
+            if (IsEnabled(CustomComboPreset.MachinistRookFeature) && level >= MCH.Levels.RookAutoturret && (bestAction == MCH.HotShot || bestAction == MCH.AirAnchor))
             {
                 var gauge = GetJobGauge<MCHGauge>();
 
@@ -354,10 +354,10 @@ internal class MachinistAirAnchorChainsaw : CustomCombo
     {
         if (actionID == MCH.HotShot || actionID == MCH.AirAnchor || actionID == MCH.Chainsaw)
         {
-            if (CanUseAction(MCH.Chainsaw))
+            if (level >= MCH.Levels.Chainsaw)
                 return CalcBestAction(actionID, MCH.Chainsaw, MCH.AirAnchor);
 
-            if (CanUseAction(MCH.AirAnchor))
+            if (level >= MCH.Levels.AirAnchor)
                 return MCH.AirAnchor;
 
             return MCH.HotShot;

@@ -1,4 +1,5 @@
 ﻿namespace XIVComboExpandedPlugin.Combos;
+
 internal static class DOH
 {
     public const byte ClassID = 0;

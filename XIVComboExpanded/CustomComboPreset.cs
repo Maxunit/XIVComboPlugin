@@ -284,6 +284,14 @@ public enum CustomComboPreset
     [CustomComboInfo("Heavy Shot into Bloodletter", "Replaces Heavy Shot with Bloodletter if charges available.", BRD.JobID)]
     BardBloodletterUpgradeFeature = 2322,
 
+    [EvilCombo]
+    [CustomComboInfo("Basic Bites Combo", "Replaces Heavy Shot and its combo chain with Venomous Bite/Windbite when no debuff on target.", BRD.JobID)]
+    BasicBiteCombo = 2323,
+
+    [EvilCombo]
+    [CustomComboInfo("DoT Combo", "Replaces Venomous Bite with Windbite when available and no Windbite Debuff on Target.", BRD.JobID)]
+    BardDoTCombo = 2324,
+
     #endregion
     // ====================================================================================
     #region DANCER
@@ -1185,11 +1193,14 @@ public enum CustomComboPreset
     [CustomComboInfo("Upheaval and Orogeny Spender", "Adds Upheaval and Orogeny to the Parent Combo if Surging Tempest is active.", WAR.JobID)]
     UpheavalOrogenySpenderFeature = 2111,
 
-    [CustomComboInfo("Healthy Balanaced Diet Feature", "Replace Thrill of Battle with Bloodwhetting, and then Equilibrium when the preceding is on cooldown.", WAR.JobID)]
+    [CustomComboInfo("Healthy Balanaced Diet Feature", "Replace Thrill of Battle with Raw Intuition/Bloodwhetting, and then Equilibrium when the preceding is on cooldown.", WAR.JobID)]
     WarriorHealthyBalancedDietFeature = 2112,
 
-    [CustomComboInfo("Heavy Swing Tomahawk Onslaught Feature", "Replaces Heavy Swing with either Tomahawk or Onslaught, depending on level, if not within melee range.", WAR.JobID)]
-    HeavySwingOnslaughtFeature = 2113,
+    [CustomComboInfo("Heavy Swing Tomahawk Feature", "Replaces Heavy Swing Combo with Tomahawk if not within melee range.", WAR.JobID)]
+    HeavySwingTomahawkFeature = 2113,
+
+    [CustomComboInfo("Heavy Swing Onslaught Feature", "Replaces Heavy Swing Combo with Onslaught if not within melee range.", WAR.JobID)]
+    HeavySwingOnslaughtFeature = 2114,
 
     #endregion
     // ====================================================================================

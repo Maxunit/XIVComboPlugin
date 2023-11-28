@@ -185,23 +185,59 @@ internal abstract partial class CustomCombo
 /// </summary>
 internal abstract partial class CustomCombo
 {
+    protected internal static bool InMeleeRange
+            => TargetDistance <= Service.Configuration.MeleeOffset;
+
+    protected internal static bool InSoftMeleeRange
+            => SoftTargetDistance <= Service.Configuration.MeleeOffset;
+
+    protected internal static double SoftTargetDistance
+    {
+        get
+        {
+            if (LocalPlayer is null || SoftTarget is null)
+                return 0;
+
+            GameObject? target = SoftTarget;
+
+            Vector2 tPos = new(target.Position.X, target.Position.Z);
+            Vector2 sPos = new(LocalPlayer.Position.X, LocalPlayer.Position.Z);
+
+            return Vector2.Distance(tPos, sPos) - target.HitboxRadius - LocalPlayer.HitboxRadius;
+        }
+    }
+
+    // Took this code from PrincessRTFM.
+    // All credits goes to them, not me!
+    // This seems to be more accurate and faster than the previous GetTargetDistance and InMeleeRange.
+    protected internal static double TargetDistance
+    {
+        get
+        {
+            if (LocalPlayer is null || CurrentTarget is null)
+                return 0;
+
+            GameObject? target = CurrentTarget;
+
+            Vector2 tPos = new(target.Position.X, target.Position.Z);
+            Vector2 sPos = new(LocalPlayer.Position.X, LocalPlayer.Position.Z);
+
+            return Vector2.Distance(tPos, sPos) - target.HitboxRadius - LocalPlayer.HitboxRadius;
+        }
+    }
+
     /// <summary>
-    /// Gets the player or null.
+    /// Gets a value indicating whether the target can be interrupted or not.
     /// </summary>
-    protected static PlayerCharacter? LocalPlayer
-        => Service.ClientState.LocalPlayer;
+    /// <returns>A value indicating if the target can be interrupted by the player.</returns>
+    protected static bool CanInterrupt
+        => Service.ComboCache.CanInterruptTarget;
 
     /// <summary>
     /// Gets the current target or null.
     /// </summary>
     protected static GameObject? CurrentTarget
         => Service.TargetManager.Target;
-
-    /// <summary>
-    /// Gets the current soft target or null.
-    /// </summary>
-    protected static GameObject? SoftTarget
-        => Service.TargetManager.SoftTarget;
 
     /// <summary>
     /// Gets the current territory type.
@@ -213,13 +249,15 @@ internal abstract partial class CustomCombo
         => Service.ClientState.TerritoryType;
 
     /// <summary>
-    /// Calls the original hook.
+    /// Gets the player or null.
     /// </summary>
-    /// <param name="actionID">Action ID.</param>
-    /// <returns>The result from the hook.</returns>
-    protected static uint OriginalHook(uint actionID)
-        => Service.IconReplacer.OriginalHook(actionID);
-
+    protected static PlayerCharacter? LocalPlayer
+        => Service.ClientState.LocalPlayer;
+    /// <summary>
+    /// Gets the current soft target or null.
+    /// </summary>
+    protected static GameObject? SoftTarget
+        => Service.TargetManager.SoftTarget;
     /// <summary>
     /// Gets bool determining if action is greyed out or not.
     /// </summary>
@@ -228,12 +266,183 @@ internal abstract partial class CustomCombo
     protected static bool CanUseAction(uint actionID) => Service.IconReplacer.CanUseAction(actionID);
 
     /// <summary>
-    /// Compare the original hook to the given action ID.
+    /// Finds an effect on the player.
+    /// The effect must be owned by the player or unowned.
     /// </summary>
-    /// <param name="actionID">Action ID.</param>
-    /// <returns>A value indicating whether the action would be modified.</returns>
-    protected static bool IsOriginal(uint actionID)
-        => Service.IconReplacer.OriginalHook(actionID) == actionID;
+    /// <param name="effectID">Status effect ID.</param>
+    /// <returns>Status object or null.</returns>
+    protected static Status? FindEffect(ushort effectID)
+        => FindEffect(effectID, LocalPlayer, LocalPlayer?.ObjectId);
+
+    /// <summary>
+    /// Finds an effect on the given object.
+    /// </summary>
+    /// <param name="effectID">Status effect ID.</param>
+    /// <param name="obj">Object to look for effects on.</param>
+    /// <param name="sourceID">Source object ID.</param>
+    /// <returns>Status object or null.</returns>
+    protected static Status? FindEffect(ushort effectID, GameObject? obj, uint? sourceID)
+        => Service.ComboCache.GetStatus(effectID, obj, sourceID);
+
+    /// <summary>
+    /// Finds an effect on the player.
+    /// The effect may be owned by anyone or unowned.
+    /// </summary>
+    /// <param name="effectID">Status effect ID.</param>
+    /// <returns>Status object or null.</returns>
+    protected static Status? FindEffectAny(ushort effectID)
+        => FindEffect(effectID, LocalPlayer, null);
+
+    /// <summary>
+    /// Finds an effect on the current target.
+    /// The effect must be owned by the player or unowned.
+    /// </summary>
+    /// <param name="effectID">Status effect ID.</param>
+    /// <returns>Status object or null.</returns>
+    protected static Status? FindTargetEffect(ushort effectID)
+        => FindEffect(effectID, CurrentTarget, LocalPlayer?.ObjectId);
+
+    /// <summary>
+    /// Finds an effect on the current target.
+    /// The effect may be owned by anyone or unowned.
+    /// </summary>
+    /// <param name="effectID">Status effect ID.</param>
+    /// <returns>Status object or null.</returns>
+    protected static Status? FindTargetEffectAny(ushort effectID)
+        => FindEffect(effectID, CurrentTarget, null);
+
+    /// <summary>
+    /// Checks to see if the GCD would not currently clip if you used a cooldown.
+    /// </summary>
+    /// <returns>A bool indicating if the GCD is greater-than-or-equal-to 0.5s or not.</returns>
+    protected static bool GCDClipCheck() => GetCooldown(PLD.RageOfHalone).CooldownRemaining >= 0.5;
+
+    /// <summary>
+    /// Gets the cooldown data for an action.
+    /// </summary>
+    /// <param name="actionID">Action ID to check.</param>
+    /// <returns>Cooldown data.</returns>
+    protected static CooldownData GetCooldown(uint actionID)
+        => Service.ComboCache.GetCooldown(actionID);
+
+    /// <summary>
+    /// Get a job gauge.
+    /// </summary>
+    /// <typeparam name="T">Type of job gauge.</typeparam>
+    /// <returns>The job gauge.</returns>
+    protected static T GetJobGauge<T>() where T : JobGaugeBase
+        => Service.ComboCache.GetJobGauge<T>();
+
+    /// <summary>
+    /// Get the maximum number of charges for an action.
+    /// </summary>
+    /// <param name="actionID">Action ID to check.</param>
+    /// <returns>Number of charges.</returns>
+    protected static ushort GetMaxCharges(uint actionID)
+        => GetCooldown(actionID).MaxCharges;
+
+    /// <summary>
+    /// Get the current number of charges remaining for an action.
+    /// </summary>
+    /// <param name="actionID">Action ID to check.</param>
+    /// <returns>Number of charges.</returns>
+    protected static ushort GetRemainingCharges(uint actionID)
+        => GetCooldown(actionID).RemainingCharges;
+
+    /// <summary>
+    /// Gets the distance from the target.
+    /// </summary>
+    /// <returns>Double representing the distance from the target.</returns>
+    protected static double GetTargetDistance()
+    {
+        if (CurrentTarget is null)
+            return 0;
+
+        if (CurrentTarget is not BattleChara chara)
+            return 0;
+
+        double distanceX = chara.YalmDistanceX;
+        double distanceY = chara.YalmDistanceZ;
+
+        return Math.Sqrt(Math.Pow(distanceX, 2) + Math.Pow(distanceY, 2));
+    }
+
+    /// <summary>
+    /// Gets a value indicating whether an action has any available charges.
+    /// </summary>
+    /// <param name="actionID">Action ID to check.</param>
+    /// <returns>True or false.</returns>
+    protected static bool HasCharges(uint actionID)
+        => GetCooldown(actionID).RemainingCharges > 0;
+
+    /// <summary>
+    /// Find if the player has a certain condition.
+    /// </summary>
+    /// <param name="flag">Condition flag.</param>
+    /// <returns>A value indicating whether the player is in the condition.</returns>
+    protected static bool HasCondition(ConditionFlag flag)
+        => Service.Condition[flag];
+
+    /// <summary>
+    /// Find if an effect on the player exists.
+    /// The effect may be owned by the player or unowned.
+    /// </summary>
+    /// <param name="effectID">Status effect ID.</param>
+    /// <returns>A value indicating if the effect exists.</returns>
+    protected static bool HasEffect(ushort effectID)
+        => FindEffect(effectID) is not null;
+
+    /// <summary>
+    /// Find if an effect on the player exists.
+    /// The effect may be owned by anyone or unowned.
+    /// </summary>
+    /// <param name="effectID">Status effect ID.</param>
+    /// <returns>A value indicating if the effect exists.</returns>
+    protected static bool HasEffectAny(ushort effectID)
+        => FindEffectAny(effectID) is not null;
+
+    /// <summary>
+    /// Gets a value indicating whether an action has no available charges.
+    /// </summary>
+    /// <param name="actionID">Action ID to check.</param>
+    /// <returns>True or false.</returns>
+    protected static bool HasNoCharges(uint actionID)
+        => GetCooldown(actionID).RemainingCharges == 0;
+
+    /// <summary>
+    /// Find if the player has no target.
+    /// </summary>
+    /// <returns>A value indicating whether the player has a target.</returns>
+    protected static bool HasNoTarget()
+        => CurrentTarget is null;
+
+    /// <summary>
+    /// Find if the player has a pet present.
+    /// </summary>
+    /// <returns>A value indicating whether the player has a pet present.</returns>
+    protected static bool HasPetPresent()
+        => Service.BuddyList.PetBuddy != null;
+
+    /// <summary>
+    /// Gets a value indicating whether the target is a soft target or not.
+    /// </summary>
+    /// <returns>A value indicating if the target is a soft target or not.</returns>
+    protected static bool HasSoftTarget()
+        => SoftTarget is not null;
+
+    /// <summary>
+    /// Find if the player has a target.
+    /// </summary>
+    /// <returns>A value indicating whether the player has a target.</returns>
+    protected static bool HasTarget()
+        => CurrentTarget is not null;
+
+    /// <summary>
+    /// Find if the player is in combat.
+    /// </summary>
+    /// <returns>A value indicating whether the player is in combat.</returns>
+    protected static bool InCombat()
+        => Service.Condition[ConditionFlag.InCombat];
 
     /// <summary>
     /// Determine if the given preset is enabled.
@@ -252,151 +461,42 @@ internal abstract partial class CustomCombo
         => !IsEnabled(preset);
 
     /// <summary>
-    /// Find if the player has a certain condition.
+    /// Gets a value indicating whether an action is off cooldown.
     /// </summary>
-    /// <param name="flag">Condition flag.</param>
-    /// <returns>A value indicating whether the player is in the condition.</returns>
-    protected static bool HasCondition(ConditionFlag flag)
-        => Service.Condition[flag];
+    /// <param name="actionID">Action ID to check.</param>
+    /// <returns>True or false.</returns>
+    protected static bool IsOffCooldown(uint actionID)
+        => !GetCooldown(actionID).IsCooldown;
 
     /// <summary>
-    /// Find if the player is in combat.
+    /// Gets a value indicating whether an action is on cooldown.
     /// </summary>
-    /// <returns>A value indicating whether the player is in combat.</returns>
-    protected static bool InCombat()
-        => Service.Condition[ConditionFlag.InCombat];
+    /// <param name="actionID">Action ID to check.</param>
+    /// <returns>True or false.</returns>
+    protected static bool IsOnCooldown(uint actionID)
+        => GetCooldown(actionID).IsCooldown;
 
+    /// <summary>
+    /// Compare the original hook to the given action ID.
+    /// </summary>
+    /// <param name="actionID">Action ID.</param>
+    /// <returns>A value indicating whether the action would be modified.</returns>
+    protected static bool IsOriginal(uint actionID)
+        => Service.IconReplacer.OriginalHook(actionID) == actionID;
+
+    /// <summary>
+    /// Calls the original hook.
+    /// </summary>
+    /// <param name="actionID">Action ID.</param>
+    /// <returns>The result from the hook.</returns>
+    protected static uint OriginalHook(uint actionID)
+        => Service.IconReplacer.OriginalHook(actionID);
     /// <summary>
     /// Find if the player is not in combat.
     /// </summary>
     /// <returns>A value indicating whether the player is not in combat.</returns>
     protected static bool OutOfCombat()
         => !InCombat();
-
-    /// <summary>
-    /// Find if the player has a target.
-    /// </summary>
-    /// <returns>A value indicating whether the player has a target.</returns>
-    protected static bool HasTarget()
-        => CurrentTarget is not null;
-
-    /// <summary>
-    /// Gets a value indicating whether the target is a soft target or not.
-    /// </summary>
-    /// <returns>A value indicating if the target is a soft target or not.</returns>
-    protected static bool HasSoftTarget()
-        => SoftTarget is not null;
-
-    /// <summary>
-    /// Gets a value indicating whether the target can be interrupted or not.
-    /// </summary>
-    /// <returns>A value indicating if the target can be interrupted by the player.</returns>
-    protected static bool CanInterrupt
-        => Service.ComboCache.CanInterruptTarget;
-
-    /// <summary>
-    /// Find if the player has no target.
-    /// </summary>
-    /// <returns>A value indicating whether the player has a target.</returns>
-    protected static bool HasNoTarget()
-        => CurrentTarget is null;
-
-    /// <summary>
-    /// Find if the current target is an enemy.
-    /// </summary>
-    /// <returns>A value indicating whether the target is an enemy.</returns>
-    protected static bool TargetIsEnemy()
-        => HasTarget() && CurrentTarget?.ObjectKind == ObjectKind.BattleNpc && CurrentTarget?.SubKind == 5;
-
-    /// <summary>
-    /// Find if the player has a pet present.
-    /// </summary>
-    /// <returns>A value indicating whether the player has a pet present.</returns>
-    protected static bool HasPetPresent()
-        => Service.BuddyList.PetBuddy != null;
-
-    /// <summary>
-    /// Find if an effect on the player exists.
-    /// The effect may be owned by the player or unowned.
-    /// </summary>
-    /// <param name="effectID">Status effect ID.</param>
-    /// <returns>A value indicating if the effect exists.</returns>
-    protected static bool HasEffect(ushort effectID)
-        => FindEffect(effectID) is not null;
-
-    /// <summary>
-    /// Finds an effect on the player.
-    /// The effect must be owned by the player or unowned.
-    /// </summary>
-    /// <param name="effectID">Status effect ID.</param>
-    /// <returns>Status object or null.</returns>
-    protected static Status? FindEffect(ushort effectID)
-        => FindEffect(effectID, LocalPlayer, LocalPlayer?.ObjectId);
-
-    /// <summary>
-    /// Find if an effect on the target exists.
-    /// The effect must be owned by the player or unowned.
-    /// </summary>
-    /// <param name="effectID">Status effect ID.</param>
-    /// <returns>A value indicating if the effect exists.</returns>
-    protected static bool TargetHasEffect(ushort effectID)
-        => FindTargetEffect(effectID) is not null;
-
-    /// <summary>
-    /// Finds an effect on the current target.
-    /// The effect must be owned by the player or unowned.
-    /// </summary>
-    /// <param name="effectID">Status effect ID.</param>
-    /// <returns>Status object or null.</returns>
-    protected static Status? FindTargetEffect(ushort effectID)
-        => FindEffect(effectID, CurrentTarget, LocalPlayer?.ObjectId);
-
-    /// <summary>
-    /// Find if an effect on the player exists.
-    /// The effect may be owned by anyone or unowned.
-    /// </summary>
-    /// <param name="effectID">Status effect ID.</param>
-    /// <returns>A value indicating if the effect exists.</returns>
-    protected static bool HasEffectAny(ushort effectID)
-        => FindEffectAny(effectID) is not null;
-
-    /// <summary>
-    /// Finds an effect on the player.
-    /// The effect may be owned by anyone or unowned.
-    /// </summary>
-    /// <param name="effectID">Status effect ID.</param>
-    /// <returns>Status object or null.</returns>
-    protected static Status? FindEffectAny(ushort effectID)
-        => FindEffect(effectID, LocalPlayer, null);
-
-    /// <summary>
-    /// Find if an effect on the target exists.
-    /// The effect may be owned by anyone or unowned.
-    /// </summary>
-    /// <param name="effectID">Status effect ID.</param>
-    /// <returns>A value indicating if the effect exists.</returns>
-    protected static bool TargetHasEffectAny(ushort effectID)
-        => FindTargetEffectAny(effectID) is not null;
-
-    /// <summary>
-    /// Finds an effect on the current target.
-    /// The effect may be owned by anyone or unowned.
-    /// </summary>
-    /// <param name="effectID">Status effect ID.</param>
-    /// <returns>Status object or null.</returns>
-    protected static Status? FindTargetEffectAny(ushort effectID)
-        => FindEffect(effectID, CurrentTarget, null);
-
-    /// <summary>
-    /// Finds an effect on the given object.
-    /// </summary>
-    /// <param name="effectID">Status effect ID.</param>
-    /// <param name="obj">Object to look for effects on.</param>
-    /// <param name="sourceID">Source object ID.</param>
-    /// <returns>Status object or null.</returns>
-    protected static Status? FindEffect(ushort effectID, GameObject? obj, uint? sourceID)
-        => Service.ComboCache.GetStatus(effectID, obj, sourceID);
-
     protected static uint PickByCooldown(uint original, params uint[] actions)
     {
         static (uint ActionID, CooldownData Data) Compare(uint original, (uint ActionID, CooldownData Data) a1, (uint ActionID, CooldownData Data) a2)
@@ -422,134 +522,29 @@ internal abstract partial class CustomCombo
     }
 
     /// <summary>
-    /// Gets the cooldown data for an action.
+    /// Find if an effect on the target exists.
+    /// The effect must be owned by the player or unowned.
     /// </summary>
-    /// <param name="actionID">Action ID to check.</param>
-    /// <returns>Cooldown data.</returns>
-    protected static CooldownData GetCooldown(uint actionID)
-        => Service.ComboCache.GetCooldown(actionID);
+    /// <param name="effectID">Status effect ID.</param>
+    /// <returns>A value indicating if the effect exists.</returns>
+    protected static bool TargetHasEffect(ushort effectID)
+        => FindTargetEffect(effectID) is not null;
 
     /// <summary>
-    /// Gets a value indicating whether an action is on cooldown.
+    /// Find if an effect on the target exists.
+    /// The effect may be owned by anyone or unowned.
     /// </summary>
-    /// <param name="actionID">Action ID to check.</param>
-    /// <returns>True or false.</returns>
-    protected static bool IsOnCooldown(uint actionID)
-        => GetCooldown(actionID).IsCooldown;
+    /// <param name="effectID">Status effect ID.</param>
+    /// <returns>A value indicating if the effect exists.</returns>
+    protected static bool TargetHasEffectAny(ushort effectID)
+        => FindTargetEffectAny(effectID) is not null;
 
     /// <summary>
-    /// Gets a value indicating whether an action is off cooldown.
+    /// Find if the current target is an enemy.
     /// </summary>
-    /// <param name="actionID">Action ID to check.</param>
-    /// <returns>True or false.</returns>
-    protected static bool IsOffCooldown(uint actionID)
-        => !GetCooldown(actionID).IsCooldown;
-
-    /// <summary>
-    /// Checks to see if the GCD would not currently clip if you used a cooldown.
-    /// </summary>
-    /// <returns>A bool indicating if the GCD is greater-than-or-equal-to 0.5s or not.</returns>
-    protected static bool GCDClipCheck() => GetCooldown(PLD.RageOfHalone).CooldownRemaining >= 0.5;
-
-    /// <summary>
-    /// Gets a value indicating whether an action has any available charges.
-    /// </summary>
-    /// <param name="actionID">Action ID to check.</param>
-    /// <returns>True or false.</returns>
-    protected static bool HasCharges(uint actionID)
-        => GetCooldown(actionID).RemainingCharges > 0;
-
-    /// <summary>
-    /// Gets a value indicating whether an action has no available charges.
-    /// </summary>
-    /// <param name="actionID">Action ID to check.</param>
-    /// <returns>True or false.</returns>
-    protected static bool HasNoCharges(uint actionID)
-        => GetCooldown(actionID).RemainingCharges == 0;
-
-    /// <summary>
-    /// Get the current number of charges remaining for an action.
-    /// </summary>
-    /// <param name="actionID">Action ID to check.</param>
-    /// <returns>Number of charges.</returns>
-    protected static ushort GetRemainingCharges(uint actionID)
-        => GetCooldown(actionID).RemainingCharges;
-
-    /// <summary>
-    /// Get the maximum number of charges for an action.
-    /// </summary>
-    /// <param name="actionID">Action ID to check.</param>
-    /// <returns>Number of charges.</returns>
-    protected static ushort GetMaxCharges(uint actionID)
-        => GetCooldown(actionID).MaxCharges;
-
-    /// <summary>
-    /// Get a job gauge.
-    /// </summary>
-    /// <typeparam name="T">Type of job gauge.</typeparam>
-    /// <returns>The job gauge.</returns>
-    protected static T GetJobGauge<T>() where T : JobGaugeBase
-        => Service.ComboCache.GetJobGauge<T>();
-
-    /// <summary>
-    /// Gets the distance from the target.
-    /// </summary>
-    /// <returns>Double representing the distance from the target.</returns>
-    protected static double GetTargetDistance()
-    {
-        if (CurrentTarget is null)
-            return 0;
-
-        if (CurrentTarget is not BattleChara chara)
-            return 0;
-
-        double distanceX = chara.YalmDistanceX;
-        double distanceY = chara.YalmDistanceZ;
-
-        return Math.Sqrt(Math.Pow(distanceX, 2) + Math.Pow(distanceY, 2));
-    }
-
-    // Took this code from PrincessRTFM.
-    // All credits goes to them, not me!
-    // This seems to be more accurate and faster than the previous GetTargetDistance and InMeleeRange.
-    protected internal static double TargetDistance
-    {
-        get
-        {
-            if (LocalPlayer is null || CurrentTarget is null)
-                return 0;
-
-            GameObject? target = CurrentTarget;
-
-            Vector2 tPos = new(target.Position.X, target.Position.Z);
-            Vector2 sPos = new(LocalPlayer.Position.X, LocalPlayer.Position.Z);
-
-            return Vector2.Distance(tPos, sPos) - target.HitboxRadius - LocalPlayer.HitboxRadius;
-        }
-    }
-
-    protected internal static bool InMeleeRange
-        => TargetDistance <= Service.Configuration.MeleeOffset;
-
-    protected internal static double SoftTargetDistance
-    {
-        get
-        {
-            if (LocalPlayer is null || SoftTarget is null)
-                return 0;
-
-            GameObject? target = SoftTarget;
-
-            Vector2 tPos = new(target.Position.X, target.Position.Z);
-            Vector2 sPos = new(LocalPlayer.Position.X, LocalPlayer.Position.Z);
-
-            return Vector2.Distance(tPos, sPos) - target.HitboxRadius - LocalPlayer.HitboxRadius;
-        }
-    }
-
-    protected internal static bool InSoftMeleeRange
-        => SoftTargetDistance <= Service.Configuration.MeleeOffset;
-
+    /// <returns>A value indicating whether the target is an enemy.</returns>
+    protected static bool TargetIsEnemy()
+        => HasTarget() && CurrentTarget?.ObjectKind == ObjectKind.BattleNpc && CurrentTarget?.SubKind == 5;
     /*
     /// <summary>
     /// Gets a value indicating whether you are in melee range from the current target.
