@@ -172,11 +172,11 @@ internal class DragoonFullThrust : CustomCombo
     {
         if (actionID == DRG.FullThrust || actionID == DRG.HeavensThrust)
         {
-            if (level >= DRG.Levels.Drakesbane && lastComboMove == DRG.FangAndClaw)
-                return DRG.Drakesbane;
-
             if (IsEnabled(CustomComboPreset.DragoonFullThrustCombo))
             {
+                if (level >= DRG.Levels.Drakesbane && lastComboMove == DRG.FangAndClaw)
+                    return DRG.Drakesbane;
+
                 if (comboTime > 0)
                 {
                     if ((lastComboMove == DRG.FullThrust || lastComboMove == DRG.HeavensThrust) && level >= DRG.Levels.FangAndClaw)

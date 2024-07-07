@@ -286,12 +286,12 @@ internal class SummonerRadiantCarbuncleFeature : CustomCombo
 
             if (level >= SMN.Levels.SummonCarbuncle && !HasPetPresent())
                 return SMN.SummonCarbuncle;
-        }
 
-        if (IsEnabled(CustomComboPreset.SummonerRadiantLuxSolarisFeature))
-        {
-            if (HasEffect(SMN.Buffs.LuxSolarisReady))
-                return SMN.LuxSolaris;
+            if (IsEnabled(CustomComboPreset.SummonerRadiantLuxSolarisFeature))
+            {
+                if (HasEffect(SMN.Buffs.LuxSolarisReady))
+                    return SMN.LuxSolaris;
+            }
         }
 
         return actionID;
