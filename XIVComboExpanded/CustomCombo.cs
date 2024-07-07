@@ -198,7 +198,7 @@ internal abstract partial class CustomCombo
             if (LocalPlayer is null || SoftTarget is null)
                 return 0;
 
-            GameObject? target = SoftTarget;
+            IGameObject? target = SoftTarget;
 
             Vector2 tPos = new(target.Position.X, target.Position.Z);
             Vector2 sPos = new(LocalPlayer.Position.X, LocalPlayer.Position.Z);
@@ -217,7 +217,7 @@ internal abstract partial class CustomCombo
             if (LocalPlayer is null || CurrentTarget is null)
                 return 0;
 
-            GameObject? target = CurrentTarget;
+            IGameObject? target = CurrentTarget;
 
             Vector2 tPos = new(target.Position.X, target.Position.Z);
             Vector2 sPos = new(LocalPlayer.Position.X, LocalPlayer.Position.Z);
@@ -236,7 +236,7 @@ internal abstract partial class CustomCombo
     /// <summary>
     /// Gets the current target or null.
     /// </summary>
-    protected static GameObject? CurrentTarget
+    protected static IGameObject? CurrentTarget
         => Service.TargetManager.Target;
 
     /// <summary>
@@ -251,12 +251,12 @@ internal abstract partial class CustomCombo
     /// <summary>
     /// Gets the player or null.
     /// </summary>
-    protected static PlayerCharacter? LocalPlayer
+    protected static IPlayerCharacter? LocalPlayer
         => Service.ClientState.LocalPlayer;
     /// <summary>
     /// Gets the current soft target or null.
     /// </summary>
-    protected static GameObject? SoftTarget
+    protected static IGameObject? SoftTarget
         => Service.TargetManager.SoftTarget;
     /// <summary>
     /// Gets bool determining if action is greyed out or not.
@@ -272,7 +272,7 @@ internal abstract partial class CustomCombo
     /// <param name="effectID">Status effect ID.</param>
     /// <returns>Status object or null.</returns>
     protected static Status? FindEffect(ushort effectID)
-        => FindEffect(effectID, LocalPlayer, LocalPlayer?.ObjectId);
+        => FindEffect(effectID, LocalPlayer, LocalPlayer?.EntityId);
 
     /// <summary>
     /// Finds an effect on the given object.
@@ -281,7 +281,7 @@ internal abstract partial class CustomCombo
     /// <param name="obj">Object to look for effects on.</param>
     /// <param name="sourceID">Source object ID.</param>
     /// <returns>Status object or null.</returns>
-    protected static Status? FindEffect(ushort effectID, GameObject? obj, uint? sourceID)
+    protected static Status? FindEffect(ushort effectID, IGameObject? obj, uint? sourceID)
         => Service.ComboCache.GetStatus(effectID, obj, sourceID);
 
     /// <summary>
@@ -300,7 +300,7 @@ internal abstract partial class CustomCombo
     /// <param name="effectID">Status effect ID.</param>
     /// <returns>Status object or null.</returns>
     protected static Status? FindTargetEffect(ushort effectID)
-        => FindEffect(effectID, CurrentTarget, LocalPlayer?.ObjectId);
+        => FindEffect(effectID, CurrentTarget, LocalPlayer?.EntityId);
 
     /// <summary>
     /// Finds an effect on the current target.
@@ -358,7 +358,7 @@ internal abstract partial class CustomCombo
         if (CurrentTarget is null)
             return 0;
 
-        if (CurrentTarget is not BattleChara chara)
+        if (CurrentTarget is not IBattleChara chara)
             return 0;
 
         double distanceX = chara.YalmDistanceX;

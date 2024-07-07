@@ -92,7 +92,7 @@ internal class DarkSouleater : CustomCombo
             if (IsEnabled(CustomComboPreset.DarkDeliriumFeature))
             {
                 if (CanUseAction(DRK.Bloodspiller) && level >= DRK.Levels.Delirium && HasEffect(DRK.Buffs.Delirium))
-                    return DRK.Bloodspiller;
+                    return OriginalHook(DRK.Bloodspiller);
             }
 
             if (IsEnabled(CustomComboPreset.DarkSouleaterCombo))
@@ -100,13 +100,13 @@ internal class DarkSouleater : CustomCombo
                 if (IsEnabled(CustomComboPreset.DarkSouleaterOvercapFeature))
                 {
                     if (CanUseAction(DRK.Bloodspiller) && gauge.Blood > 90 && HasEffect(DRK.Buffs.BloodWeapon))
-                        return DRK.Bloodspiller;
+                        return OriginalHook(DRK.Bloodspiller);
                 }
 
                 if (IsEnabled(CustomComboPreset.DarkSouleaterOvercapFeature))
                 {
                     if (CanUseAction(DRK.Bloodspiller) && (gauge.Blood > 80 || (gauge.Blood > 70 && HasEffect(DRK.Buffs.BloodWeapon))))
-                        return DRK.Bloodspiller;
+                        return OriginalHook(DRK.Bloodspiller);
                 }
 
                 if (comboTime > 0)
@@ -153,7 +153,7 @@ internal class DarkStalwartSoul : CustomCombo
             if (IsEnabled(CustomComboPreset.DarkDeliriumFeature))
             {
                 if (CanUseAction(DRK.Quietus) && level >= DRK.Levels.Delirium && HasEffect(DRK.Buffs.Delirium))
-                    return DRK.Quietus;
+                    return OriginalHook(DRK.Quietus);
             }
 
             if (IsEnabled(CustomComboPreset.DarkStalwartSoulCombo))
@@ -161,13 +161,13 @@ internal class DarkStalwartSoul : CustomCombo
                 if (IsEnabled(CustomComboPreset.DarkStalwartSoulOvercapFeature))
                 {
                     if (CanUseAction(DRK.Quietus) && gauge.Blood > 90 && HasEffect(DRK.Buffs.BloodWeapon))
-                        return DRK.Quietus;
+                        return OriginalHook(DRK.Quietus);
                 }
 
                 if (IsEnabled(CustomComboPreset.DarkStalwartSoulOvercapFeature))
                 {
                     if (CanUseAction(DRK.Quietus) && (gauge.Blood > 80 || (gauge.Blood > 70 && HasEffect(DRK.Buffs.BloodWeapon))))
-                        return DRK.Quietus;
+                        return OriginalHook(DRK.Quietus);
                 }
 
                 if (comboTime > 0)

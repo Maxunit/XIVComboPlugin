@@ -25,7 +25,8 @@ internal static class GNB
         FatedCircle = 16163,
         Bloodfest = 16164,
         Hypervelocity = 25759,
-        DoubleDown = 25760;
+        DoubleDown = 25760,
+        FatedBrand = 36936;
 
     public static class Buffs
     {
@@ -34,7 +35,8 @@ internal static class GNB
             ReadyToRip = 1842,
             ReadyToTear = 1843,
             ReadyToGouge = 1844,
-            ReadyToBlast = 2686;
+            ReadyToBlast = 2686,
+            ReadyToFated = 3839;
     }
 
     public static class Debuffs
@@ -90,6 +92,12 @@ internal class GunbreakerSolidBarrel : CustomCombo
             {
                 if (level >= GNB.Levels.EnhancedContinuation && HasEffect(GNB.Buffs.ReadyToBlast))
                     return GNB.Hypervelocity;
+            }
+
+            if (IsEnabled(CustomComboPreset.GunbreakerFatedCircleCont))
+            {
+                if (level >= GNB.Levels.EnhancedContinuation && HasEffect(GNB.Buffs.ReadyToFated))
+                    return GNB.FatedBrand;
             }
 
             if (IsEnabled(CustomComboPreset.GunbreakerBurstStrikeFeature))
@@ -209,6 +217,11 @@ internal class GunbreakerDemonSlaughter : CustomCombo
         {
             var gauge = GetJobGauge<GNBGauge>();
             var maxAmmo = level >= GNB.Levels.CartridgeCharge2 ? 3 : 2;
+
+            if (HasEffect(GNB.Buffs.ReadyToFated) && IsEnabled(CustomComboPreset.GunbreakerFatedCircleCont))
+            {
+                return GNB.FatedBrand;
+            }
 
             if (IsEnabled(CustomComboPreset.GunbreakerEmptyBloodfestFeature))
             {

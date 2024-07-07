@@ -69,126 +69,127 @@ internal static class AST
     }
 }
 
-internal class AstrologianMalefic : CustomCombo
-{
-    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstrologianMaleficDrawFeature;
+/* internal class AstrologianMalefic : CustomCombo
+// {
+//    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstrologianMaleficDrawFeature;
 
-    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-    {
-        if (actionID == AST.Malefic || actionID == AST.Malefic2 || actionID == AST.Malefic3 || actionID == AST.Malefic4 || actionID == AST.FallMalefic)
-        {
-            var gauge = GetJobGauge<ASTGauge>();
+//    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+//    {
+//        if (actionID == AST.Malefic || actionID == AST.Malefic2 || actionID == AST.Malefic3 || actionID == AST.Malefic4 || actionID == AST.FallMalefic)
+//        {
+//            var gauge = GetJobGauge<ASTGauge>();
 
-            if (CanUseAction(AST.Draw) && gauge.DrawnCard == CardType.NONE && HasCharges(AST.Draw))
-                return AST.Draw;
-        }
+//            if (level >= AST.Levels.Draw && gauge.DrawnCard == CardType.NONE && HasCharges(AST.Draw))
+//                return AST.Draw;
+//        }
 
-        return actionID;
-    }
-}
+//        return actionID;
+//    }
+// }
 
-internal class AstrologianGravity : CustomCombo
-{
-    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstrologianGravityDrawFeature;
+//internal class AstrologianGravity : CustomCombo
+//{
+//    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstrologianGravityDrawFeature;
 
-    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-    {
-        if (actionID == AST.Gravity || actionID == AST.Gravity2)
-        {
-            var gauge = GetJobGauge<ASTGauge>();
+//    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+//    {
+//        if (actionID == AST.Gravity || actionID == AST.Gravity2)
+//        {
+//            var gauge = GetJobGauge<ASTGauge>();
 
-            if (CanUseAction(AST.Draw) && gauge.DrawnCard == CardType.NONE && HasCharges(AST.Draw))
-                return AST.Draw;
-        }
+//            if (level >= AST.Levels.Draw && gauge.DrawnCard == CardType.NONE && HasCharges(AST.Draw))
+//                return AST.Draw;
+//        }
 
-        return actionID;
-    }
-}
+//        return actionID;
+//    }
+//}
 
-internal class AstrologianPlay : CustomCombo
-{
-    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstAny;
+//internal class AstrologianPlay : CustomCombo
+//{
+//    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstAny;
 
-    private Dictionary<CardType, SealType> CardSeals { get; } = new Dictionary<CardType, SealType>
-    {
-        { CardType.BALANCE, SealType.SUN },
-        { CardType.BOLE, SealType.SUN },
-        { CardType.ARROW, SealType.MOON },
-        { CardType.EWER, SealType.MOON },
-        { CardType.SPEAR, SealType.CELESTIAL },
-        { CardType.SPIRE, SealType.CELESTIAL },
-    };
+//    private Dictionary<CardType, SealType> CardSeals { get; } = new Dictionary<CardType, SealType>
+//    {
+//        { CardType.BALANCE, SealType.SUN },
+//        { CardType.BOLE, SealType.SUN },
+//        { CardType.ARROW, SealType.MOON },
+//        { CardType.EWER, SealType.MOON },
+//        { CardType.SPEAR, SealType.CELESTIAL },
+//        { CardType.SPIRE, SealType.CELESTIAL },
+//    };
 
-    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-    {
-        if (actionID == AST.Play)
-        {
-            var gauge = GetJobGauge<ASTGauge>();
+//    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+//    {
+//        if (actionID == AST.Play)
+//        {
+//            var gauge = GetJobGauge<ASTGauge>();
 
-            if (IsEnabled(CustomComboPreset.AstrologianPlayAstrodyneFeature))
-            {
-                if (CanUseAction(AST.Astrodyne) && !gauge.ContainsSeal(SealType.NONE))
-                    return AST.Astrodyne;
-            }
+//            if (IsEnabled(CustomComboPreset.AstrologianPlayAstrodyneFeature))
+//            {
+//                if (level >= AST.Levels.Astrodyne && !gauge.ContainsSeal(SealType.NONE))
+//                    return AST.Astrodyne;
+//            }
 
-            if (IsEnabled(CustomComboPreset.AstrologianPlayDrawFeature))
-            {
-                if (IsEnabled(CustomComboPreset.AstrologianPlayDrawAstrodyneFeature))
-                {
-                    var draw = GetCooldown(AST.Draw);
+//            if (IsEnabled(CustomComboPreset.AstrologianPlayDrawFeature))
+//            {
+//                if (IsEnabled(CustomComboPreset.AstrologianPlayDrawAstrodyneFeature))
+//                {
+//                    var draw = GetCooldown(AST.Draw);
 
-                    if (CanUseAction(AST.Astrodyne) && !gauge.ContainsSeal(SealType.NONE) && (draw.RemainingCharges == 0 || gauge.DrawnCard != CardType.NONE))
-                        return AST.Astrodyne;
-                }
+//                    if (level >= AST.Levels.Astrodyne && !gauge.ContainsSeal(SealType.NONE) && (draw.RemainingCharges == 0 || gauge.DrawnCard != CardType.NONE))
+//                        return AST.Astrodyne;
+//                }
 
-                if (CanUseAction(AST.Draw) && gauge.DrawnCard == CardType.NONE)
-                    return AST.Draw;
-            }
+//                if (level >= AST.Levels.Draw && gauge.DrawnCard == CardType.NONE)
+//                    return AST.Draw;
+//            }
 
-            if (IsEnabled(CustomComboPreset.AstrologianPlayRedrawFeature))
-            {
-                // Use redraw if and only if the player has has a card drawn and the drawn card is a seal type the
-                // player already has.  Note that there is no check here to see if the player already has 3 seals.
-                // While players should never use Draw at 3 seals, if the player has not enabled the Play to Astrodyne
-                // or Play to Draw to Astrodyne feature, we should still handle the Redraw check as normal, since the
-                // ONLY reason to use Play at 3 seals is to try to fish for the 3-different-seals Astrodyne, even though
-                // that's an unmitigated DPS loss over using Astrodyne at only 1 or 2 seals.
+//            if (IsEnabled(CustomComboPreset.AstrologianPlayRedrawFeature))
+//            {
+//                // Use redraw if and only if the player has has a card drawn and the drawn card is a seal type the
+//                // player already has.  Note that there is no check here to see if the player already has 3 seals.
+//                // While players should never use Draw at 3 seals, if the player has not enabled the Play to Astrodyne
+//                // or Play to Draw to Astrodyne feature, we should still handle the Redraw check as normal, since the
+//                // ONLY reason to use Play at 3 seals is to try to fish for the 3-different-seals Astrodyne, even though
+//                // that's an unmitigated DPS loss over using Astrodyne at only 1 or 2 seals.
 
-                if (CanUseAction(AST.Redraw) && gauge.DrawnCard != CardType.NONE && HasEffect(AST.Buffs.ClarifyingDraw))
-                {
-                    var cardSeal = this.CardSeals.GetValueOrDefault(gauge.DrawnCard, SealType.NONE);
+//                if (level >= AST.Levels.Redraw && gauge.DrawnCard != CardType.NONE && HasEffect(AST.Buffs.ClarifyingDraw))
+//                {
+//                    var cardSeal = this.CardSeals.GetValueOrDefault(gauge.DrawnCard, SealType.NONE);
 
-                    if (gauge.ContainsSeal(cardSeal))
-                        return AST.Redraw;
-                }
-            }
-        }
+//                    if (gauge.ContainsSeal(cardSeal))
+//                        return AST.Redraw;
+//                }
+//            }
+//        }
 
-        return actionID;
-    }
-}
+//        return actionID;
+//    }
+//}
 
-internal class AstrologianDraw : CustomCombo
-{
-    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstrologianDrawLockoutFeature;
+//internal class AstrologianDraw : CustomCombo
+//{
+//    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstrologianDrawLockoutFeature;
 
-    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-    {
-        if (actionID == AST.Draw)
-        {
-            var gauge = GetJobGauge<ASTGauge>();
+//    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+//    {
+//        if (actionID == AST.Draw)
+//        {
+//            var gauge = GetJobGauge<ASTGauge>();
 
-            if (gauge.DrawnCard != CardType.NONE)
-                // Malefic4
-                return OriginalHook(AST.Malefic);
-        }
+//            if (gauge.DrawnCard != CardType.NONE)
+//                // Malefic4
+//                return OriginalHook(AST.Malefic);
+//        }
 
-        return actionID;
-    }
-}
+//        return actionID;
+//    }
+#pragma warning disable SA1005 // Single line comments should begin with single space
+//}
 
-/*
 internal class AstrologianBenefic2 : CustomCombo
+#pragma warning restore SA1005 // Single line comments should begin with single space
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstrologianBeneficSyncFeature;
 
@@ -202,21 +203,4 @@ internal class AstrologianBenefic2 : CustomCombo
 
         return actionID;
     }
-}
-*/
-
-internal class AstrologianBenefic2 : CustomCombo
-{
-    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AstrologianBeneficSyncFeature;
-
-    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-    {
-        if (actionID == AST.Benefic2)
-        {
-            if (!CanUseAction(AST.Benefic2))
-                return AST.Benefic;
-        }
-
-        return actionID;
-    }
-}
+} */

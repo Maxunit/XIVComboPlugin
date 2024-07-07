@@ -73,6 +73,12 @@ internal class ConfigWindow : Window
     /// <inheritdoc/>
     public override void Draw()
     {
+        ImGui.Text("DAWNTRAIL EDITION");
+        ImGui.Text("This version of XIVCombo has been updated for Dawntrail (7.0).");
+        ImGui.Text("Because of the massive amount of changes, some combos have been removed, reworked, added.");
+        ImGui.Text("New combos will be added at a later date.");
+        ImGui.Text("If you encounter any problems, please open an issue on github.");
+        ImGui.Separator();
         ImGui.Text("Welcome to Maxunit's XIVCombo Expanded Testbed.");
         ImGui.Text("This window allows you to enable and disable custom combos to your liking.");
         ImGui.Text("For features that replace buttons with cooldowns, it is recommended to");

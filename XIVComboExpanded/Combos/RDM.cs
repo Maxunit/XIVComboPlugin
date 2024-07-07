@@ -16,6 +16,7 @@ internal static class RDM
         Verstone = 7511,
         Zwerchhau = 7512,
         Moulinet = 7513,
+        Vercure = 7514,
         Redoublement = 7516,
         Fleche = 7517,
         Acceleration = 7518,
@@ -35,7 +36,10 @@ internal static class RDM
         Scorch = 16530,
         Verthunder3 = 25855,
         Veraero3 = 25856,
-        Resolution = 25858;
+        Resolution = 25858,
+        ViceOfThorns = 37005,
+        GrandImpact = 37006,
+        Prefulgence = 37007;
 
     public static class Buffs
     {
@@ -45,7 +49,10 @@ internal static class RDM
             VerstoneReady = 1235,
             Acceleration = 1238,
             Dualcast = 1249,
-            LostChainspell = 2560;
+            LostChainspell = 2560,
+            ThornedFlourish = 3876,
+            GrandImpactReady = 3877,
+            PrefulgenceReady = 3878;
     }
 
     public static class Debuffs
@@ -79,7 +86,10 @@ internal static class RDM
             Scorch = 80,
             Veraero3 = 82,
             Verthunder3 = 82,
-            Resolution = 90;
+            Resolution = 90,
+            ViceOfThorns = 92,
+            GrandImpact = 96,
+            Prefulgence = 100;
     }
 }
 
@@ -188,6 +198,8 @@ internal class RedMageRedoublementMoulinet : CustomCombo
 
             if (IsEnabled(CustomComboPreset.RedMageMeleeCapstoneCombo))
             {
+                if (HasEffect(RDM.Buffs.PrefulgenceReady))
+                    return RDM.Prefulgence;
                 if (lastComboMove == RDM.Scorch && CanUseAction(RDM.Resolution))
                     return RDM.Resolution;
 
@@ -275,6 +287,9 @@ internal class RedMageVerstoneVerfire : CustomCombo
 
             if (IsEnabled(CustomComboPreset.RedMageVerprocPlusFeature))
             {
+                if (!IsEnabled(CustomComboPreset.RedMageGrandImpactDeprioritize) && HasEffect(RDM.Buffs.GrandImpactReady))
+                    return RDM.GrandImpact;
+
                 if (CanUseAction(RDM.Veraero) && (HasEffect(RDM.Buffs.Dualcast) || HasEffect(RDM.Buffs.Acceleration) || HasEffect(RDM.Buffs.Swiftcast) || HasEffect(RDM.Buffs.LostChainspell)))
                     // Veraero3
                     return OriginalHook(RDM.Veraero);
@@ -289,6 +304,9 @@ internal class RedMageVerstoneVerfire : CustomCombo
 
             if (IsEnabled(CustomComboPreset.RedMageVerprocFeature))
             {
+                if (!IsEnabled(CustomComboPreset.RedMageVerprocGrandImpactDeprioritize) && HasEffect(RDM.Buffs.GrandImpactReady))
+                    return RDM.GrandImpact;
+
                 if (HasEffect(RDM.Buffs.VerstoneReady))
                     return RDM.Verstone;
 
@@ -321,6 +339,9 @@ internal class RedMageVerstoneVerfire : CustomCombo
 
             if (IsEnabled(CustomComboPreset.RedMageVerprocPlusFeature))
             {
+                if (!IsEnabled(CustomComboPreset.RedMageGrandImpactDeprioritize) && HasEffect(RDM.Buffs.GrandImpactReady))
+                    return RDM.GrandImpact;
+
                 if (CanUseAction(RDM.Verthunder) && (HasEffect(RDM.Buffs.Dualcast) || HasEffect(RDM.Buffs.Acceleration) || HasEffect(RDM.Buffs.Swiftcast) || HasEffect(RDM.Buffs.LostChainspell)))
                     // Verthunder3
                     return OriginalHook(RDM.Verthunder);
@@ -335,6 +356,9 @@ internal class RedMageVerstoneVerfire : CustomCombo
 
             if (IsEnabled(CustomComboPreset.RedMageVerprocFeature))
             {
+                if (!IsEnabled(CustomComboPreset.RedMageVerprocGrandImpactDeprioritize) && HasEffect(RDM.Buffs.GrandImpactReady))
+                    return RDM.GrandImpact;
+
                 if (HasEffect(RDM.Buffs.VerfireReady))
                     return RDM.Verfire;
 
@@ -349,7 +373,7 @@ internal class RedMageVerstoneVerfire : CustomCombo
 
 internal class RedMageAcceleration : CustomCombo
 {
-    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.RedMageAccelerationSwiftcastFeature;
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.RdmAny;
 
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
@@ -357,9 +381,21 @@ internal class RedMageAcceleration : CustomCombo
         {
             if (CanUseAction(RDM.Acceleration))
             {
-                if (IsEnabled(CustomComboPreset.RedMageAccelerationSwiftcastOption))
+                if (IsEnabled(CustomComboPreset.RedMageAccelerationGrandImpactFeature) && HasEffect(RDM.Buffs.GrandImpactReady))
+                    return RDM.GrandImpact;
+
+                if (IsEnabled(CustomComboPreset.RedMageAccelerationSwiftcastFeature))
                 {
-                    if (IsOffCooldown(RDM.Acceleration) && IsOffCooldown(ADV.Swiftcast))
+                    if (IsEnabled(CustomComboPreset.RedMageAccelerationSwiftcastOption))
+                    {
+                        if (IsOffCooldown(RDM.Acceleration) && IsOffCooldown(ADV.Swiftcast))
+                            return ADV.Swiftcast;
+                    }
+
+                    if (IsOffCooldown(RDM.Acceleration))
+                        return RDM.Acceleration;
+
+                    if (IsOffCooldown(ADV.Swiftcast))
                         return ADV.Swiftcast;
                 }
 

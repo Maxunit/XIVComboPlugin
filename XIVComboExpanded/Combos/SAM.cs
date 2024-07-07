@@ -15,6 +15,7 @@ internal static class SAM
         Yukikaze = 7480,
         Gekko = 7481,
         Kasha = 7482,
+        Gyofu = 36963,
         // AoE
         Fuga = 7483,
         Mangetsu = 7484,
@@ -31,9 +32,10 @@ internal static class SAM
         HissatsuSenei = 16481,
         HissatsuGuren = 7496,
         Ikishoten = 16482,
-        Shoha2 = 25779,
+        //Shoha2 = 25779,
         OgiNamikiri = 25781,
-        KaeshiNamikiri = 25782;
+        KaeshiNamikiri = 25782,
+        Zanshin = 36964;
 
     public static class Buffs
     {
@@ -42,7 +44,8 @@ internal static class SAM
             EyesOpen = 1252,
             Jinpu = 1298,
             Shifu = 1299,
-            OgiNamikiriReady = 2959;
+            OgiNamikiriReady = 2959,
+            ZanshinReady = 3855;
     }
 
     public static class Debuffs
@@ -67,10 +70,11 @@ internal static class SAM
             HissatsuSenei = 72,
             TsubameGaeshi = 76,
             Shoha = 80,
-            Shoha2 = 82,
+            //Shoha2 = 82,
             Hyosetsu = 86,
             Fuko = 86,
-            OgiNamikiri = 90;
+            OgiNamikiri = 90,
+            Zanshin = 96;
     }
 }
 
@@ -87,11 +91,11 @@ internal class SamuraiYukikaze : CustomCombo
 
             if (comboTime > 0)
             {
-                if (lastComboMove == SAM.Hakaze && level >= SAM.Levels.Yukikaze)
+                if ((lastComboMove == SAM.Hakaze || lastComboMove == SAM.Gyofu) && level >= SAM.Levels.Yukikaze)
                     return SAM.Yukikaze;
             }
 
-            return SAM.Hakaze;
+            return OriginalHook(SAM.Hakaze);
         }
 
         return actionID;
@@ -114,14 +118,14 @@ internal class SamuraiGekko : CustomCombo
                 if (lastComboMove == SAM.Jinpu && level >= SAM.Levels.Gekko)
                     return SAM.Gekko;
 
-                if (lastComboMove == SAM.Hakaze && level >= SAM.Levels.Jinpu)
+                if ((lastComboMove == SAM.Hakaze || lastComboMove == SAM.Gyofu) && level >= SAM.Levels.Jinpu)
                     return SAM.Jinpu;
             }
 
             if (IsEnabled(CustomComboPreset.SamuraiGekkoOption))
                 return SAM.Jinpu;
 
-            return SAM.Hakaze;
+            return OriginalHook(SAM.Hakaze);
         }
 
         return actionID;
@@ -144,14 +148,14 @@ internal class SamuraiKasha : CustomCombo
                 if (lastComboMove == SAM.Shifu && level >= SAM.Levels.Kasha)
                     return SAM.Kasha;
 
-                if (lastComboMove == SAM.Hakaze && level >= SAM.Levels.Shifu)
+                if ((lastComboMove == SAM.Hakaze || lastComboMove == SAM.Gyofu) && level >= SAM.Levels.Shifu)
                     return SAM.Shifu;
             }
 
             if (IsEnabled(CustomComboPreset.SamuraiKashaOption))
                 return SAM.Shifu;
 
-            return SAM.Hakaze;
+            return OriginalHook(SAM.Hakaze);
         }
 
         return actionID;
@@ -276,6 +280,12 @@ internal class SamuraiShinten : CustomCombo
         {
             var gauge = GetJobGauge<SAMGauge>();
 
+            if (IsEnabled(CustomComboPreset.SamuraiShintenZanshinFeature))
+            {
+                if (level >= SAM.Levels.Zanshin && HasEffect(SAM.Buffs.ZanshinReady))
+                    return SAM.Zanshin;
+            }
+
             if (IsEnabled(CustomComboPreset.SamuraiShintenShohaFeature))
             {
                 if (level >= SAM.Levels.Shoha && gauge.MeditationStacks >= 3)
@@ -327,12 +337,6 @@ internal class SamuraiKyuten : CustomCombo
         if (actionID == SAM.HissatsuKyuten)
         {
             var gauge = GetJobGauge<SAMGauge>();
-
-            if (IsEnabled(CustomComboPreset.SamuraiKyutenShoha2Feature))
-            {
-                if (level >= SAM.Levels.Shoha2 && gauge.MeditationStacks >= 3)
-                    return SAM.Shoha2;
-            }
 
             if (IsEnabled(CustomComboPreset.SamuraiKyutenGurenFeature))
             {

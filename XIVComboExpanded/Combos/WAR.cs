@@ -20,6 +20,7 @@ internal static class WAR
         FellCleave = 3549,
         Decimate = 3550,
         Onslaught = 7386,
+        Upheaval = 7387,
         RawIntuition = 3551,
         Equilibrium = 3552,
         InnerRelease = 7389,
@@ -28,9 +29,10 @@ internal static class WAR
         NascentFlash = 16464,
         InnerChaos = 16465,
         Bloodwhetting = 25751,
+        Orogeny = 25752,
         PrimalRend = 25753,
-        Upheaval = 7387,
-        Orogeny = 25752;
+        PrimalWrath = 36924,
+        PrimalRuination = 36925;
 
     public const byte JobID = 21;
 
@@ -41,7 +43,9 @@ internal static class WAR
             InnerRelease = 1177,
             NascentChaos = 1897,
             PrimalRendReady = 2624,
-            SurgingTempest = 2677;
+            SurgingTempest = 2677,
+            Wrathful = 3901,
+            PrimalRuinationReady = 3834;
     }
 
     public static class Debuffs
@@ -76,7 +80,9 @@ internal static class WAR
             InnerChaos = 80,
             Bloodwhetting = 82,
             Orogeny = 86,
-            PrimalRend = 90;
+            PrimalRend = 90,
+            PrimalWrath = 96,
+            PrimalRuination = 100;
     }
 }
 
@@ -187,6 +193,12 @@ internal class WArriorPrimalReleaseFeature : CustomCombo
     {
         if (actionID == WAR.Berserk || actionID == WAR.InnerRelease)
         {
+            if (level >= WAR.Levels.PrimalWrath && HasEffect(WAR.Buffs.Wrathful))
+                return WAR.PrimalWrath;
+
+            if (level >= WAR.Levels.PrimalRuination && HasEffect(WAR.Buffs.PrimalRuinationReady))
+                return WAR.PrimalRuination;
+
             if (CanUseAction(WAR.PrimalRend) && HasEffect(WAR.Buffs.PrimalRendReady))
                 return WAR.PrimalRend;
         }

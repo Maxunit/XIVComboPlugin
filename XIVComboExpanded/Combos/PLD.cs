@@ -28,12 +28,16 @@ internal static class PLD
         HolyCircle = 16458,
         Confiteor = 16459,
         Atonement = 16460,
+        Intervene = 16461,
         HolySheltron = 25746,
         Expiacion = 25747,
         BladeOfFaith = 25748,
         BladeOfTruth = 25749,
         BladeOfValor = 25750,
-        Intervene = 16461;
+        Supplication = 36918,
+        Sepulchre = 36919,
+        Imperator = 36921,
+        BladeOfHonor = 36922;
 
     public static class Buffs
     {
@@ -42,7 +46,11 @@ internal static class PLD
             Requiescat = 1368,
             SwordOath = 1902,
             DivineMight = 2673,
-            ConfiteorReady = 3019;
+            ConfiteorReady = 3019,
+            SupplicationReady = 3827,
+            SepulchreReady = 3828,
+            GoringBladeReady = 3847,
+            BladeOfHonorReady = 3831;
     }
 
     public static class Debuffs
@@ -71,12 +79,15 @@ internal static class PLD
             HolyCircle = 72,
             Intervene = 74,
             Atonement = 76,
+            Supplication = 76,
+            Sepulchre = 76,
             Confiteor = 80,
             HolySheltron = 82,
             Expiacion = 86,
             BladeOfFaith = 90,
             BladeOfTruth = 90,
-            BladeOfValor = 90;
+            BladeOfValor = 90,
+            BladeOfHonor = 100;
     }
 }
 
@@ -128,10 +139,25 @@ internal class PaladinRoyalAuthority : PaladinCombo
                 }
             }
 
-            if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityAtonementFeature))
+            if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityAtonementComboFeature))
             {
-                if (level >= PLD.Levels.Atonement && lastComboMove != PLD.FastBlade && lastComboMove != PLD.RiotBlade && HasEffect(PLD.Buffs.SwordOath))
-                    return PLD.Atonement;
+                if (level >= PLD.Levels.Atonement && lastComboMove != PLD.FastBlade && lastComboMove != PLD.RiotBlade)
+                {
+                    if (HasEffect(PLD.Buffs.SwordOath))
+                    {
+                        return PLD.Atonement;
+                    }
+
+                    if (HasEffect(PLD.Buffs.SupplicationReady))
+                    {
+                        return PLD.Supplication;
+                    }
+
+                    if (HasEffect(PLD.Buffs.SepulchreReady))
+                    {
+                        return PLD.Sepulchre;
+                    }
+                }
             }
 
             if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityCombo))
@@ -261,8 +287,10 @@ internal class PaladinFightOrFlight : PaladinCombo
         {
             if (IsEnabled(CustomComboPreset.PaladinFightOrFlightGoringBladeFeature))
             {
-                if (level >= PLD.Levels.GoringBlade && HasEffect(PLD.Buffs.FightOrFlight) && IsOffCooldown(PLD.GoringBlade))
+                if (HasEffect(PLD.Buffs.GoringBladeReady))
+                {
                     return PLD.GoringBlade;
+                }
             }
         }
 
@@ -276,7 +304,7 @@ internal class PaladinRequiescat : PaladinCombo
 
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
-        if (actionID == PLD.Requiescat)
+        if (actionID == PLD.Requiescat || actionID == PLD.Imperator)
         {
             if (IsEnabled(CustomComboPreset.PaladinRequiescatCombo))
             {
@@ -297,7 +325,7 @@ internal class PaladinRequiescat : PaladinCombo
                 {
                     if (level >= PLD.Levels.GoringBlade && IsOffCooldown(PLD.GoringBlade))
                     {
-                        if (IsOnCooldown(PLD.FightOrFlight) && (level < PLD.Levels.Requiescat || IsOnCooldown(PLD.Requiescat)))
+                        if (HasEffect(PLD.Buffs.GoringBladeReady))
                             return PLD.GoringBlade;
                     }
                 }
@@ -309,8 +337,11 @@ internal class PaladinRequiescat : PaladinCombo
                     if (original != PLD.Confiteor)
                         return original;
 
+                    if (HasEffect(PLD.Buffs.BladeOfHonorReady))
+                        return OriginalHook(PLD.Imperator);
+
                     if (HasEffect(PLD.Buffs.ConfiteorReady))
-                        return PLD.Confiteor;
+                        return OriginalHook(PLD.Confiteor);
                 }
 
                 if (level >= PLD.Levels.Requiescat && HasEffect(PLD.Buffs.Requiescat))
@@ -414,7 +445,7 @@ internal class PaladinFastBladeSingleCombo : PaladinCombo
                         return OriginalHook(PLD.HolySpirit);
                 }
 
-                if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityAtonementFeature))
+                if (IsEnabled(CustomComboPreset.PaladinRoyalAuthorityAtonementComboFeature))
                 {
                     if (level >= PLD.Levels.Atonement && HasEffect(PLD.Buffs.SwordOath) && lastComboMove != PLD.FastBlade && lastComboMove != PLD.RiotBlade)
                         return PLD.Atonement;

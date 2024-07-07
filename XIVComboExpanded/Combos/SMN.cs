@@ -1,5 +1,3 @@
-using System.Reflection.Metadata.Ecma335;
-
 using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVComboExpandedPlugin.Combos;
@@ -10,6 +8,7 @@ internal static class SMN
     public const byte JobID = 27;
 
     public const uint
+
         Ruin = 163,
         Ruin2 = 172,
         Ruin3 = 3579,
@@ -17,34 +16,53 @@ internal static class SMN
         Fester = 181,
         Painflare = 3578,
         DreadwyrmTrance = 3581,
+        Deathflare = 3582,
         SummonBahamut = 7427,
         EnkindleBahamut = 7429,
+        Physick = 16230,
         EnergySyphon = 16510,
         Outburst = 16511,
+        EnkindlePhoenix = 16516,
         EnergyDrain = 16508,
         SummonCarbuncle = 25798,
         RadiantAegis = 25799,
         Aethercharge = 25800,
         SearingLight = 25801,
+        SummonRuby = 25802,
+        SummonTopaz = 25803,
+        SummonEmerald = 25804,
+        SummonIfrit = 25805,
+        SummonTitan = 25806,
+        SummonGaruda = 25807,
         AstralFlow = 25822,
         TriDisaster = 25826,
+        Rekindle = 25830,
+        SummonPhoenix = 25831,
         CrimsonCyclone = 25835,
         MountainBuster = 25836,
         Slipstream = 25837,
+        SummonIfrit2 = 25838,
+        SummonTitan2 = 25839,
+        SummonGaruda2 = 25840,
         CrimsonStrike = 25885,
         Gemshine = 25883,
         PreciousBrilliance = 25884,
-        Physick = 16230,
-        Deathflare = 3582,
-        Rekindle = 25830;
+        Necrosis = 36990,
+        SummonSolarBahamut = 36992,
+        Sunflare = 36996,
+        LuxSolaris = 36997,
+        EnkindleSolarBahamut = 36998;
 
     public static class Buffs
     {
         public const ushort
+            Aetherflow = 304,
             FurtherRuin = 2701,
+            SearingLight = 2703,
             IfritsFavor = 2724,
             GarudasFavor = 2725,
-            TitansFavor = 2853;
+            TitansFavor = 2853,
+            LuxSolarisReady = 3874;
     }
 
     public static class Debuffs
@@ -58,7 +76,6 @@ internal static class SMN
         public const byte
             SummonCarbuncle = 2,
             RadiantAegis = 2,
-            Physick = 4,
             Gemshine = 6,
             EnergyDrain = 10,
             Fester = 10,
@@ -66,14 +83,15 @@ internal static class SMN
             Painflare = 40,
             EnergySyphon = 52,
             Ruin3 = 54,
-            AstralFlow = 60,
-            Deathflare = 60,
             Ruin4 = 62,
             SearingLight = 66,
             EnkindleBahamut = 70,
             Rekindle = 80,
+            ElementalMastery = 86,
             SummonPhoenix = 80,
-            ElementalMastery = 86;
+            Necrosis = 92,
+            SummonSolarBahamut = 100,
+            LuxSolaris = 100;
     }
 }
 
@@ -83,11 +101,11 @@ internal class SummonerFester : CustomCombo
 
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
-        if (actionID == SMN.Fester)
+        if (actionID == SMN.Fester || actionID == SMN.Necrosis)
         {
             var gauge = GetJobGauge<SMNGauge>();
 
-            if (CanUseAction(SMN.EnergyDrain) && !gauge.HasAetherflowStacks)
+            if (level >= SMN.Levels.EnergyDrain && !gauge.HasAetherflowStacks)
                 return SMN.EnergyDrain;
         }
 
@@ -105,13 +123,13 @@ internal class SummonerPainflare : CustomCombo
         {
             var gauge = GetJobGauge<SMNGauge>();
 
-            if (CanUseAction(SMN.EnergySyphon) && !gauge.HasAetherflowStacks)
+            if (level >= SMN.Levels.EnergySyphon && !gauge.HasAetherflowStacks)
                 return SMN.EnergySyphon;
 
-            if (CanUseAction(SMN.EnergyDrain) && !gauge.HasAetherflowStacks)
+            if (level >= SMN.Levels.EnergyDrain && !gauge.HasAetherflowStacks)
                 return SMN.EnergyDrain;
 
-            if (!CanUseAction(SMN.Painflare))
+            if (level < SMN.Levels.Painflare)
                 return SMN.Fester;
         }
 
@@ -137,16 +155,16 @@ internal class SummonerRuin : CustomCombo
 
             if (IsEnabled(CustomComboPreset.SummonerRuinFeature))
             {
-                if (CanUseAction(SMN.Gemshine))
+                if (level >= SMN.Levels.Gemshine)
                 {
-                    if (gauge.IsIfritAttuned || gauge.IsTitanAttuned || gauge.IsGarudaAttuned)
+                    if (gauge.Attunement > 0)
                         return OriginalHook(SMN.Gemshine);
                 }
             }
 
             if (IsEnabled(CustomComboPreset.SummonerFurtherRuinFeature))
             {
-                if (CanUseAction(SMN.Ruin4) && gauge.SummonTimerRemaining == 0 && gauge.AttunmentTimerRemaining == 0 && HasEffect(SMN.Buffs.FurtherRuin))
+                if (level >= SMN.Levels.Ruin4 && gauge.SummonTimerRemaining == 0 && gauge.AttunmentTimerRemaining == 0 && HasEffect(SMN.Buffs.FurtherRuin))
                     return SMN.Ruin4;
             }
         }
@@ -173,16 +191,16 @@ internal class SummonerOutburstTriDisaster : CustomCombo
 
             if (IsEnabled(CustomComboPreset.SummonerOutburstFeature))
             {
-                if (CanUseAction(SMN.PreciousBrilliance))
+                if (level >= SMN.Levels.PreciousBrilliance)
                 {
-                    if (gauge.IsIfritAttuned || gauge.IsTitanAttuned || gauge.IsGarudaAttuned)
+                    if (gauge.Attunement > 0)
                         return OriginalHook(SMN.PreciousBrilliance);
                 }
             }
 
             if (IsEnabled(CustomComboPreset.SummonerFurtherOutburstFeature))
             {
-                if (CanUseAction(SMN.Ruin4) && gauge.SummonTimerRemaining == 0 && gauge.AttunmentTimerRemaining == 0 && HasEffect(SMN.Buffs.FurtherRuin))
+                if (level >= SMN.Levels.Ruin4 && gauge.SummonTimerRemaining == 0 && gauge.AttunmentTimerRemaining == 0 && HasEffect(SMN.Buffs.FurtherRuin))
                     return SMN.Ruin4;
             }
         }
@@ -209,14 +227,14 @@ internal class SummonerGemshinePreciousBrilliance : CustomCombo
 
             if (IsEnabled(CustomComboPreset.SummonerShinyEnkindleFeature))
             {
-                if (CanUseAction(SMN.EnkindleBahamut) && !gauge.IsIfritAttuned && !gauge.IsTitanAttuned && !gauge.IsGarudaAttuned && gauge.SummonTimerRemaining > 0)
-                    // Enkindle
+                if (level >= SMN.Levels.EnkindleBahamut && !gauge.IsIfritAttuned && !gauge.IsTitanAttuned && !gauge.IsGarudaAttuned && gauge.SummonTimerRemaining > 0)
+                    // Rekindle
                     return OriginalHook(SMN.EnkindleBahamut);
             }
 
             if (IsEnabled(CustomComboPreset.SummonerFurtherShinyFeature))
             {
-                if (CanUseAction(SMN.Ruin4) && gauge.SummonTimerRemaining == 0 && gauge.AttunmentTimerRemaining == 0 && HasEffect(SMN.Buffs.FurtherRuin))
+                if (level >= SMN.Levels.Ruin4 && gauge.SummonTimerRemaining == 0 && gauge.AttunmentTimerRemaining == 0 && HasEffect(SMN.Buffs.FurtherRuin))
                     return SMN.Ruin4;
             }
         }
@@ -240,14 +258,14 @@ internal class SummonerDemiFeature : CustomCombo
 
             if (IsEnabled(CustomComboPreset.SummonerDemiSearingLightFeature))
             {
-                if (CanUseAction(SMN.SearingLight) && gauge.IsBahamutReady && InCombat() && IsOffCooldown(SMN.SearingLight))
+                if (level >= SMN.Levels.SearingLight && (gauge.IsBahamutReady || gauge.IsPhoenixReady) && InCombat() && IsOffCooldown(SMN.SearingLight))
                     return SMN.SearingLight;
             }
 
             if (IsEnabled(CustomComboPreset.SummonerDemiEnkindleFeature))
             {
-                if (CanUseAction(SMN.EnkindleBahamut) && !gauge.IsIfritAttuned && !gauge.IsTitanAttuned && !gauge.IsGarudaAttuned && gauge.SummonTimerRemaining > 0)
-                    // Enkindle
+                if (level >= SMN.Levels.EnkindleBahamut && gauge.Attunement == 0 && gauge.SummonTimerRemaining > 0)
+                    // Rekindle
                     return OriginalHook(SMN.EnkindleBahamut);
             }
         }
@@ -266,26 +284,30 @@ internal class SummonerRadiantCarbuncleFeature : CustomCombo
         {
             var gauge = GetJobGauge<SMNGauge>();
 
-            if (CanUseAction(SMN.SummonCarbuncle) && !HasPetPresent() && gauge.Attunement == 0)
+            if (level >= SMN.Levels.SummonCarbuncle && !HasPetPresent())
                 return SMN.SummonCarbuncle;
+        }
+
+        if (IsEnabled(CustomComboPreset.SummonerRadiantLuxSolarisFeature))
+        {
+            if (HasEffect(SMN.Buffs.LuxSolarisReady))
+                return SMN.LuxSolaris;
         }
 
         return actionID;
     }
 }
 
-internal class SummonerBahamutCarbuncleFeature : CustomCombo
+internal class SummonerLuxSolarisFeature : CustomCombo
 {
-    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SummonerBahamutCarbuncleFeature;
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SummonerSummonLuxSolarisFeature;
 
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
-        if (actionID == SMN.Aethercharge || actionID == SMN.DreadwyrmTrance || actionID == SMN.SummonBahamut)
+        if (actionID == SMN.SummonBahamut)
         {
-            var gauge = GetJobGauge<SMNGauge>();
-
-            if (CanUseAction(SMN.SummonCarbuncle) && !HasPetPresent() && gauge.Attunement == 0)
-                return SMN.SummonCarbuncle;
+            if (HasEffect(SMN.Buffs.LuxSolarisReady))
+                return SMN.LuxSolaris;
         }
 
         return actionID;

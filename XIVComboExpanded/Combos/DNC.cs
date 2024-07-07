@@ -24,6 +24,8 @@ internal static class DNC
         StandardStep = 15997,
         TechnicalStep = 15998,
         Tillana = 25790,
+        LastDance = 36983,
+        FinishingMove = 36984,
         // Fans
         FanDance1 = 16007,
         FanDance2 = 16008,
@@ -49,7 +51,9 @@ internal static class DNC
             StandardStep = 1818,
             TechnicalStep = 1819,
             ThreefoldFanDance = 1820,
-            FourfoldFanDance = 2699;
+            FourfoldFanDance = 2699,
+            LastDanceReady = 3867,
+            FinishingMoveReady = 3868;
     }
 
     public static class Debuffs
@@ -78,7 +82,9 @@ internal static class DNC
             SaberDance = 76,
             Tillana = 82,
             FanDance4 = 86,
-            StarfallDance = 90;
+            StarfallDance = 90,
+            LastDance = 92,
+            FinishingMove = 96;
     }
 }
 
@@ -337,6 +343,29 @@ internal class DancerDevilment : CustomCombo
         {
             if (CanUseAction(DNC.StarfallDance) && HasEffect(DNC.Buffs.FlourishingStarfall))
                 return DNC.StarfallDance;
+        }
+
+        return actionID;
+    }
+}
+
+internal class DancerLastDanceFeature : CustomCombo
+{
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DancerLastDanceFeature;
+
+    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+    {
+        if (actionID == DNC.StandardStep)
+        {
+            if (level >= DNC.Levels.LastDance)
+            {
+                if (IsEnabled(CustomComboPreset.DancerFinishingMovePriorityFeature) && HasEffect(DNC.Buffs.FinishingMoveReady) && level >= DNC.Levels.FinishingMove)
+                {
+                    return DNC.FinishingMove;
+                }
+
+                return DNC.LastDance;
+            }
         }
 
         return actionID;

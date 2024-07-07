@@ -43,7 +43,7 @@ internal class Service
     /// Gets the Dalamud plugin interface.
     /// </summary>
     [PluginService]
-    internal static DalamudPluginInterface Interface { get; private set; } = null!;
+    internal static IDalamudPluginInterface Interface { get; private set; } = null!;
 
     /// <summary>
     /// Gets the Dalamud buddy list.
@@ -104,4 +104,10 @@ internal class Service
     /// </summary>
     [PluginService]
     internal static ITargetManager TargetManager { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets the Dalamud plugin log.
+    /// </summary>
+    [PluginService]
+    internal static IPluginLog PluginLog { get; private set; } = null!;
 }

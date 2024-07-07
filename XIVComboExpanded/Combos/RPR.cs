@@ -52,6 +52,7 @@ internal static class RPR
         public const ushort
             EnhancedHarpe = 2845,
             SoulReaver = 2587,
+            Executioner = 3858,
             EnhancedGibbet = 2588,
             EnhancedGallows = 2589,
             EnhancedVoidReaping = 2590,
@@ -65,7 +66,6 @@ internal static class RPR
     public static class Debuffs
     {
         public const ushort
-            Placeholder = 0,
             DeathsDesign = 2586;
     }
 
@@ -93,7 +93,8 @@ internal static class RPR
             EnhancedShroud = 86,
             LemuresScythe = 86,
             PlentifulHarvest = 88,
-            Communio = 90;
+            Communio = 90,
+            Executioner = 96;
     }
 }
 
@@ -129,6 +130,7 @@ internal class ReaperSlice : CustomCombo
             }
 
             if ((level >= RPR.Levels.SoulReaver && HasEffect(RPR.Buffs.SoulReaver)) ||
+                (level >= RPR.Levels.Executioner && HasEffect(RPR.Buffs.Executioner)) ||
                 (CanUseAction(RPR.Enshroud) && gauge.EnshroudedTimeRemaining > 0))
             {
                 if (IsEnabled(CustomComboPreset.ReaperSliceEnhancedEnshroudedFeature))
@@ -218,6 +220,7 @@ internal class ReaperScythe : CustomCombo
             if (IsEnabled(CustomComboPreset.ReaperScytheGuillotineFeature))
             {
                 if ((level >= RPR.Levels.SoulReaver && HasEffect(RPR.Buffs.SoulReaver)) ||
+                    (level >= RPR.Levels.Executioner && HasEffect(RPR.Buffs.Executioner)) ||
                     (CanUseAction(RPR.Enshroud) && gauge.EnshroudedTimeRemaining > 0))
                     // Grim Reaping
                     return OriginalHook(RPR.Guillotine);
@@ -294,6 +297,7 @@ internal class ReaperShadowOfDeath : CustomCombo
             }
 
             if ((level >= RPR.Levels.SoulReaver && HasEffect(RPR.Buffs.SoulReaver)) ||
+                (level >= RPR.Levels.Executioner && HasEffect(RPR.Buffs.Executioner)) ||
                 (CanUseAction(RPR.Enshroud) && gauge.EnshroudedTimeRemaining > 0))
             {
                 if (IsEnabled(CustomComboPreset.ReaperShadowGallowsFeature))
@@ -336,6 +340,7 @@ internal class ReaperSoulSlice : CustomCombo
             }
 
             if ((level >= RPR.Levels.SoulReaver && HasEffect(RPR.Buffs.SoulReaver)) ||
+                (level >= RPR.Levels.Executioner && HasEffect(RPR.Buffs.Executioner)) ||
                 (CanUseAction(RPR.Enshroud) && gauge.EnshroudedTimeRemaining > 0))
             {
                 if (IsEnabled(CustomComboPreset.ReaperSoulGallowsFeature))
@@ -445,6 +450,7 @@ internal class ReaperGibbetGallowsGuillotine : CustomCombo
             var gauge = GetJobGauge<RPRGauge>();
 
             if ((level >= RPR.Levels.SoulReaver && HasEffect(RPR.Buffs.SoulReaver)) ||
+                (level >= RPR.Levels.Executioner && HasEffect(RPR.Buffs.Executioner)) ||
                 (CanUseAction(RPR.Enshroud) && gauge.EnshroudedTimeRemaining > 0))
             {
                 if (IsEnabled(CustomComboPreset.ReaperLemuresSoulReaverFeature))

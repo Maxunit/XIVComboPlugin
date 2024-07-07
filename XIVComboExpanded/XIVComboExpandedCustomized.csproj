@@ -3,14 +3,14 @@
   <PropertyGroup>
     <Authors>attick, daemitus, Evil-Crab, PrincessRTFM, Maxunit</Authors>
     <Company>-</Company>
-    <Version>1.4.0.25</Version>
+    <Version>1.5.0.19</Version>
     <Description>This plugin condenses combos and mutually exclusive abilities onto a single button.</Description>
     <Copyright>Copyleft attick 2020 baybeeee</Copyright>
     <PackageProjectUrl>https://github.com/Maxunit/XIVComboPlugin</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Platforms>x64</Platforms>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -47,9 +47,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DalamudPackager" Version="2.1.12" />
+    <PackageReference Include="DalamudPackager" Version="2.1.13" />
     <PackageReference Include="ILRepack" Version="2.1.0-beta1" GeneratePathProperty="true" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507">
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -59,6 +59,10 @@
     <Reference Include="Lumina" Private="False" />
     <Reference Include="Lumina.Excel" Private="False" />
     <Reference Include="Newtonsoft.Json" Private="False" />
+	  <Reference Include="InteropGenerator.Runtime">
+		  <HintPath>$(DalamudLibPath)InteropGenerator.Runtime.dll</HintPath>
+		  <Pritvate>false</Pritvate>
+	  </Reference>
   </ItemGroup>
 
   <Target Name="ILRepack" AfterTargets="Build">
@@ -66,7 +70,6 @@
       <InputAssemblies Include="$(TargetPath)" />
       <InputAssemblies Include="$(TargetDir)*.dll" Exclude="$(TargetPath)" />
     </ItemGroup>
-    <Exec Command="$(PkgILRepack)\tools\ILRepack.exe /lib:$(DalamudLibPath) /out:$(TargetDir)$(TargetFileName) @(InputAssemblies, ' ')" />
   </Target>
 
   <Target Name="CleanOutDir" AfterTargets="ILRepack">
