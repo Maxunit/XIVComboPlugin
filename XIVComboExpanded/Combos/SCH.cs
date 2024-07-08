@@ -30,13 +30,16 @@ internal static class SCH
         Consolation = 16546,
         SummonEos = 17215,
         SummonSelene = 17216,
-        Ruin2 = 17870;
+        Ruin2 = 17870,
+        Seraphism = 37014;
 
     public static class Buffs
     {
         public const ushort
             Dissipation = 791,
-            Recitation = 1896;
+            Recitation = 1896,
+            Seraphism = 3884,
+            SeraphismAura = 3885;
     }
 
     public static class Debuffs
@@ -203,6 +206,22 @@ internal class ScholarSummon : CustomCombo
             if (gauge.SeraphTimer != 0 || HasPetPresent())
                 // Consolation
                 return OriginalHook(SCH.SummonSeraph);
+        }
+
+        return actionID;
+    }
+}
+
+internal class ScholarSeraphism : CustomCombo
+{
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.ScholarSeraphismFeature;
+
+    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+    {
+        if (actionID == SCH.Seraphism)
+        {
+            if (HasEffect(SCH.Buffs.Seraphism))
+                return OriginalHook(SCH.EmergencyTactics);
         }
 
         return actionID;

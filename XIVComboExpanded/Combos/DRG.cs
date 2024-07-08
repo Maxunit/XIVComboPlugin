@@ -133,11 +133,11 @@ internal class DragoonChaosThrust : CustomCombo
     {
         if (actionID == DRG.ChaosThrust || actionID == DRG.ChaoticSpring)
         {
-            if (level >= DRG.Levels.Drakesbane && lastComboMove == DRG.WheelingThrust)
-                return DRG.Drakesbane;
-
             if (IsEnabled(CustomComboPreset.DragoonChaosThrustCombo))
             {
+                if (level >= DRG.Levels.Drakesbane && (lastComboMove == DRG.WheelingThrust || lastComboMove == DRG.FangAndClaw))
+                    return DRG.Drakesbane;
+
                 if (comboTime > 0)
                 {
                     if ((lastComboMove == DRG.ChaosThrust || lastComboMove == DRG.ChaoticSpring) && level >= DRG.Levels.WheelingThrust)
@@ -174,7 +174,7 @@ internal class DragoonFullThrust : CustomCombo
         {
             if (IsEnabled(CustomComboPreset.DragoonFullThrustCombo))
             {
-                if (level >= DRG.Levels.Drakesbane && lastComboMove == DRG.FangAndClaw)
+                if (level >= DRG.Levels.Drakesbane && (lastComboMove == DRG.WheelingThrust || lastComboMove == DRG.FangAndClaw))
                     return DRG.Drakesbane;
 
                 if (comboTime > 0)
@@ -231,7 +231,7 @@ internal class DragoonStardiver : CustomCombo
     }
 }
 
-/* //internal class DragoonDives : CustomCombo
+//internal class DragoonDives : CustomCombo
 //{
 //    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DragoonDiveFeature;
 
@@ -258,7 +258,7 @@ internal class DragoonStardiver : CustomCombo
 
 //        return actionID;
 //    }
-//} */
+//}
 
 internal class DragoonGierskogul : CustomCombo
 {

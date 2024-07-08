@@ -31,7 +31,8 @@ internal static class BLM
         Blizzard2 = 25793,
         HighFire2 = 25794,
         HighBlizzard2 = 25795,
-        Paradox = 25797;
+        Paradox = 25797,
+        FlareStar = 38072;
 
     public static class Buffs
     {
@@ -70,7 +71,8 @@ internal static class BLM
             HighFire2 = 82,
             HighBlizzard2 = 82,
             EnhancedSharpcast2 = 88,
-            Paradox = 90;
+            Paradox = 90,
+            FlareStar = 100;
     }
 
     public static class MpCosts
@@ -308,7 +310,21 @@ internal class BlackFire2 : CustomCombo
 
             if (level >= BLM.Levels.Flare && gauge.InAstralFire)
             {
-                return BLM.Flare;
+                // Level 100 uses a simplified rotation that just uses Flare twice and then Flare Star.
+                if (level >= BLM.Levels.FlareStar)
+                {
+                    // FIXME: Uncomment once the Astral Soul gauge is implemented
+                    // if (gauge.AstralSoulStacks >= 6)
+                    //     return BLM.FlareStar
+
+                    return BLM.Flare;
+                }
+
+                // At level 50, Fire II is used until under 3800 mana (the combined cost of Fire II and Flare), 
+                // and then Flare is cast once.
+                // At level 58, Fire II is used until 1 Umbral Heart is remaining, and then Flare is cast twice.
+                if (LocalPlayer?.CurrentMp < BLM.MpCosts.Fire2 + BLM.MpCosts.Flare || gauge.UmbralHearts == 1)
+                    return BLM.Flare;
             }
         }
 

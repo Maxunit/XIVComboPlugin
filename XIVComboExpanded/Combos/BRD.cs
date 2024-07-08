@@ -35,7 +35,11 @@ internal static class BRD
         Shadowbite = 16494,
         Ladonsbite = 25783,
         BlastArrow = 25784,
-        RadiantFinale = 25785;
+        RadiantFinale = 25785,
+        WideVolley = 36974,
+        HeartbreakShot = 36975,
+        ResonantArrow = 36976,
+        RadiantEncore = 36977;
 
     public static class Buffs
     {
@@ -45,7 +49,9 @@ internal static class BRD
             WanderersMinuet = 2009,
             BlastShotReady = 2692,
             ShadowbiteReady = 3002,
-            HawksEye = 3861;
+            HawksEye = 3861,
+            ResonantArrowReady = 3862,
+            RadiantEncoreReady = 3863;
     }
 
     public static class Debuffs
@@ -64,6 +70,7 @@ internal static class BRD
             RagingStrikes = 4,
             VenomousBite = 6,
             Bloodletter = 12,
+            WideVolley = 25,
             MagesBallad = 30,
             Windbite = 30,
             Barrage = 38,
@@ -82,7 +89,10 @@ internal static class BRD
             ApexArrow = 80,
             Ladonsbite = 82,
             BlastShot = 86,
-            RadiantFinale = 90;
+            RadiantFinale = 90,
+            HeartbreakShot = 92,
+            ResonantArrow = 96,
+            RadiantEncore = 100;
     }
 }
 
@@ -202,7 +212,7 @@ internal class BardQuickNock : CustomCombo
 
             if (IsEnabled(CustomComboPreset.BardShadowbiteFeature))
             {
-                if (level >= BRD.Levels.Shadowbite && HasEffect(BRD.Buffs.HawksEye))
+                if (level >= BRD.Levels.WideVolley && (HasEffect(BRD.Buffs.HawksEye) || HasEffect(BRD.Buffs.Barrage)))
                 {
                     if (IsEnabled(CustomComboPreset.BardShadowbiteBarrageFeature))
                     {
@@ -210,7 +220,7 @@ internal class BardQuickNock : CustomCombo
                             return BRD.Barrage;
                     }
 
-                    return BRD.Shadowbite;
+                    return OriginalHook(BRD.WideVolley);
                 }
             }
         }

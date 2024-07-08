@@ -179,7 +179,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Freeze/Flare Feature", "Freeze and Flare become whichever action you can currently use.", BLM.JobID)]
     BlackFreezeFlareFeature = 2506,
 
-    [CustomComboInfo("Fire 2 Feature", "(High) Fire 2 becomes Flare in Astral Fire when only 1 Umbral Heart is active, less than 3000 mp, or during Enhanced Flare.", BLM.JobID)]
+    [CustomComboInfo("Fire 2 Feature", "(High) Fire 2 becomes Flare when in Astral Fire and is optimal.", BLM.JobID)]
     BlackFire2Feature = 2508,
 
     [CustomComboInfo("Ice 2 Feature", "(High) Blizzard 2 becomes Freeze in Umbral Ice.", BLM.JobID)]
@@ -212,7 +212,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Burst Shot/Quick Nock into Apex Arrow", "Replace Burst Shot and Quick Nock with Apex Arrow when gauge is full.", BRD.JobID)]
     BardApexFeature = 2304,
 
-    [CustomComboInfo("Quick Nock into Shadowbite", "Replace Quick Nock with Shadowbite when available.", BRD.JobID)]
+    [CustomComboInfo("Quick Nock into Wide Volley/Shadowbite", "Replace Quick Nock with Wide Volley/Shadowbite when available.", BRD.JobID)]
     BardShadowbiteFeature = 2305,
 
     [SecretCustomCombo]
@@ -272,7 +272,7 @@ public enum CustomComboPreset
     BardEmpyrealArrowFeature = 2320,
 
     [ParentCombo(BardShadowbiteFeature)]
-    [CustomComboInfo("A Barrage of Shadowbites", "Replace Quick Nock with Barrage when off cooldown and Shadowbite is available.", BRD.JobID)]
+    [CustomComboInfo("A Wide Barrage of Shadowbites", "Replace Quick Nock with Barrage when off cooldown and Wide Volley/Shadowbite is available.", BRD.JobID)]
     BardShadowbiteBarrageFeature = 2321,
 
     [EvilCombo]
@@ -1150,6 +1150,9 @@ public enum CustomComboPreset
 
     [CustomComboInfo("Sacred Soil Aetherflow", "Replace Sacred Soil with Aetherflow when you have no more Aetherflow stacks.", SCH.JobID)]
     ScholarSacredSoilAetherflowFeature = 2811,
+
+    [CustomComboInfo("Seraphism Feature", "Replace Seraphism with Emergency Tactics as long as you are under its effect.", SCH.JobID)]
+    ScholarSeraphismFeature = 2812,
 
     #endregion
     // ====================================================================================
