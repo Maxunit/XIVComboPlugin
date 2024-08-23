@@ -1,3 +1,5 @@
+THIS FORK IS NOT BEING MAINTAINED RIGHT NOW AND NOT DAWNTRAIL-READY!
+
 Foreword:
 
 This fork of XIVCombo is based on the fork from daemitus and contains code changes from their respective owners. On top of that, it contains code changes and additions based on/from PrincessRTFM and Evil Crab.
