@@ -99,62 +99,59 @@ internal abstract class CustomCombo {
 	#region Common calculations and shortcuts
 
 	/// <summary>
-	/// Vergleicht zwei Aktionen und gibt die "bessere" basierend auf Cooldown, Charges und Präferenz zurück.
-	/// </summary>
-	private static (uint ActionID, CooldownData Data) getBetterActionByCooldown((uint ActionID, CooldownData Data) a, (uint ActionID, CooldownData Data) b, uint preference) {
-		// Fall 1: Eine oder beide Aktionen sind bereit.
-		bool isAReady = !a.Data.IsCooldown;
-		bool isBReady = !b.Data.IsCooldown;
-
-		if (isAReady && isBReady) {
-			// Beide bereit? Dann entscheidet die Präferenz.
-			return preference == a.ActionID ? a : b;
-		}
-		if (isAReady)
-			return a; // Nur A ist bereit.
-		if (isBReady)
-			return b; // Nur B ist bereit.
-
-		// Fall 2: Beide Aktionen sind auf Cooldown. Hier wird's knifflig.
-		if (a.Data.HasCharges && b.Data.HasCharges) {
-			// Beide haben Charges. Wer hat mehr?
-			if (a.Data.RemainingCharges != b.Data.RemainingCharges) {
-				return a.Data.RemainingCharges > b.Data.RemainingCharges ? a : b;
-			}
-			// Gleich viele Charges? Wessen nächster Charge ist schneller wieder da?
-			return a.Data.ChargeCooldownRemaining < b.Data.ChargeCooldownRemaining ? a : b;
-		}
-
-		// Nur eine von beiden hat Charges.
-		if (a.Data.HasCharges) // Nur A
-		{
-			return a.Data.RemainingCharges > 0 || a.Data.ChargeCooldownRemaining < b.Data.CooldownRemaining ? a : b;
-		}
-
-		if (b.Data.HasCharges) // Nur B
-		{
-			return b.Data.RemainingCharges > 0 || b.Data.ChargeCooldownRemaining < a.Data.CooldownRemaining ? b : a;
-		}
-
-		// Fall 3: Keine von beiden hat Charges. Wer ist schneller wieder komplett ready?
-		return a.Data.CooldownRemaining < b.Data.CooldownRemaining ? a : b;
-	}
-
-	/// <summary>
-	/// Die aufgeräumte Hauptmethode.
+	/// Selects the best action from a list based on cooldown, charges, and a preferred action.
+	/// The priority is: 1. Ready actions (preference is tie-breaker), 2. Actions with more charges, 3. Action with the shortest cooldown.
 	/// </summary>
 	protected internal static uint PickByCooldown(uint preference, params uint[] actions) {
 		if (actions is null || actions.Length == 0)
 			return 0;
 
-		// Mappt jede Action ID auf ein Tupel mit ihren Cooldown-Daten.
 		var actionsWithCooldown = actions.Select(id => (ActionID: id, Data: GetCooldown(id)));
 
-		// Führt den Vergleich über die ganze Liste aus, indem es unsere saubere Helper-Methode nutzt.
-		var bestAction = actionsWithCooldown.Aggregate((best, next) => getBetterActionByCooldown(best, next, preference));
+		// 1. Prioritize ready actions, using 'preference' as a tie-breaker
+		var readyActions = actionsWithCooldown.Where(a => a.Data.Available && !a.Data.IsCooldown).ToList();
+		if (readyActions.Count != 0) {
+			uint bestAction = readyActions.FirstOrDefault(a => a.ActionID == preference, readyActions.First()).ActionID;
+			Service.TickLogger.Debug($"Final selection (ready): {bestAction}");
+			return bestAction;
+		}
 
-		Service.TickLogger.Debug($"Final selection: {bestAction.ActionID}");
-		return bestAction.ActionID;
+		// 2. If no actions are fully ready, check for actions with charges
+		var actionsWithCharges = actionsWithCooldown.Where(a => a.Data.HasCharges && a.Data.RemainingCharges > 0).ToList();
+		if (actionsWithCharges.Count != 0) {
+			// Prioritize by most charges, then by shortest time to next charge
+			uint bestAction = actionsWithCharges.OrderByDescending(a => a.Data.RemainingCharges)
+									 .ThenBy(a => a.Data.ChargeCooldownRemaining)
+									 .First().ActionID;
+			Service.TickLogger.Debug($"Final selection (charges): {bestAction}");
+			return bestAction;
+		}
+
+		// 3. If no actions are ready or have charges, pick the one with the shortest remaining cooldown
+		uint finalAction = actionsWithCooldown.OrderBy(a => a.Data.CooldownRemaining).First().ActionID;
+		Service.TickLogger.Debug($"Final selection (cooldown): {finalAction}");
+		return finalAction;
+	}
+
+	/// <summary>
+	/// A helper to check if an oGCD can be weaved without clipping the GCD.
+	/// </summary>
+	/// <param name="actionToWeave">The ID of the oGCD action to potentially use.</param>
+	/// <param name="baseAction">The ID of the GCD action that is being used.</param>
+	/// <param name="minWeaveTime">The minimum time remaining on the GCD cooldown to allow weaving.</param>
+	/// <returns>True if the action can be weaved, otherwise false.</returns>
+	protected static bool TryWeave(uint actionToWeave, uint baseAction, float minWeaveTime = 0.7f) {
+		return CanWeave(baseAction, minWeaveTime) && CanUse(actionToWeave);
+	}
+
+	/// <summary>
+	/// A helper to check if a DoT/debuff needs to be reapplied based on its remaining duration.
+	/// </summary>
+	/// <param name="debuffId">The status ID of the debuff.</param>
+	/// <param name="threshold">The remaining duration below which the debuff should be refreshed.</param>
+	/// <returns>True if the debuff should be reapplied, otherwise false.</returns>
+	protected static bool NeedsDebuff(ushort debuffId, float threshold) {
+		return HasTarget && TargetOwnEffectDuration(debuffId) < threshold;
 	}
 
 	protected static bool IsJob(params uint[] jobs) {
