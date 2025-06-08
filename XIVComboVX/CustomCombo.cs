@@ -98,64 +98,63 @@ internal abstract class CustomCombo {
 
 	#region Common calculations and shortcuts
 
-	protected internal static uint PickByCooldown(uint preference, params uint[] actions) {
+	/// <summary>
+	/// Vergleicht zwei Aktionen und gibt die "bessere" basierend auf Cooldown, Charges und Präferenz zurück.
+	/// </summary>
+	private static (uint ActionID, CooldownData Data) getBetterActionByCooldown((uint ActionID, CooldownData Data) a, (uint ActionID, CooldownData Data) b, uint preference) {
+		// Fall 1: Eine oder beide Aktionen sind bereit.
+		bool isAReady = !a.Data.IsCooldown;
+		bool isBReady = !b.Data.IsCooldown;
 
-		static (uint ActionID, CooldownData Data) selector(uint actionID) => (actionID, GetCooldown(actionID));
+		if (isAReady && isBReady) {
+			// Beide bereit? Dann entscheidet die Präferenz.
+			return preference == a.ActionID ? a : b;
+		}
+		if (isAReady)
+			return a; // Nur A ist bereit.
+		if (isBReady)
+			return b; // Nur B ist bereit.
 
-		static (uint ActionID, CooldownData Data) compare(uint preference, (uint ActionID, CooldownData Data) a, (uint ActionID, CooldownData Data) b) {
-
-			// VS decided that the conditionals could be "simplified" to this.
-			// Someone should maybe teach VS what "simplified" actually means.
-			(uint ActionID, CooldownData Data) choice = // it begins ("it" = suffering)
-				!a.Data.IsCooldown && !b.Data.IsCooldown // welcome to hell, population: anyone trying to maintain this
-					? preference == a.ActionID // both off CD
-						? a // return the original if it's the first one
-						: b // or else the second, no matter what
-					: a.Data.IsCooldown && b.Data.IsCooldown // one/both are on CD
-						? a.Data.HasCharges && b.Data.HasCharges // both on CD
-							? a.Data.RemainingCharges == b.Data.RemainingCharges // both have charges
-								? a.Data.ChargeCooldownRemaining < b.Data.ChargeCooldownRemaining // both have the same number of charges left
-									? a // a will get a charge back before b
-									: b // b will get a charge back before a
-								: a.Data.RemainingCharges > b.Data.RemainingCharges // one has more charges than the other
-									? a // a has more charges
-									: b // b has more charges
-							: a.Data.HasCharges // only one has charges or neither does
-								? a.Data.RemainingCharges > 0 // only a has charges
-									? a // and there are charges remaining
-									: a.Data.ChargeCooldownRemaining < b.Data.CooldownRemaining // but there aren't any available
-										? a // a will recover a charge before b comes off cooldown
-										: b // b will come off cooldown before a recovers a charge
-								: b.Data.HasCharges // a does not have charges
-									? b.Data.RemainingCharges > 0 // but b does
-										? b // and it has at least one available
-										: b.Data.ChargeCooldownRemaining < a.Data.CooldownRemaining // but there are no charges available
-											? b // b will recover a charge before a comes off cooldown
-											: a // a will come off cooldown before b recovers a charge
-									: a.Data.CooldownRemaining < b.Data.CooldownRemaining // neither action has charges
-										? a // a has less cooldown time left
-										: b // b has less cooldown time left
-						: a.Data.IsCooldown // only one on CD
-							? b // b is off cooldown
-							: a; // a is off cooldown
-
-			// You know that one scene in Doctor Who on the really long spaceship that's being sucked into a black hole?
-			// And time's dilated at one end but not the other?
-			// And there's that hospital in the end by the black hole?
-			// And there's that one patient that's just constantly hitting the "pain" button?
-			// And they've got a TTS-style voice just constantly repeating "PAIN. PAIN. PAIN. PAIN. PAIN." from it?
-			// Yeah.
-
-			Service.TickLogger.Debug($"CDCMP: {a.ActionID}, {b.ActionID}: {choice.ActionID}\n{a.Data.DebugLabel}\n{b.Data.DebugLabel}");
-			return choice;
+		// Fall 2: Beide Aktionen sind auf Cooldown. Hier wird's knifflig.
+		if (a.Data.HasCharges && b.Data.HasCharges) {
+			// Beide haben Charges. Wer hat mehr?
+			if (a.Data.RemainingCharges != b.Data.RemainingCharges) {
+				return a.Data.RemainingCharges > b.Data.RemainingCharges ? a : b;
+			}
+			// Gleich viele Charges? Wessen nächster Charge ist schneller wieder da?
+			return a.Data.ChargeCooldownRemaining < b.Data.ChargeCooldownRemaining ? a : b;
 		}
 
-		uint id = actions
-			.Select(selector)
-			.Aggregate((a1, a2) => compare(preference, a1, a2))
-			.ActionID;
-		Service.TickLogger.Debug($"Final selection: {id}");
-		return id;
+		// Nur eine von beiden hat Charges.
+		if (a.Data.HasCharges) // Nur A
+		{
+			return a.Data.RemainingCharges > 0 || a.Data.ChargeCooldownRemaining < b.Data.CooldownRemaining ? a : b;
+		}
+
+		if (b.Data.HasCharges) // Nur B
+		{
+			return b.Data.RemainingCharges > 0 || b.Data.ChargeCooldownRemaining < a.Data.CooldownRemaining ? b : a;
+		}
+
+		// Fall 3: Keine von beiden hat Charges. Wer ist schneller wieder komplett ready?
+		return a.Data.CooldownRemaining < b.Data.CooldownRemaining ? a : b;
+	}
+
+	/// <summary>
+	/// Die aufgeräumte Hauptmethode.
+	/// </summary>
+	protected internal static uint PickByCooldown(uint preference, params uint[] actions) {
+		if (actions is null || actions.Length == 0)
+			return 0;
+
+		// Mappt jede Action ID auf ein Tupel mit ihren Cooldown-Daten.
+		var actionsWithCooldown = actions.Select(id => (ActionID: id, Data: GetCooldown(id)));
+
+		// Führt den Vergleich über die ganze Liste aus, indem es unsere saubere Helper-Methode nutzt.
+		var bestAction = actionsWithCooldown.Aggregate((best, next) => getBetterActionByCooldown(best, next, preference));
+
+		Service.TickLogger.Debug($"Final selection: {bestAction.ActionID}");
+		return bestAction.ActionID;
 	}
 
 	protected static bool IsJob(params uint[] jobs) {

@@ -5,11 +5,11 @@ namespace PrincessRTFM.XIVComboVX.GameData;
 [StructLayout(LayoutKind.Explicit)]
 internal readonly struct CooldownData {
 	[FieldOffset(0x0)] private readonly bool isCooldown;
-	[FieldOffset(0x4)] private readonly uint actionID;
 	[FieldOffset(0x8)] private readonly float cooldownElapsed;
 	[FieldOffset(0xC)] private readonly float cooldownTotal;
 
-	public uint ActionID => this.actionID;
+	[field: FieldOffset(0x4)]
+	public uint ActionID { get; }
 
 	/// <summary>
 	/// Whether this action is currently on cooldown, even if charges may be available

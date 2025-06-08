@@ -81,7 +81,8 @@ internal static class DNC {
 			SaberDance = 76, // [sic] - should be Sabre but america
 			Tillana = 82,
 			FanDance4 = 86,
-			StarfallDance = 90;
+			StarfallDance = 90,
+			LastDance = 92;
 
 	}
 }
@@ -149,6 +150,11 @@ internal class DancerDanceStepCombo: CustomCombo {
 	protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) {
 		if (level >= DNC.Levels.StandardStep && Service.DataCache.DancerSmartDancing(out uint danceStep))
 			return danceStep;
+
+		if (level >= DNC.Levels.LastDance) {
+			if (SelfHasEffect(DNC.Buffs.LastDanceReady))
+				return DNC.LastDance;
+		}
 
 		if (level >= DNC.Levels.TechnicalStep) {
 

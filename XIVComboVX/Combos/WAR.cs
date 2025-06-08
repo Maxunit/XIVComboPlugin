@@ -165,7 +165,7 @@ internal class WarriorStormsEyeCombo: CustomCombo {
 
 		if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapEyeFeature)) {
 			if (level >= WAR.Levels.InnerBeast) {
-				if (GetJobGauge<WARGauge>().BeastGauge > (inCombo ? 90 : 80))
+				if (GetJobGauge<WARGauge>().BeastGauge > (inCombo ? 90 : 70))
 					return OriginalHook(WAR.FellCleave);
 			}
 		}
@@ -204,7 +204,7 @@ internal class WarriorMythrilTempestCombo: CustomCombo {
 
 		if (IsEnabled(CustomComboPreset.WarriorGaugeOvercapTempestFeature)) {
 			if (level >= WAR.Levels.MythrilTempestTrait) {
-				if (GetJobGauge<WARGauge>().BeastGauge > (inCombo ? 90 : 80))
+				if (GetJobGauge<WARGauge>().BeastGauge > (inCombo ? 90 : 70))
 					return OriginalHook(WAR.Decimate);
 			}
 		}

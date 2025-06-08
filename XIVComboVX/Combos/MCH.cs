@@ -190,14 +190,19 @@ internal class MachinistHypercharge: CustomCombo {
 
 		if (IsEnabled(CustomComboPreset.MachinistHyperchargeStabiliser)) {
 			if (level >= MCH.Levels.BarrelStabiliser && !gauge.IsOverheated && gauge.Heat < 50 && !SelfHasEffect(MCH.Buffs.Hypercharged))
-				return MCH.BarrelStabiliser;
+				return OriginalHook(MCH.BarrelStabiliser);
+			if (level >= MCH.Levels.BarrelStabiliser && SelfHasEffect(MCH.Buffs.FullMetalMachinist))
+				return OriginalHook(MCH.BarrelStabiliser);
 		}
 
 		if (IsEnabled(CustomComboPreset.MachinistHyperchargeWildfire)) {
 
 			if (level >= MCH.Levels.Wildfire && gauge.IsOverheated) {
 
-				if (gauge.OverheatTimeRemaining >= 9_000 && IsOffCooldown(MCH.Wildfire) && HasTarget)
+				/* if (gauge.OverheatTimeRemaining >= 9_000 && IsOffCooldown(MCH.Wildfire) && HasTarget)
+					return MCH.Wildfire; */
+
+				if (IsOffCooldown(MCH.Wildfire) && HasTarget)
 					return MCH.Wildfire;
 
 				if (IsOnCooldown(MCH.Hypercharge) && !IsOriginal(MCH.Wildfire))
@@ -223,12 +228,12 @@ internal class MachinistHeatBlastBlazingShot: CustomCombo {
 
 		if (IsEnabled(CustomComboPreset.MachinistSmartHeatup) && !gauge.IsOverheated) {
 			if (IsEnabled(CustomComboPreset.MachinistHyperchargeStabiliser) && level >= MCH.Levels.BarrelStabiliser) {
-				if (!gauge.IsOverheated && gauge.Heat < 50 && !SelfHasEffect(MCH.Buffs.Hypercharged))
-					return MCH.BarrelStabiliser;
+				 if (!gauge.IsOverheated && gauge.Heat < 50 && !SelfHasEffect(MCH.Buffs.Hypercharged))
+					return OriginalHook(MCH.BarrelStabiliser);
 			}
 
 			return MCH.Hypercharge;
-		}
+		}		
 
 		if (IsEnabled(CustomComboPreset.MachinistHyperchargeWildfire) && level >= MCH.Levels.Wildfire) {
 			if (gauge.IsOverheated && gauge.OverheatTimeRemaining >= 9_000 && IsOffCooldown(MCH.Wildfire) && HasTarget)
@@ -281,7 +286,7 @@ internal class MachinistAutoCrossbow: CustomCombo {
 		if (!gauge.IsOverheated) {
 			if (IsEnabled(CustomComboPreset.MachinistHyperchargeStabiliser) && level >= MCH.Levels.BarrelStabiliser) {
 				if (!gauge.IsOverheated && gauge.Heat < 50 && !SelfHasEffect(MCH.Buffs.Hypercharged))
-					return MCH.BarrelStabiliser;
+					return OriginalHook(MCH.BarrelStabiliser);
 			}
 
 			return MCH.Hypercharge;
