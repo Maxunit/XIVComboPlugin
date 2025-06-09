@@ -191,12 +191,30 @@ internal class DancerFlourishFeature: CustomCombo {
 
 internal class DancerSingleTargetMultibutton: CustomCombo {
 	public override CustomComboPreset Preset => CustomComboPreset.DancerSingleTargetMultibutton;
-	public override uint[] ActionIDs { get; } = [DNC.Cascade];
+	public override uint[] ActionIDs { get; } = [DNC.Cascade, DNC.ReverseCascade, DNC.Fountainfall];
 
 	protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) {
 		if (IsEnabled(CustomComboPreset.DancerSmartDanceFeature)) {
 			if (level >= DNC.Levels.StandardStep && Service.DataCache.DancerSmartDancing(out uint danceStep))
 				return danceStep;
+		}
+
+		if (IsEnabled(CustomComboPreset.DancerSingleTargetDevilmentWeave) && level >= DNC.Levels.Devilment && InCombat && CanUse(DNC.Devilment)) {
+			if (CanUse(DNC.Devilment))
+				return DNC.Devilment;
+		}
+
+		if (IsEnabled(CustomComboPreset.DancerSingleTargetFlourishWeave)) {
+			if (level >= DNC.Levels.Flourish && InCombat && CanUse(DNC.Flourish)) {
+				if (!(
+					SelfHasEffect(DNC.Buffs.FlourishingSymmetry)
+					|| SelfHasEffect(DNC.Buffs.FlourishingFlow)
+					|| SelfHasEffect(DNC.Buffs.ThreefoldFanDance)
+					|| SelfHasEffect(DNC.Buffs.FourfoldFanDance)
+				)) {
+					return DNC.Flourish;
+				}
+			}
 		}
 
 		DNCGauge gauge = GetJobGauge<DNCGauge>();
@@ -223,24 +241,6 @@ internal class DancerSingleTargetMultibutton: CustomCombo {
 
 			}
 
-			if (IsEnabled(CustomComboPreset.DancerSingleTargetFlourishWeave)) {
-				if (level >= DNC.Levels.Flourish && InCombat && CanUse(DNC.Flourish)) {
-					if (!(
-						SelfHasEffect(DNC.Buffs.FlourishingSymmetry)
-						|| SelfHasEffect(DNC.Buffs.FlourishingFlow)
-						|| SelfHasEffect(DNC.Buffs.ThreefoldFanDance)
-						|| SelfHasEffect(DNC.Buffs.FourfoldFanDance)
-					)) {
-						return DNC.Flourish;
-					}
-				}
-			}
-
-			if (IsEnabled(CustomComboPreset.DancerSingleTargetDevilmentWeave) && level >= DNC.Levels.Devilment) {
-				if (CanUse(DNC.Devilment))
-					return DNC.Devilment;
-			}
-
 		}
 
 		if (IsEnabled(CustomComboPreset.DancerSingleTargetStarfall) && level >= DNC.Levels.StarfallDance) {
@@ -261,18 +261,31 @@ internal class DancerSingleTargetMultibutton: CustomCombo {
 		if (lastComboMove is DNC.Cascade && level >= DNC.Levels.Fountain)
 			return DNC.Fountain;
 
-		return actionID;
+		return DNC.Cascade;
 	}
 }
 
 internal class DancerAoeMultibutton: CustomCombo {
 	public override CustomComboPreset Preset => CustomComboPreset.DancerAoeMultibutton;
-	public override uint[] ActionIDs { get; } = [DNC.Windmill];
+	public override uint[] ActionIDs { get; } = [DNC.Windmill, DNC.RisingWindmill, DNC.Bloodshower];
 
 	protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) {
 		if (IsEnabled(CustomComboPreset.DancerSmartDanceFeature)) {
 			if (level >= DNC.Levels.StandardStep && Service.DataCache.DancerSmartDancing(out uint danceStep))
 				return danceStep;
+		}
+
+		if (IsEnabled(CustomComboPreset.DancerAoeFlourishWeave)) {
+			if (level >= DNC.Levels.Flourish && InCombat && CanUse(DNC.Flourish)) {
+				if (!(
+					SelfHasEffect(DNC.Buffs.FlourishingSymmetry)
+					|| SelfHasEffect(DNC.Buffs.FlourishingFlow)
+					|| SelfHasEffect(DNC.Buffs.ThreefoldFanDance)
+					|| SelfHasEffect(DNC.Buffs.FourfoldFanDance)
+				)) {
+					return DNC.Flourish;
+				}
+			}
 		}
 
 		DNCGauge gauge = GetJobGauge<DNCGauge>();
@@ -299,19 +312,6 @@ internal class DancerAoeMultibutton: CustomCombo {
 
 			}
 
-			if (IsEnabled(CustomComboPreset.DancerAoeFlourishWeave)) {
-				if (level >= DNC.Levels.Flourish && InCombat && CanUse(DNC.Flourish)) {
-					if (!(
-						SelfHasEffect(DNC.Buffs.FlourishingSymmetry)
-						|| SelfHasEffect(DNC.Buffs.FlourishingFlow)
-						|| SelfHasEffect(DNC.Buffs.ThreefoldFanDance)
-						|| SelfHasEffect(DNC.Buffs.FourfoldFanDance)
-					)) {
-						return DNC.Flourish;
-					}
-				}
-			}
-
 		}
 
 		if (IsEnabled(CustomComboPreset.DancerAoeStarfall) && level >= DNC.Levels.StarfallDance) {
@@ -332,7 +332,7 @@ internal class DancerAoeMultibutton: CustomCombo {
 		if (lastComboMove is DNC.Windmill && level >= DNC.Levels.Bladeshower)
 			return DNC.Bladeshower;
 
-		return actionID;
+		return DNC.Windmill;
 	}
 }
 

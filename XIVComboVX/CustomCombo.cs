@@ -106,31 +106,20 @@ internal abstract class CustomCombo {
 		if (actions is null || actions.Length == 0)
 			return 0;
 
-		var actionsWithCooldown = actions.Select(id => (ActionID: id, Data: GetCooldown(id)));
+		// Stell sicher, dass die bevorzugte Aktion in der Liste ist, um sie fair zu bewerten.
+		var allActions = actions.Contains(preference) ? actions : actions.Prepend(preference);
 
-		// 1. Prioritize ready actions, using 'preference' as a tie-breaker
-		var readyActions = actionsWithCooldown.Where(a => a.Data.Available && !a.Data.IsCooldown).ToList();
-		if (readyActions.Count != 0) {
-			uint bestAction = readyActions.FirstOrDefault(a => a.ActionID == preference, readyActions.First()).ActionID;
-			Service.TickLogger.Debug($"Final selection (ready): {bestAction}");
-			return bestAction;
-		}
+		var bestAction = allActions
+			.Select(id => (ActionID: id, Data: GetCooldown(id)))
+			.OrderBy(a => !a.Data.Available) // 1. Verfügbare Aktionen zuerst (false kommt vor true)
+			.ThenByDescending(a => a.ActionID == preference) // 2. Bevorzugte Aktion priorisieren
+			.ThenByDescending(a => a.Data.RemainingCharges) // 3. Aktionen mit mehr Aufladungen zuerst
+			.ThenBy(a => a.Data.CooldownRemaining) // 4. Aktionen mit kürzerem Cooldown zuerst
+			.First()
+			.ActionID;
 
-		// 2. If no actions are fully ready, check for actions with charges
-		var actionsWithCharges = actionsWithCooldown.Where(a => a.Data.HasCharges && a.Data.RemainingCharges > 0).ToList();
-		if (actionsWithCharges.Count != 0) {
-			// Prioritize by most charges, then by shortest time to next charge
-			uint bestAction = actionsWithCharges.OrderByDescending(a => a.Data.RemainingCharges)
-									 .ThenBy(a => a.Data.ChargeCooldownRemaining)
-									 .First().ActionID;
-			Service.TickLogger.Debug($"Final selection (charges): {bestAction}");
-			return bestAction;
-		}
-
-		// 3. If no actions are ready or have charges, pick the one with the shortest remaining cooldown
-		uint finalAction = actionsWithCooldown.OrderBy(a => a.Data.CooldownRemaining).First().ActionID;
-		Service.TickLogger.Debug($"Final selection (cooldown): {finalAction}");
-		return finalAction;
+		Service.TickLogger.Debug($"Final selection: {bestAction}");
+		return bestAction;
 	}
 
 	/// <summary>
@@ -187,18 +176,35 @@ internal abstract class CustomCombo {
 		=> Service.BuddyList.PetBuddy is not null;
 
 	protected static double PlayerHealthPercentage
-		=> (double)LocalPlayer.CurrentHp / LocalPlayer.MaxHp * 100.0;
+		{
+		get {
+			var player = LocalPlayer;
+			if (player is null)
+				return 0;
+			return player.MaxHp == 0 ? 0 : (double)player.CurrentHp / player.MaxHp * 100.0;
+		}
+	}
 
 	protected internal static bool ShouldSwiftcast
 		=> IsOffCooldown(Common.Swiftcast)
 			&& !SelfHasEffect(Common.Buffs.LostChainspell)
 			&& !SelfHasEffect(RDM.Buffs.Dualcast);
-	protected internal static bool IsFastcasting
-		=> SelfHasEffect(Common.Buffs.Swiftcast1)
-			|| SelfHasEffect(Common.Buffs.Swiftcast2)
-			|| SelfHasEffect(Common.Buffs.Swiftcast3)
-			|| SelfHasEffect(RDM.Buffs.Dualcast)
-			|| SelfHasEffect(Common.Buffs.LostChainspell);
+	protected internal static bool IsFastcasting {
+		get {
+			// Alle Buffs, die einen Instant-Cast ermöglichen, in einem Array sammeln.
+			ushort[] fastcastBuffs =
+			[
+			Common.Buffs.Swiftcast1,
+			Common.Buffs.Swiftcast2,
+			Common.Buffs.Swiftcast3,
+			RDM.Buffs.Dualcast,
+			Common.Buffs.LostChainspell,
+		];
+
+			// Prüfen, ob irgendeiner dieser Buffs auf dem Spieler aktiv ist.
+			return fastcastBuffs.Any(buffId => SelfHasEffect(buffId));
+		}
+	}
 	protected internal static bool IsHardcasting => !IsFastcasting;
 
 	protected internal static T GetJobGauge<T>() where T : JobGaugeBase

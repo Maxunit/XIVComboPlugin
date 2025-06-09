@@ -19,18 +19,31 @@ internal class IconReplacer: IDisposable {
 
 	private IntPtr actionManager = IntPtr.Zero;
 
-	private readonly List<CustomCombo> customCombos;
+	private readonly Dictionary<uint, List<CustomCombo>> comboActionMap = [];
 
 	public IconReplacer() {
 		Service.Log.Information("Loading registered combos");
-		this.customCombos = Assembly.GetAssembly(this.GetType())!.GetTypes()
+
+		var allCombos = Assembly.GetAssembly(this.GetType())!.GetTypes()
 			.Where(t => !t.IsAbstract && (t.BaseType == typeof(CustomCombo) || t.BaseType?.BaseType == typeof(CustomCombo)))
 			.Select(Activator.CreateInstance)
 			.Cast<CustomCombo>()
 			.ToList();
-		Service.Log.Information($"Loaded {this.customCombos.Count} replacers");
+
+		foreach (var combo in allCombos) {
+			foreach (var actionId in combo.ActionIDs) {
+				if (!this.comboActionMap.TryGetValue(actionId, out List<CustomCombo>? value)) {
+					value = [];
+					this.comboActionMap[actionId] = value;
+				}
+
+				value.Add(combo);
+			}
+		}
+
+		Service.Log.Information($"Loaded {allCombos.Count} replacers for {this.comboActionMap.Count} unique actions");
 #if DEBUG
-		Service.Log.Information(string.Join(", ", this.customCombos.Select(combo => combo.GetType().Name)));
+		Service.Log.Information(string.Join(", ", allCombos.Select(combo => combo.GetType().Name)));
 #endif
 
 		this.getIconHook = Service.Interop.HookFromAddress<GetIconDelegate>(FFXIVClientStructs.FFXIV.Client.Game.ActionManager.Addresses.GetAdjustedActionId.Value, this.getIconDetour);
@@ -38,7 +51,6 @@ internal class IconReplacer: IDisposable {
 
 		this.getIconHook.Enable();
 		this.isIconReplaceableHook.Enable();
-
 	}
 
 	public void Dispose() {
@@ -68,14 +80,16 @@ internal class IconReplacer: IDisposable {
 			if (player is null)
 				return this.OriginalHook(actionID);
 
-			uint lastComboActionId = *(uint*)Service.Address.LastComboMove;
-			float comboTime = *(float*)Service.Address.ComboTimer;
-			byte level = player.Level;
-			uint classJobID = player.ClassJob.RowId;
+			if (this.comboActionMap.TryGetValue(actionID, out var relevantCombos)) {
+				uint lastComboActionId = *(uint*)Service.Address.LastComboMove;
+				float comboTime = *(float*)Service.Address.ComboTimer;
+				byte level = player.Level;
+				uint classJobID = player.ClassJob.RowId;
 
-			foreach (CustomCombo combo in this.customCombos) {
-				if (combo.TryInvoke(actionID, lastComboActionId, comboTime, level, classJobID, out uint newActionID))
-					return newActionID;
+				foreach (CustomCombo combo in relevantCombos) {
+					if (combo.TryInvoke(actionID, lastComboActionId, comboTime, level, classJobID, out uint newActionID))
+						return newActionID;
+				}
 			}
 
 			return this.OriginalHook(actionID);
